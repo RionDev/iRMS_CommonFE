@@ -1,0 +1,88 @@
+# @irms/common — 모듈 상세
+
+공통 모듈의 export 목록과 규칙. 앱 구현 시 이 파일을 먼저 확인한다.
+
+## Export 목록 (`src/index.ts`)
+
+### Pages
+
+| export      | 파일                  | 역할                                                        |
+| ----------- | --------------------- | ----------------------------------------------------------- |
+| `LoginPage` | `pages/LoginPage.tsx` | 로그인 폼 렌더링, 인증 처리, 로그인 후 원래 경로로 redirect |
+
+### Components
+
+| export      | 파일                       | Props                                                         |
+| ----------- | -------------------------- | ------------------------------------------------------------- |
+| `Button`    | `components/Button.tsx`    | `variant?: 'primary'\|'secondary'` + 기본 button 속성         |
+| `Input`     | `components/Input.tsx`     | `label?: string`, `error?: string` + 기본 input 속성          |
+| `Modal`     | `components/Modal.tsx`     | `isOpen`, `onClose`, `title`, `children`                      |
+| `Layout`    | `components/Layout.tsx`    | `title: string`, `children` — 헤더(로그아웃 포함) + 본문 래퍼 |
+| `LoginForm` | `components/LoginForm.tsx` | `onSubmit`, `loading?`, `error?` — LoginPage 내부용           |
+
+### Hooks
+
+| export           | 파일               | 반환값                                                                |
+| ---------------- | ------------------ | --------------------------------------------------------------------- |
+| `useAuth`        | `hooks/useAuth.ts` | `{ user, isAuthenticated, logout }` — 미인증 시 `/login`으로 redirect |
+| `useRequireRole` | `hooks/useAuth.ts` | `user` — 허용되지 않은 role이면 Error throw                           |
+| `useApi`         | `hooks/useApi.ts`  | `{ data, loading, error, execute }` — fetcher 함수 래핑               |
+
+### Services
+
+| export                | 파일                      | 함수                                            |
+| --------------------- | ------------------------- | ----------------------------------------------- |
+| `apiClient` (default) | `services/apiClient.ts`   | Axios 인스턴스 (토큰 자동 첨부, 401 시 refresh) |
+| `login`               | `services/authService.ts` | `POST /api/auth/login`                          |
+| `refresh`             | `services/authService.ts` | `POST /api/auth/refresh`                        |
+| `logout`              | `services/authService.ts` | `POST /api/auth/logout`                         |
+
+### Stores
+
+| export         | 파일                  | 상태/액션                                                              |
+| -------------- | --------------------- | ---------------------------------------------------------------------- |
+| `useAuthStore` | `stores/authStore.ts` | `user`, `isAuthenticated`, `login(tokens)`, `logout()`, `initialize()` |
+
+### Types
+
+| export          | 파일                 | 설명                                                         |
+| --------------- | -------------------- | ------------------------------------------------------------ |
+| `User`          | `types/auth.ts`      | DB 유저 전체 필드                                            |
+| `VUser`         | `types/auth.ts`      | 뷰용 유저 (team_name, role_name 등 문자열)                   |
+| `TokenPair`     | `types/auth.ts`      | `access_token`, `refresh_token`                              |
+| `AuthPayload`   | `types/auth.ts`      | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
+| `LoginRequest`  | `types/auth.ts`      | `id`, `password`                                             |
+| `LoginResponse` | `types/auth.ts`      | `TokenPair` + `user: VUser`                                  |
+| `Role`          | `types/constants.ts` | `{ MEMBER:1, LEAD:2, ADMIN:3, GUEST:4 }`                     |
+| `Team`          | `types/constants.ts` | `{ ENGINE:1, ANALYST:2 }`                                    |
+| `RoleType`      | `types/constants.ts` | `Role` 값의 union 타입                                       |
+| `TeamType`      | `types/constants.ts` | `Team` 값의 union 타입                                       |
+
+### Utils
+
+| export            | 파일             | 설명                                   |
+| ----------------- | ---------------- | -------------------------------------- |
+| `getAccessToken`  | `utils/token.ts` | localStorage에서 access token 읽기     |
+| `getRefreshToken` | `utils/token.ts` | localStorage에서 refresh token 읽기    |
+| `saveTokens`      | `utils/token.ts` | access/refresh token localStorage 저장 |
+| `clearTokens`     | `utils/token.ts` | access/refresh token localStorage 삭제 |
+| `decodeToken`     | `utils/token.ts` | JWT payload 디코딩 → `AuthPayload`     |
+
+## 규칙
+
+- 앱에서 Axios 인스턴스를 직접 생성하지 않는다 — `apiClient` 사용
+- 앱에서 인증 상태를 별도 store로 관리하지 않는다 — `useAuthStore` 사용
+- 앱에서 로그인 페이지를 별도 구현하지 않는다 — `LoginPage` 사용
+- 앱에서 `useAuth`, `useRequireRole`을 재구현하지 않는다
+- `Role`, `Team` 상수를 앱마다 재정의하지 않는다 — 이 모듈에서 import
+- `Layout`은 `useAuthStore`를 직접 참조하므로 앱에서 store를 props로 전달하지 않아도 된다
+- `initialize()`는 앱 진입점(`main.tsx` 또는 `App.tsx`)에서 최초 1회 호출한다
+
+## 정책 문서
+
+상세 사용법은 `docs/` 참조:
+
+- [docs/components.md](docs/components.md)
+- [docs/auth.md](docs/auth.md)
+- [docs/api-client.md](docs/api-client.md)
+- [docs/stores.md](docs/stores.md)
