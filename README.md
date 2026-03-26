@@ -6,7 +6,7 @@ iRMS FE 공통 모듈. 모든 앱에서 공유하는 인증, API 클라이언트
 
 ## 패키지 구조
 
-```
+```text
 common/
 ├── src/
 │   ├── components/     # 공통 UI 컴포넌트
@@ -29,17 +29,17 @@ common/
 앱의 `vite.config.ts` 또는 `tsconfig.json`에서 `@irms/common`을 alias로 등록한 뒤 import한다.
 
 ```ts
-import { useAuth, apiClient, Layout, Role } from '@irms/common';
+import { useAuth, apiClient, Layout, Role } from "@irms/common";
 ```
 
 상세 사용법은 각 정책 문서 참조:
 
-| 문서 | 내용 |
-|------|------|
+| 문서                                     | 내용                                    |
+| ---------------------------------------- | --------------------------------------- |
 | [docs/components.md](docs/components.md) | Button, Input, Modal, Layout, LoginForm |
-| [docs/auth.md](docs/auth.md) | 인증 훅, 토큰 관리, LoginPage |
-| [docs/api-client.md](docs/api-client.md) | Axios 인스턴스, 인터셉터, 환경변수 |
-| [docs/stores.md](docs/stores.md) | authStore 사용법, 초기화 |
+| [docs/auth.md](docs/auth.md)             | 인증 훅, 토큰 관리, LoginPage           |
+| [docs/api-client.md](docs/api-client.md) | Axios 인스턴스, 인터셉터, 환경변수      |
+| [docs/stores.md](docs/stores.md)         | authStore 사용법, 초기화                |
 
 ## 테스트
 
