@@ -2,7 +2,7 @@
 
 iRMS FE 공통 모듈. 모든 앱에서 공유하는 인증, API 클라이언트, UI 컴포넌트, 전역 상태를 제공한다.
 
-각 앱에 git submodule로 포함되어 사용된다 (`RionDev/iRMS_FE_Common`).
+각 앱에 git submodule로 포함되어 사용된다 (`RionDev/iRMS_CommonFE`).
 
 ## 패키지 구조
 
