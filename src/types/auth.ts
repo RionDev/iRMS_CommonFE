@@ -14,6 +14,9 @@ export interface VUser {
   idx: number;
   id: string;
   name: string;
+  team?: number | null;
+  role?: number;
+  status?: number | string;
   team_name: string;
   role_name: string;
   status_name: string;

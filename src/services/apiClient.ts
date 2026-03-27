@@ -2,13 +2,17 @@ import axios from 'axios';
 import { getAccessToken, getRefreshToken, saveTokens, clearTokens } from '../utils/token';
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || '',
   timeout: 10000,
 });
 
+function isAuthRequest(url?: string): boolean {
+  return !!url && (url.includes('/api/auth/login') || url.includes('/api/auth/refresh'));
+}
+
 apiClient.interceptors.request.use((config) => {
   const token = getAccessToken();
-  if (token) {
+  if (token && !isAuthRequest(config.url)) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -19,19 +23,26 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    if (!originalRequest || isAuthRequest(originalRequest.url)) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       const refreshToken = getRefreshToken();
       if (!refreshToken) {
         clearTokens();
-        window.location.href = '/login';
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
 
       try {
+        const authBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
         const res = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/api/auth/refresh`,
+          `${authBaseUrl}/api/auth/refresh`,
           { refresh_token: refreshToken },
         );
         saveTokens(res.data);
@@ -39,7 +50,9 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       } catch {
         clearTokens();
-        window.location.href = '/login';
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
     }

@@ -26,6 +26,10 @@ export function LoginForm({ onSubmit, loading = false, error }: LoginFormProps) 
         value={id}
         onChange={(e) => setId(e.target.value)}
         placeholder="이메일을 입력하세요"
+        autoComplete="username"
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
         required
       />
       <Input
@@ -34,6 +38,7 @@ export function LoginForm({ onSubmit, loading = false, error }: LoginFormProps) 
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="비밀번호를 입력하세요"
+        autoComplete="current-password"
         required
       />
       {error && (
