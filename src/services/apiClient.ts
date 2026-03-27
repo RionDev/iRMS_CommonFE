@@ -1,10 +1,17 @@
 import axios from 'axios';
 import { getAccessToken, getRefreshToken, saveTokens, clearTokens } from '../utils/token';
 
+const configuredBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+const apiBaseUrl = import.meta.env.DEV ? '' : configuredBaseUrl;
+
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '',
+  baseURL: apiBaseUrl,
   timeout: 10000,
 });
+
+function resolveApiUrl(path: string): string {
+  return apiBaseUrl ? `${apiBaseUrl}${path}` : path;
+}
 
 function isAuthRequest(url?: string): boolean {
   return !!url && (url.includes('/api/auth/login') || url.includes('/api/auth/refresh'));
@@ -40,9 +47,8 @@ apiClient.interceptors.response.use(
       }
 
       try {
-        const authBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
         const res = await axios.post(
-          `${authBaseUrl}/api/auth/refresh`,
+          resolveApiUrl('/api/auth/refresh'),
           { refresh_token: refreshToken },
         );
         saveTokens(res.data);
