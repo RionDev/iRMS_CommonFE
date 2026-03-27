@@ -2,12 +2,15 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LoginForm } from '../components/LoginForm';
+import { Modal } from '../components/Modal';
 import { login } from '../services/authService';
 import { useAuthStore } from '../stores/authStore';
+import { theme } from '../styles/theme';
 
 export function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pendingMessage, setPendingMessage] = useState<string | null>(null);
   const authLogin = useAuthStore((s) => s.login);
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,7 +32,11 @@ export function LoginPage() {
       if (axios.isAxiosError(error)) {
         const detail = error.response?.data?.detail;
         if (typeof detail === 'string' && detail.length > 0) {
-          setError(detail);
+          if (detail.includes('승인 대기')) {
+            setPendingMessage(detail);
+          } else {
+            setError(detail);
+          }
         } else {
           setError(`로그인에 실패했습니다. (${error.response?.status ?? '네트워크 오류'})`);
         }
@@ -48,15 +55,17 @@ export function LoginPage() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: theme.colors.pageBackground,
+        color: theme.colors.text,
+        fontFamily: theme.fontFamily,
       }}
     >
       <div
         style={{
-          backgroundColor: '#fff',
+          backgroundColor: theme.colors.surface,
           padding: '32px',
-          borderRadius: '8px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          borderRadius: theme.radius.md,
+          boxShadow: theme.shadow.card,
           width: '100%',
           maxWidth: '360px',
         }}
@@ -64,13 +73,15 @@ export function LoginPage() {
         <h1 style={{ textAlign: 'center', marginBottom: '24px', fontSize: '20px' }}>
           iRMS 로그인
         </h1>
-        {import.meta.env.DEV && (
-          <p style={{ margin: '0 0 12px 0', fontSize: '12px', color: '#666' }}>
-            개발 계정: dev-admin@irms / dev1234!
-          </p>
-        )}
         <LoginForm onSubmit={handleSubmit} loading={loading} error={error} />
       </div>
+      <Modal
+        isOpen={pendingMessage !== null}
+        onClose={() => setPendingMessage(null)}
+        title="승인 대기"
+      >
+        <p style={{ margin: 0, color: theme.colors.text }}>{pendingMessage}</p>
+      </Modal>
     </div>
   );
 }

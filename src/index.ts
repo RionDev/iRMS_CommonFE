@@ -7,6 +7,9 @@ export { Input } from './components/Input';
 export { Modal } from './components/Modal';
 export { Layout } from './components/Layout';
 export { LoginForm } from './components/LoginForm';
+export { SideNav } from './components/SideNav';
+export type { SideNavItem } from './components/SideNav';
+export { theme } from './styles/theme';
 
 // Hooks
 export { useAuth, useRequireRole } from './hooks/useAuth';

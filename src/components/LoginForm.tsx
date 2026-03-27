@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Input } from './Input';
 import { Button } from './Button';
+import { theme } from '../styles/theme';
 
 interface LoginFormProps {
   onSubmit: (id: string, password: string) => void;
@@ -42,7 +43,7 @@ export function LoginForm({ onSubmit, loading = false, error }: LoginFormProps) 
         required
       />
       {error && (
-        <p style={{ color: '#d32f2f', fontSize: '14px', margin: '0 0 12px 0' }}>{error}</p>
+        <p style={{ color: theme.colors.danger, fontSize: '14px', margin: '0 0 12px 0' }}>{error}</p>
       )}
       <Button type="submit" disabled={loading} style={{ width: '100%' }}>
         {loading ? '로그인 중...' : '로그인'}

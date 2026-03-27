@@ -13,6 +13,7 @@ common/
 │   ├── hooks/          # 공통 훅 (인증, API)
 │   ├── pages/          # 공통 페이지 (LoginPage)
 │   ├── services/       # API 클라이언트, 인증 서비스
+│   ├── styles/         # 공통 theme 토큰
 │   ├── stores/         # Zustand 전역 상태
 │   ├── types/          # 공통 타입, 상수
 │   ├── utils/          # 유틸 함수 (토큰)
@@ -36,7 +37,7 @@ import { useAuth, apiClient, Layout, Role } from "@irms/common";
 
 | 문서                                     | 내용                                    |
 | ---------------------------------------- | --------------------------------------- |
-| [docs/components.md](docs/components.md) | Button, Input, Modal, Layout, LoginForm |
+| [docs/components.md](docs/components.md) | Button, Input, Modal, Layout, SideNav, LoginForm, theme |
 | [docs/auth.md](docs/auth.md)             | 인증 훅, 토큰 관리, LoginPage           |
 | [docs/api-client.md](docs/api-client.md) | Axios 인스턴스, 인터셉터, 환경변수      |
 | [docs/stores.md](docs/stores.md)         | authStore 사용법, 초기화                |

@@ -1,20 +1,31 @@
 import type { ReactNode } from 'react';
 import { useAuthStore } from '../stores/authStore';
+import { SideNav } from './SideNav';
+import type { SideNavItem } from './SideNav';
+import { theme } from '../styles/theme';
 
 interface LayoutProps {
   title: string;
   children: ReactNode;
+  sideNavItems?: SideNavItem[];
 }
 
-export function Layout({ title, children }: LayoutProps) {
+export function Layout({ title, children, sideNavItems = [] }: LayoutProps) {
   const { user, isAuthenticated, logout } = useAuthStore();
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: theme.colors.pageBackground,
+        color: theme.colors.text,
+        fontFamily: theme.fontFamily,
+      }}
+    >
       <header
         style={{
-          backgroundColor: '#1976d2',
-          color: '#fff',
+          backgroundColor: theme.colors.primary,
+          color: theme.colors.primaryText,
           padding: '12px 24px',
           display: 'flex',
           justifyContent: 'space-between',
@@ -30,11 +41,12 @@ export function Layout({ title, children }: LayoutProps) {
               style={{
                 background: 'none',
                 border: '1px solid rgba(255,255,255,0.5)',
-                color: '#fff',
+                color: theme.colors.primaryText,
                 padding: '4px 12px',
-                borderRadius: '4px',
+                borderRadius: theme.radius.sm,
                 cursor: 'pointer',
                 fontSize: '13px',
+                fontFamily: theme.fontFamily,
               }}
             >
               로그아웃
@@ -42,8 +54,11 @@ export function Layout({ title, children }: LayoutProps) {
           </div>
         )}
       </header>
-      <main style={{ padding: '24px', maxWidth: '960px', margin: '0 auto' }}>
-        {children}
+      <main style={{ padding: '24px', maxWidth: theme.layout.contentMaxWidth, margin: '0 auto' }}>
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
+          {sideNavItems.length > 0 && <SideNav items={sideNavItems} />}
+          <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
+        </div>
       </main>
     </div>
   );
