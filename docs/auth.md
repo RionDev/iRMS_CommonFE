@@ -56,8 +56,20 @@ function App() {
 }
 ```
 
-- 로그인 성공 시 이전에 접근하려던 경로로 redirect (`location.state.from` 활용)
-- 이전 경로가 없으면 `/`로 이동
+- 로그인 성공 시 `redirect` 쿼리 또는 이전 경로(`location.state.from`)로 이동
+- 이전 경로가 없으면 앱 기본 경로로 이동
+
+## 앱 진입 규칙
+
+현재 루트 gateway 기준 앱 진입 규칙은 다음과 같다.
+
+- `/login` → `/auth/login`
+- `/auth` → `/login?redirect=/auth/password`
+- `/admin` → `/login?redirect=/admin/users`
+- `/login?redirect=...` → `/auth/login?redirect=...`
+- 이미 로그인된 상태에서 `LoginPage`에 들어오면 `redirect` 목적지로 즉시 이동
+
+즉, 앱 루트 경로의 로그인 진입 규칙은 gateway가 먼저 정하고, 실제 로그인 화면은 auth 앱이 공통으로 제공한다.
 
 ## useAuth — 인증 보호 훅
 
