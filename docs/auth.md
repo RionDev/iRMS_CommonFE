@@ -13,11 +13,11 @@
 
 ```ts
 import {
-    getAccessToken,
-    getRefreshToken,
-    saveTokens,
-    clearTokens,
-    decodeToken,
+  getAccessToken,
+  getRefreshToken,
+  saveTokens,
+  clearTokens,
+  decodeToken,
 } from "@irms/common";
 ```
 
@@ -45,14 +45,14 @@ import { LoginPage } from "@irms/common";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/" element={<HomePage />} />
-            </Routes>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 ```
 
@@ -79,9 +79,9 @@ function App() {
 import { useAuth } from "@irms/common";
 
 function MyPage() {
-    const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
-    return <div>{user?.name} 님 환영합니다.</div>;
+  return <div>{user?.name} 님 환영합니다.</div>;
 }
 ```
 
@@ -103,9 +103,9 @@ function MyPage() {
 import { useRequireRole, Role } from "@irms/common";
 
 function AdminPage() {
-    const user = useRequireRole(Role.ADMIN);
-    // role이 ADMIN이 아니면 Error('권한이 없습니다') throw
-    return <div>관리자 페이지</div>;
+  const user = useRequireRole(Role.ADMIN);
+  // role이 ADMIN이 아니면 Error('권한이 없습니다') throw
+  return <div>관리자 페이지</div>;
 }
 ```
 
@@ -128,11 +128,11 @@ JWT access token을 디코딩하면 얻을 수 있는 payload 구조.
 
 ```ts
 interface AuthPayload {
-    sub: number; // 유저 idx
-    id: string; // 로그인 ID
-    name: string; // 이름
-    role: number; // Role 상수 값
-    team: number; // Team 상수 값
-    exp: number; // 만료 시각 (Unix timestamp, 초 단위)
+  sub: number; // 유저 idx
+  id: string; // 로그인 ID
+  name: string; // 이름
+  role: number; // Role 상수 값
+  team: number; // Team 상수 값
+  exp: number; // 만료 시각 (Unix timestamp, 초 단위)
 }
 ```

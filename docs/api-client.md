@@ -60,13 +60,13 @@ import apiClient from "@irms/common";
 import type { SomeRequest, SomeResponse } from "../types/some";
 
 export async function getSomeList(): Promise<SomeResponse[]> {
-    const res = await apiClient.get<SomeResponse[]>("/api/some");
-    return res.data;
+  const res = await apiClient.get<SomeResponse[]>("/api/some");
+  return res.data;
 }
 
 export async function createSome(data: SomeRequest): Promise<SomeResponse> {
-    const res = await apiClient.post<SomeResponse>("/api/some", data);
-    return res.data;
+  const res = await apiClient.post<SomeResponse>("/api/some", data);
+  return res.data;
 }
 ```
 

@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { Modal } from '../components/Modal';
-import { theme } from '../styles/theme';
-import { SignupForm } from '../components/SignupForm';
-import { signup } from '../services/signupService';
+import axios from "axios";
+import { useState } from "react";
+import { Modal } from "../components/Modal";
+import { SignupForm } from "../components/SignupForm";
+import { signup } from "../services/signupService";
+import { theme } from "../styles/theme";
 
 interface SignupPageProps {
   loginUrl?: string;
 }
 
-export function SignupPage({ loginUrl = '/login' }: SignupPageProps) {
+export function SignupPage({ loginUrl = "/login" }: SignupPageProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -23,7 +23,7 @@ export function SignupPage({ loginUrl = '/login' }: SignupPageProps) {
     team: number | null;
   }) => {
     if (data.password !== data.password_confirm) {
-      setError('비밀번호가 일치하지 않습니다.');
+      setError("비밀번호가 일치하지 않습니다.");
       return;
     }
 
@@ -32,20 +32,24 @@ export function SignupPage({ loginUrl = '/login' }: SignupPageProps) {
     try {
       const normalizedId = data.id
         .trim()
-        .replace(/[\u200B-\u200D\uFEFF]/g, '')
-        .replace(/\s+/g, '');
+        .replace(/[\u200B-\u200D\uFEFF]/g, "")
+        .replace(/\s+/g, "");
       await signup({ ...data, id: normalizedId });
-      setSuccessMessage('회원가입이 완료되었습니다. 관리자 승인 후 로그인할 수 있습니다.');
+      setSuccessMessage(
+        "회원가입이 완료되었습니다. 관리자 승인 후 로그인할 수 있습니다.",
+      );
     } catch (caughtError: unknown) {
       if (axios.isAxiosError(caughtError)) {
         const detail = caughtError.response?.data?.detail;
-        if (typeof detail === 'string' && detail.length > 0) {
+        if (typeof detail === "string" && detail.length > 0) {
           setError(detail);
         } else {
-          setError(`회원가입에 실패했습니다. (${caughtError.response?.status ?? '네트워크 오류'})`);
+          setError(
+            `회원가입에 실패했습니다. (${caughtError.response?.status ?? "네트워크 오류"})`,
+          );
         }
       } else {
-        setError('회원가입에 실패했습니다. 잠시 후 다시 시도하세요.');
+        setError("회원가입에 실패했습니다. 잠시 후 다시 시도하세요.");
       }
     } finally {
       setLoading(false);
@@ -55,10 +59,10 @@ export function SignupPage({ loginUrl = '/login' }: SignupPageProps) {
   return (
     <div
       style={{
-        minHeight: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: theme.colors.pageBackground,
         color: theme.colors.text,
         fontFamily: theme.fontFamily,
@@ -67,25 +71,31 @@ export function SignupPage({ loginUrl = '/login' }: SignupPageProps) {
       <div
         style={{
           backgroundColor: theme.colors.surface,
-          padding: '32px',
+          padding: "32px",
           borderRadius: theme.radius.md,
           boxShadow: theme.shadow.card,
-          width: '100%',
-          maxWidth: '360px',
+          width: "100%",
+          maxWidth: "360px",
         }}
       >
-        <h1 style={{ textAlign: 'center', marginBottom: '24px', fontSize: '20px' }}>
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "24px",
+            fontSize: "20px",
+          }}
+        >
           iRMS 회원가입
         </h1>
         <SignupForm onSubmit={handleSubmit} loading={loading} error={error} />
-        <div style={{ textAlign: 'center', marginTop: '16px' }}>
-          <span style={{ fontSize: '14px', color: theme.colors.textMuted }}>
-            이미 계정이 있으신가요?{' '}
+        <div style={{ textAlign: "center", marginTop: "16px" }}>
+          <span style={{ fontSize: "14px", color: theme.colors.textMuted }}>
+            이미 계정이 있으신가요?{" "}
             <a
               href={loginUrl}
               style={{
                 color: theme.colors.primary,
-                textDecoration: 'none',
+                textDecoration: "none",
                 fontWeight: 500,
               }}
             >

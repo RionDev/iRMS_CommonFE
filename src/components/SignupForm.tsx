@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
-import { Input } from './Input';
-import { Button } from './Button';
-import { theme } from '../styles/theme';
-import { Role, Team } from '../types/constants';
+import type { FormEvent } from "react";
+import { useState } from "react";
+import { theme } from "../styles/theme";
+import { Role, Team } from "../types/constants";
+import { Button } from "./Button";
+import { Input } from "./Input";
 
 interface SignupFormProps {
   onSubmit: (data: {
@@ -18,11 +18,15 @@ interface SignupFormProps {
   error?: string | null;
 }
 
-export function SignupForm({ onSubmit, loading = false, error }: SignupFormProps) {
-  const [id, setId] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+export function SignupForm({
+  onSubmit,
+  loading = false,
+  error,
+}: SignupFormProps) {
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [role, setRole] = useState<number>(Role.MEMBER);
   const [team, setTeam] = useState<number | null>(Team.ENGINE);
 
@@ -70,9 +74,14 @@ export function SignupForm({ onSubmit, loading = false, error }: SignupFormProps
         autoComplete="name"
         required
       />
-      <div style={{ marginBottom: '12px' }}>
+      <div style={{ marginBottom: "12px" }}>
         <label
-          style={{ display: 'block', marginBottom: '4px', fontSize: '14px', color: theme.colors.text }}
+          style={{
+            display: "block",
+            marginBottom: "4px",
+            fontSize: "14px",
+            color: theme.colors.text,
+          }}
         >
           역할
         </label>
@@ -80,13 +89,13 @@ export function SignupForm({ onSubmit, loading = false, error }: SignupFormProps
           value={role}
           onChange={(e) => handleRoleChange(Number(e.target.value))}
           style={{
-            width: '100%',
-            padding: '8px',
+            width: "100%",
+            padding: "8px",
             border: `1px solid ${theme.colors.border}`,
             borderRadius: theme.radius.sm,
-            fontSize: '14px',
+            fontSize: "14px",
             fontFamily: theme.fontFamily,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
             backgroundColor: theme.colors.surface,
           }}
         >
@@ -113,22 +122,29 @@ export function SignupForm({ onSubmit, loading = false, error }: SignupFormProps
         autoComplete="new-password"
         required
       />
-      <div style={{ marginBottom: '12px' }}>
-        <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px', color: theme.colors.text }}>
+      <div style={{ marginBottom: "12px" }}>
+        <label
+          style={{
+            display: "block",
+            marginBottom: "4px",
+            fontSize: "14px",
+            color: theme.colors.text,
+          }}
+        >
           소속 팀
         </label>
         <select
-          value={team ?? ''}
+          value={team ?? ""}
           onChange={(e) => setTeam(Number(e.target.value))}
           disabled={role === Role.GUEST}
           style={{
-            width: '100%',
-            padding: '8px',
+            width: "100%",
+            padding: "8px",
             border: `1px solid ${theme.colors.border}`,
             borderRadius: theme.radius.sm,
-            fontSize: '14px',
+            fontSize: "14px",
             fontFamily: theme.fontFamily,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
             backgroundColor: theme.colors.surface,
             opacity: role === Role.GUEST ? 0.6 : 1,
           }}
@@ -139,10 +155,18 @@ export function SignupForm({ onSubmit, loading = false, error }: SignupFormProps
         </select>
       </div>
       {error && (
-        <p style={{ color: theme.colors.danger, fontSize: '14px', margin: '0 0 12px 0' }}>{error}</p>
+        <p
+          style={{
+            color: theme.colors.danger,
+            fontSize: "14px",
+            margin: "0 0 12px 0",
+          }}
+        >
+          {error}
+        </p>
       )}
-      <Button type="submit" disabled={loading} style={{ width: '100%' }}>
-        {loading ? '가입 중...' : '회원가입'}
+      <Button type="submit" disabled={loading} style={{ width: "100%" }}>
+        {loading ? "가입 중..." : "회원가입"}
       </Button>
     </form>
   );

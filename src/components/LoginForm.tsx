@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
-import { Input } from './Input';
-import { Button } from './Button';
-import { theme } from '../styles/theme';
+import type { FormEvent } from "react";
+import { useState } from "react";
+import { theme } from "../styles/theme";
+import { Button } from "./Button";
+import { Input } from "./Input";
 
 interface LoginFormProps {
   onSubmit: (id: string, password: string) => void;
@@ -10,9 +10,13 @@ interface LoginFormProps {
   error?: string | null;
 }
 
-export function LoginForm({ onSubmit, loading = false, error }: LoginFormProps) {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+export function LoginForm({
+  onSubmit,
+  loading = false,
+  error,
+}: LoginFormProps) {
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -43,10 +47,18 @@ export function LoginForm({ onSubmit, loading = false, error }: LoginFormProps) 
         required
       />
       {error && (
-        <p style={{ color: theme.colors.danger, fontSize: '14px', margin: '0 0 12px 0' }}>{error}</p>
+        <p
+          style={{
+            color: theme.colors.danger,
+            fontSize: "14px",
+            margin: "0 0 12px 0",
+          }}
+        >
+          {error}
+        </p>
       )}
-      <Button type="submit" disabled={loading} style={{ width: '100%' }}>
-        {loading ? '로그인 중...' : '로그인'}
+      <Button type="submit" disabled={loading} style={{ width: "100%" }}>
+        {loading ? "로그인 중..." : "로그인"}
       </Button>
     </form>
   );

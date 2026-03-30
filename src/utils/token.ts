@@ -1,7 +1,7 @@
-import type { AuthPayload, TokenPair } from '../types/auth';
+import type { AuthPayload, TokenPair } from "../types/auth";
 
-const ACCESS_TOKEN_KEY = 'irms_access_token';
-const REFRESH_TOKEN_KEY = 'irms_refresh_token';
+const ACCESS_TOKEN_KEY = "irms_access_token";
+const REFRESH_TOKEN_KEY = "irms_refresh_token";
 
 export function getAccessToken(): string | null {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -22,6 +22,6 @@ export function clearTokens(): void {
 }
 
 export function decodeToken(token: string): AuthPayload {
-  const payload = token.split('.')[1];
+  const payload = token.split(".")[1];
   return JSON.parse(atob(payload));
 }

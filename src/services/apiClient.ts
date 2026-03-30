@@ -1,8 +1,13 @@
-import axios from 'axios';
-import { getAccessToken, getRefreshToken, saveTokens, clearTokens } from '../utils/token';
+import axios from "axios";
+import {
+  clearTokens,
+  getAccessToken,
+  getRefreshToken,
+  saveTokens,
+} from "../utils/token";
 
-const configuredBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
-const apiBaseUrl = import.meta.env.DEV ? '' : configuredBaseUrl;
+const configuredBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
+const apiBaseUrl = import.meta.env.DEV ? "" : configuredBaseUrl;
 
 const apiClient = axios.create({
   baseURL: apiBaseUrl,
@@ -14,12 +19,15 @@ function resolveApiUrl(path: string): string {
 }
 
 function isAuthRequest(url?: string): boolean {
-  return !!url && (url.includes('/api/auth/login') || url.includes('/api/auth/refresh'));
+  return (
+    !!url &&
+    (url.includes("/api/auth/login") || url.includes("/api/auth/refresh"))
+  );
 }
 
 function getLoginUrl(): string {
-  const basePath = '/' + window.location.pathname.split('/')[1];
-  return basePath + '/login';
+  const basePath = "/" + window.location.pathname.split("/")[1];
+  return basePath + "/login";
 }
 
 apiClient.interceptors.request.use((config) => {
@@ -45,23 +53,22 @@ apiClient.interceptors.response.use(
       const refreshToken = getRefreshToken();
       if (!refreshToken) {
         clearTokens();
-        if (!window.location.pathname.includes('/login')) {
+        if (!window.location.pathname.includes("/login")) {
           window.location.href = getLoginUrl();
         }
         return Promise.reject(error);
       }
 
       try {
-        const res = await axios.post(
-          resolveApiUrl('/api/auth/refresh'),
-          { refresh_token: refreshToken },
-        );
+        const res = await axios.post(resolveApiUrl("/api/auth/refresh"), {
+          refresh_token: refreshToken,
+        });
         saveTokens(res.data);
         originalRequest.headers.Authorization = `Bearer ${res.data.access_token}`;
         return apiClient(originalRequest);
       } catch {
         clearTokens();
-        if (!window.location.pathname.includes('/login')) {
+        if (!window.location.pathname.includes("/login")) {
           window.location.href = getLoginUrl();
         }
         return Promise.reject(error);

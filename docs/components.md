@@ -73,8 +73,8 @@ import { Modal } from "@irms/common";
 const [isOpen, setIsOpen] = useState(false);
 
 <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="확인">
-    <p>삭제하시겠습니까?</p>
-    <Button onClick={() => setIsOpen(false)}>닫기</Button>
+  <p>삭제하시겠습니까?</p>
+  <Button onClick={() => setIsOpen(false)}>닫기</Button>
 </Modal>;
 ```
 
@@ -100,21 +100,24 @@ const [isOpen, setIsOpen] = useState(false);
 import { Layout } from "@irms/common";
 
 function App() {
-    return (
-        <Layout title="관리자" sideNavItems={[{ label: "회원 목록", to: "/users" }]}>
-            <SomePage />
-        </Layout>
-    );
+  return (
+    <Layout
+      title="관리자"
+      sideNavItems={[{ label: "회원 목록", to: "/users" }]}
+    >
+      <SomePage />
+    </Layout>
+  );
 }
 ```
 
 ### 4.1. Props
 
-| prop       | 타입        | 설명                                |
-| ---------- | ----------- | ----------------------------------- |
-| `title`    | `string`    | 헤더에 `iRMS — {title}` 형태로 표시 |
-| `children` | `ReactNode` | 본문 컨텐츠                         |
-| `sideNavItems` | `SideNavItem[]` | 앱별 사이드 메뉴 항목 목록 |
+| prop           | 타입            | 설명                                |
+| -------------- | --------------- | ----------------------------------- |
+| `title`        | `string`        | 헤더에 `iRMS — {title}` 형태로 표시 |
+| `children`     | `ReactNode`     | 본문 컨텐츠                         |
+| `sideNavItems` | `SideNavItem[]` | 앱별 사이드 메뉴 항목 목록          |
 
 `useAuthStore`를 내부에서 직접 참조한다. 인증된 상태이면 헤더에 사용자 이름과 로그아웃 버튼이 표시된다.
 
@@ -137,10 +140,10 @@ import { SideNav } from "@irms/common";
 
 ### 5.1. SideNavItem
 
-| 필드 | 타입 | 설명 |
-| --- | --- | --- |
-| `label` | `string` | 메뉴 표시 이름 |
-| `to` | `string` | 앱 basename 기준 이동 경로 |
+| 필드    | 타입     | 설명                       |
+| ------- | -------- | -------------------------- |
+| `label` | `string` | 메뉴 표시 이름             |
+| `to`    | `string` | 앱 basename 기준 이동 경로 |
 
 ---
 
@@ -166,9 +169,9 @@ import { SideNav } from "@irms/common";
 import { LoginForm } from "@irms/common";
 
 <LoginForm
-    onSubmit={(id, password) => handleLogin(id, password)}
-    loading={isLoading}
-    error={errorMessage}
+  onSubmit={(id, password) => handleLogin(id, password)}
+  loading={isLoading}
+  error={errorMessage}
 />;
 ```
 

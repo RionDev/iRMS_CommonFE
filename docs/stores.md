@@ -83,12 +83,12 @@ login({ access_token: "...", refresh_token: "..." });
 import { create } from "zustand";
 
 interface SomeState {
-    items: Item[];
-    setItems: (items: Item[]) => void;
+  items: Item[];
+  setItems: (items: Item[]) => void;
 }
 
 export const useSomeStore = create<SomeState>((set) => ({
-    items: [],
-    setItems: (items) => set({ items }),
+  items: [],
+  setItems: (items) => set({ items }),
 }));
 ```

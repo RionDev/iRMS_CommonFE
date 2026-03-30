@@ -1,6 +1,11 @@
-import { create } from 'zustand';
-import type { AuthPayload, TokenPair } from '../types/auth';
-import { saveTokens, clearTokens, getAccessToken, decodeToken } from '../utils/token';
+import { create } from "zustand";
+import type { AuthPayload, TokenPair } from "../types/auth";
+import {
+  clearTokens,
+  decodeToken,
+  getAccessToken,
+  saveTokens,
+} from "../utils/token";
 
 interface AuthState {
   user: AuthPayload | null;
