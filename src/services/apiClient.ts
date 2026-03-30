@@ -17,6 +17,11 @@ function isAuthRequest(url?: string): boolean {
   return !!url && (url.includes('/api/auth/login') || url.includes('/api/auth/refresh'));
 }
 
+function getLoginUrl(): string {
+  const basePath = '/' + window.location.pathname.split('/')[1];
+  return basePath + '/login';
+}
+
 apiClient.interceptors.request.use((config) => {
   const token = getAccessToken();
   if (token && !isAuthRequest(config.url)) {
@@ -40,8 +45,8 @@ apiClient.interceptors.response.use(
       const refreshToken = getRefreshToken();
       if (!refreshToken) {
         clearTokens();
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
+        if (!window.location.pathname.includes('/login')) {
+          window.location.href = getLoginUrl();
         }
         return Promise.reject(error);
       }
@@ -56,8 +61,8 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       } catch {
         clearTokens();
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
+        if (!window.location.pathname.includes('/login')) {
+          window.location.href = getLoginUrl();
         }
         return Promise.reject(error);
       }

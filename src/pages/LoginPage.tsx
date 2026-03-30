@@ -1,40 +1,34 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { LoginForm } from '../components/LoginForm';
 import { Modal } from '../components/Modal';
 import { login } from '../services/authService';
 import { useAuthStore } from '../stores/authStore';
 import { theme } from '../styles/theme';
 
-export function LoginPage() {
+interface LoginPageProps {
+  signupUrl?: string;
+  defaultRedirect?: string;
+}
+
+export function LoginPage({ signupUrl = '/signup', defaultRedirect = '/' }: LoginPageProps) {
   type AuthState = ReturnType<typeof useAuthStore.getState>;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pendingMessage, setPendingMessage] = useState<string | null>(null);
   const authLogin = useAuthStore((s: AuthState) => s.login);
   const isAuthenticated = useAuthStore((s: AuthState) => s.isAuthenticated);
-  const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const stateFrom =
-    typeof location.state === 'object' &&
-    location.state !== null &&
-    'from' in location.state &&
-    typeof location.state.from === 'string'
-      ? location.state.from
-      : null;
 
-  const from =
-    searchParams.get('redirect') ||
-    stateFrom ||
-    '/admin/users';
+  const from = searchParams.get('redirect') || defaultRedirect;
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(from, { replace: true });
+      window.location.href = from;
     }
-  }, [from, isAuthenticated, navigate]);
+  }, [from, isAuthenticated]);
 
   const handleSubmit = async (id: string, password: string) => {
     setLoading(true);
@@ -46,7 +40,7 @@ export function LoginPage() {
         .replace(/\s+/g, '');
       const res = await login({ id: normalizedId, password });
       authLogin({ access_token: res.access_token, refresh_token: res.refresh_token });
-      navigate(from, { replace: true });
+      window.location.href = from;
     } catch (caughtError: unknown) {
       if (axios.isAxiosError(caughtError)) {
         const detail = caughtError.response?.data?.detail;
@@ -93,6 +87,21 @@ export function LoginPage() {
           iRMS 로그인
         </h1>
         <LoginForm onSubmit={handleSubmit} loading={loading} error={error} />
+        <div style={{ textAlign: 'center', marginTop: '16px' }}>
+          <span style={{ fontSize: '14px', color: theme.colors.textMuted }}>
+            계정이 없으신가요?{' '}
+            <a
+              href={signupUrl}
+              style={{
+                color: theme.colors.primary,
+                textDecoration: 'none',
+                fontWeight: 500,
+              }}
+            >
+              회원가입
+            </a>
+          </span>
+        </div>
       </div>
       <Modal
         isOpen={pendingMessage !== null}
