@@ -3,6 +3,16 @@ import type { AuthPayload, TokenPair } from "../types/auth";
 const ACCESS_TOKEN_KEY = "irms_access_token";
 const REFRESH_TOKEN_KEY = "irms_refresh_token";
 const BLOCKED_USER_STATUS = 3;
+const JWT_COOKIE_KEY = "jwt";
+
+function clearCookie(name: string): void {
+  const expires = "Thu, 01 Jan 1970 00:00:00 GMT";
+  const paths = ["/", "/admin", "/auth", "/portal"];
+
+  paths.forEach((path) => {
+    document.cookie = `${name}=; expires=${expires}; path=${path};`;
+  });
+}
 
 export function getAccessToken(): string | null {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -20,6 +30,7 @@ export function saveTokens(tokens: TokenPair): void {
 export function clearTokens(): void {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
+  clearCookie(JWT_COOKIE_KEY);
 }
 
 export function decodeToken(token: string): AuthPayload {

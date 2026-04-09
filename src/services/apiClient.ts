@@ -39,6 +39,15 @@ function redirectToLogin(): void {
   }
 }
 
+function isRateLimitBlockedDetail(detail?: string): boolean {
+  if (!detail) return false;
+  const message = detail.toLowerCase();
+  return (
+    message.includes("too many requests") ||
+    message.includes("account has been blocked")
+  );
+}
+
 apiClient.interceptors.request.use((config) => {
   const token = getAccessToken();
   if (!token) return config;
@@ -97,12 +106,17 @@ apiClient.interceptors.response.use(
     const detail: string | undefined = error.response?.data?.detail;
 
     if (status === 403) {
-      const token = getAccessToken();
-      if (token && isBlockedToken(token)) {
-        alert("차단된 계정입니다.");
+      if (isRateLimitBlockedDetail(detail)) {
+        alert(detail ?? "차단된 계정입니다.");
         redirectToLogin();
       } else {
-        alert(detail ?? "접근 권한이 없습니다.");
+        const token = getAccessToken();
+        if (token && isBlockedToken(token)) {
+          alert("차단된 계정입니다.");
+          redirectToLogin();
+        } else {
+          alert(detail ?? "접근 권한이 없습니다.");
+        }
       }
     } else if (status === 404) {
       alert(detail ?? "요청한 리소스를 찾을 수 없습니다.");
