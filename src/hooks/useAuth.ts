@@ -16,14 +16,7 @@ export function useRequireRole(...allowedRoles: number[]) {
 
     handledRef.current = true;
     alert("권한이 없습니다.");
-
-    if (window.history.length > 1) {
-      window.history.back();
-      return;
-    }
-
-    const basePath = "/" + window.location.pathname.split("/")[1];
-    window.location.href = basePath || "/";
+    window.location.href = "/portal";
   }, [allowedRoles, user]);
 
   return user;
