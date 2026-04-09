@@ -46,23 +46,25 @@ export function LoginPage({
         access_token: res.access_token,
         refresh_token: res.refresh_token,
       });
+      if (!useAuthStore.getState().isAuthenticated) {
+        setError("차단된 계정입니다. 관리자에게 문의하세요.");
+        return;
+      }
       window.location.href = from;
     } catch (caughtError: unknown) {
       if (axios.isAxiosError(caughtError)) {
         const detail = caughtError.response?.data?.detail;
-        if (typeof detail === "string" && detail.length > 0) {
-          if (detail.includes("승인 대기")) {
-            setPendingMessage(detail);
-          } else {
-            setError(detail);
-          }
+        if (typeof detail === "string" && detail.includes("승인 대기")) {
+          setPendingMessage(detail);
         } else {
-          setError(
-            `로그인에 실패했습니다. (${caughtError.response?.status ?? "네트워크 오류"})`,
+          alert(
+            typeof detail === "string" && detail.length > 0
+              ? detail.replace(/\. 사유:.*$/, ".")
+              : `로그인에 실패했습니다. (${caughtError.response?.status ?? "네트워크 오류"})`,
           );
         }
       } else {
-        setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.");
+        alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.");
       }
     } finally {
       setLoading(false);

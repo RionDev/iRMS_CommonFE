@@ -4,6 +4,7 @@ import {
   clearTokens,
   decodeToken,
   getAccessToken,
+  isBlockedToken,
   saveTokens,
 } from "../utils/token";
 
@@ -20,8 +21,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
 
   login: (tokens: TokenPair) => {
-    saveTokens(tokens);
     const payload = decodeToken(tokens.access_token);
+    if (payload.status === 3) {
+      clearTokens();
+      set({ user: null, isAuthenticated: false });
+      return;
+    }
+
+    saveTokens(tokens);
     set({ user: payload, isAuthenticated: true });
   },
 
@@ -35,7 +42,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (token) {
       try {
         const payload = decodeToken(token);
-        if (payload.exp * 1000 > Date.now()) {
+        if (payload.exp * 1000 > Date.now() && !isBlockedToken(token)) {
           set({ user: payload, isAuthenticated: true });
         } else {
           clearTokens();

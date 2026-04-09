@@ -3,8 +3,10 @@ import {
   clearTokens,
   getAccessToken,
   getRefreshToken,
+  isBlockedToken,
   saveTokens,
 } from "../utils/token";
+
 
 const configuredBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
 const apiBaseUrl = import.meta.env.DEV ? "" : configuredBaseUrl;
@@ -30,11 +32,26 @@ function getLoginUrl(): string {
   return basePath + "/login";
 }
 
+function redirectToLogin(): void {
+  clearTokens();
+  if (!window.location.pathname.includes("/login")) {
+    window.location.href = getLoginUrl();
+  }
+}
+
 apiClient.interceptors.request.use((config) => {
   const token = getAccessToken();
-  if (token && !isAuthRequest(config.url)) {
+  if (!token) return config;
+
+  if (isBlockedToken(token)) {
+    redirectToLogin();
+    return Promise.reject(new Error("Blocked account"));
+  }
+
+  if (!isAuthRequest(config.url)) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 
@@ -52,10 +69,7 @@ apiClient.interceptors.response.use(
 
       const refreshToken = getRefreshToken();
       if (!refreshToken) {
-        clearTokens();
-        if (!window.location.pathname.includes("/login")) {
-          window.location.href = getLoginUrl();
-        }
+        redirectToLogin();
         return Promise.reject(error);
       }
 
@@ -63,16 +77,35 @@ apiClient.interceptors.response.use(
         const res = await axios.post(resolveApiUrl("/api/auth/refresh"), {
           refresh_token: refreshToken,
         });
+
+        if (isBlockedToken(res.data.access_token)) {
+          redirectToLogin();
+          return Promise.reject(error);
+        }
+
         saveTokens(res.data);
         originalRequest.headers.Authorization = `Bearer ${res.data.access_token}`;
         return apiClient(originalRequest);
       } catch {
-        clearTokens();
-        if (!window.location.pathname.includes("/login")) {
-          window.location.href = getLoginUrl();
-        }
+        redirectToLogin();
         return Promise.reject(error);
       }
+    }
+
+    // 401 이외의 HTTP 에러 — alert로 표시
+    const status = error.response?.status;
+    const detail: string | undefined = error.response?.data?.detail;
+
+    if (status === 403) {
+      alert(detail ?? "접근 권한이 없습니다.");
+    } else if (status === 404) {
+      alert(detail ?? "요청한 리소스를 찾을 수 없습니다.");
+    } else if (status === 409) {
+      alert(detail ?? "요청이 충돌했습니다. 다시 시도해 주세요.");
+    } else if (status && status >= 500) {
+      alert(detail ?? "서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+    } else if (!error.response) {
+      alert("네트워크 오류가 발생했습니다. 연결 상태를 확인해 주세요.");
     }
 
     return Promise.reject(error);

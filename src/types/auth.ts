@@ -34,6 +34,7 @@ export interface AuthPayload {
   name: string;
   role: number;
   team: number;
+  status?: number;
   exp: number;
 }
 

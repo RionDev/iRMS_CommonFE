@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { Modal } from "../components/Modal";
 import { SignupForm } from "../components/SignupForm";
@@ -38,19 +37,8 @@ export function SignupPage({ loginUrl = "/login" }: SignupPageProps) {
       setSuccessMessage(
         "회원가입이 완료되었습니다. 관리자 승인 후 로그인할 수 있습니다.",
       );
-    } catch (caughtError: unknown) {
-      if (axios.isAxiosError(caughtError)) {
-        const detail = caughtError.response?.data?.detail;
-        if (typeof detail === "string" && detail.length > 0) {
-          setError(detail);
-        } else {
-          setError(
-            `회원가입에 실패했습니다. (${caughtError.response?.status ?? "네트워크 오류"})`,
-          );
-        }
-      } else {
-        setError("회원가입에 실패했습니다. 잠시 후 다시 시도하세요.");
-      }
+    } catch {
+      // interceptor가 alert 처리
     } finally {
       setLoading(false);
     }
