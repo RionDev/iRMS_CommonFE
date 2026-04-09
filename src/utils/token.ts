@@ -28,6 +28,7 @@ export function decodeToken(token: string): AuthPayload {
 }
 
 export function isBlockedToken(token: string): boolean {
+  console.log("[isBlockedToken] token:", token);
   try {
     const payload = decodeToken(token);
     return payload.status === BLOCKED_USER_STATUS;
