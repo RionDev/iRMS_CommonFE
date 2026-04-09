@@ -57,14 +57,14 @@ export function LoginPage({
         if (typeof detail === "string" && detail.includes("승인 대기")) {
           setPendingMessage(detail);
         } else {
-          alert(
+          setError(
             typeof detail === "string" && detail.length > 0
               ? detail.replace(/\. 사유:.*$/, ".")
               : `로그인에 실패했습니다. (${caughtError.response?.status ?? "네트워크 오류"})`,
           );
         }
       } else {
-        alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.");
+        setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.");
       }
     } finally {
       setLoading(false);
