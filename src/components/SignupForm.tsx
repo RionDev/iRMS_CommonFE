@@ -24,16 +24,27 @@ export function SignupForm({
   error,
 }: SignupFormProps) {
   const [id, setId] = useState("");
+  const [idError, setIdError] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [role, setRole] = useState<number>(Role.MEMBER);
   const [team, setTeam] = useState<number | null>(Team.ENGINE);
 
+  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    const normalizedId = id.trim();
+
+    if (!isValidEmail(normalizedId)) {
+      setIdError("이메일 주소 형식이 올바르지 않습니다.");
+      return;
+    }
+
+    setIdError(null);
     onSubmit({
-      id,
+      id: normalizedId,
       name,
       password,
       password_confirm: passwordConfirm,
@@ -57,7 +68,10 @@ export function SignupForm({
         label="아이디 (이메일)"
         type="email"
         value={id}
-        onChange={(e) => setId(e.target.value)}
+        onChange={(e) => {
+          setId(e.target.value);
+          if (idError) setIdError(null);
+        }}
         placeholder="이메일을 입력하세요"
         autoComplete="username"
         autoCapitalize="none"
@@ -154,7 +168,7 @@ export function SignupForm({
           <option value={Team.ANALYST}>분석팀</option>
         </select>
       </div>
-      {error && (
+      {(idError ?? error) && (
         <p
           style={{
             color: theme.colors.danger,
@@ -162,7 +176,7 @@ export function SignupForm({
             margin: "0 0 12px 0",
           }}
         >
-          {error}
+          {idError ?? error}
         </p>
       )}
       <Button type="submit" disabled={loading} style={{ width: "100%" }}>
