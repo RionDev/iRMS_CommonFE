@@ -97,10 +97,12 @@ apiClient.interceptors.response.use(
     const detail: string | undefined = error.response?.data?.detail;
 
     if (status === 403) {
-      const msg = detail ?? "접근 권한이 없습니다.";
-      alert(msg.replace(/\. 사유:.*$/, "."));
-      if (detail && detail.includes("차단")) {
+      const token = getAccessToken();
+      if (token && isBlockedToken(token)) {
+        alert("차단된 계정입니다.");
         redirectToLogin();
+      } else {
+        alert(detail ?? "접근 권한이 없습니다.");
       }
     } else if (status === 404) {
       alert(detail ?? "요청한 리소스를 찾을 수 없습니다.");
