@@ -5,7 +5,7 @@
 인증 상태를 관리하는 유일한 전역 store. 앱마다 별도로 정의하지 않는다.
 
 ```ts
-import { useAuthStore } from "@irms/common";
+import { useAuthStore } from "@common";
 ```
 
 ### 1.1. 상태
@@ -38,7 +38,7 @@ const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 인증이 필요한 페이지는 store를 직접 사용하지 않고 `useAuth` 훅을 사용한다.
 
 ```tsx
-import { useAuth } from "@irms/common";
+import { useAuth } from "@common";
 
 const { user, isAuthenticated, logout } = useAuth();
 ```
@@ -46,7 +46,7 @@ const { user, isAuthenticated, logout } = useAuth();
 #### 1.2.3. 앱 초기화 (main.tsx)
 
 ```tsx
-import { useAuthStore } from "@irms/common";
+import { useAuthStore } from "@common";
 
 // React 렌더링 전에 동기적으로 호출
 useAuthStore.getState().initialize();
@@ -57,7 +57,7 @@ useAuthStore.getState().initialize();
 직접 호출이 필요한 경우:
 
 ```ts
-import { useAuthStore } from "@irms/common";
+import { useAuthStore } from "@common";
 
 const { login } = useAuthStore();
 login({ access_token: "...", refresh_token: "..." });

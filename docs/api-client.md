@@ -5,7 +5,7 @@
 ## 기본 사용법
 
 ```ts
-import apiClient from "@irms/common";
+import apiClient from "@common/services/apiClient";
 
 // GET
 const res = await apiClient.get<MyResponse>("/api/some/endpoint");
@@ -72,7 +72,7 @@ VITE_API_BASE_URL=https://api.irms.example.com
 
 ```ts
 // src/services/someService.ts
-import apiClient from "@irms/common";
+import apiClient from "@common/services/apiClient";
 import type { SomeRequest, SomeResponse } from "../types/some";
 
 export async function getSomeList(): Promise<SomeResponse[]> {

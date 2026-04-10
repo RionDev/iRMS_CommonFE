@@ -6,19 +6,23 @@
 
 ### Pages
 
-| export      | 파일                  | 역할                                                        |
-| ----------- | --------------------- | ----------------------------------------------------------- |
-| `LoginPage` | `pages/LoginPage.tsx` | 로그인 폼 렌더링, 인증 처리, 로그인 후 원래 경로로 redirect |
+| export       | 파일                   | 역할                                                        |
+| ------------ | ---------------------- | ----------------------------------------------------------- |
+| `LoginPage`  | `pages/LoginPage.tsx`  | 로그인 폼 렌더링, 인증 처리, 로그인 후 원래 경로로 redirect |
+| `SignupPage` | `pages/SignupPage.tsx` | 회원가입 폼 렌더링, 가입 처리                               |
 
 ### Components
 
-| export      | 파일                       | Props                                                         |
-| ----------- | -------------------------- | ------------------------------------------------------------- |
-| `Button`    | `components/Button.tsx`    | `variant?: 'primary'\|'secondary'` + 기본 button 속성         |
-| `Input`     | `components/Input.tsx`     | `label?: string`, `error?: string` + 기본 input 속성          |
-| `Modal`     | `components/Modal.tsx`     | `isOpen`, `onClose`, `title`, `children`                      |
-| `Layout`    | `components/Layout.tsx`    | `title: string`, `children` — 헤더(로그아웃 포함) + 본문 래퍼 |
-| `LoginForm` | `components/LoginForm.tsx` | `onSubmit`, `loading?`, `error?` — LoginPage 내부용           |
+| export       | 파일                        | Props                                                         |
+| ------------ | --------------------------- | ------------------------------------------------------------- |
+| `Button`     | `components/Button.tsx`     | `variant?: 'primary'\|'secondary'` + 기본 button 속성         |
+| `Input`      | `components/Input.tsx`      | `label?: string`, `error?: string` + 기본 input 속성          |
+| `Modal`      | `components/Modal.tsx`      | `isOpen`, `onClose`, `title`, `children`                      |
+| `Layout`     | `components/Layout.tsx`     | `title: string`, `children` — 헤더(로그아웃 포함) + 본문 래퍼 |
+| `LoginForm`  | `components/LoginForm.tsx`  | `onSubmit`, `loading?`, `error?` — LoginPage 내부용           |
+| `SideNav`    | `components/SideNav.tsx`    | `items: SideNavItem[]` — 앱별 사이드 메뉴 렌더링              |
+| `SignupForm` | `components/SignupForm.tsx` | `onSubmit`, `loading?`, `error?` — SignupPage 내부용          |
+| `theme`      | `styles/theme.ts`           | 색상, spacing, radius, shadow 등 공통 디자인 토큰             |
 
 ### Hooks
 
@@ -30,12 +34,13 @@
 
 ### Services
 
-| export                | 파일                      | 함수                                            |
-| --------------------- | ------------------------- | ----------------------------------------------- |
-| `apiClient` (default) | `services/apiClient.ts`   | Axios 인스턴스 (토큰 자동 첨부, 401 시 refresh) |
-| `login`               | `services/authService.ts` | `POST /api/auth/login`                          |
-| `refresh`             | `services/authService.ts` | `POST /api/auth/refresh`                        |
-| `logout`              | `services/authService.ts` | `POST /api/auth/logout`                         |
+| export                | 파일                        | 함수                                            |
+| --------------------- | --------------------------- | ----------------------------------------------- |
+| `apiClient` (default) | `services/apiClient.ts`     | Axios 인스턴스 (토큰 자동 첨부, 401 시 refresh) |
+| `login`               | `services/authService.ts`   | `POST /api/auth/login`                          |
+| `refresh`             | `services/authService.ts`   | `POST /api/auth/refresh`                        |
+| `logout`              | `services/authService.ts`   | `POST /api/auth/logout`                         |
+| `signup`              | `services/signupService.ts` | `POST /api/auth/signup`                         |
 
 ### Stores
 
@@ -45,18 +50,20 @@
 
 ### Types
 
-| export          | 파일                 | 설명                                                         |
-| --------------- | -------------------- | ------------------------------------------------------------ |
-| `User`          | `types/auth.ts`      | DB 유저 전체 필드                                            |
-| `VUser`         | `types/auth.ts`      | 뷰용 유저 (team_name, role_name 등 문자열)                   |
-| `TokenPair`     | `types/auth.ts`      | `access_token`, `refresh_token`                              |
-| `AuthPayload`   | `types/auth.ts`      | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
-| `LoginRequest`  | `types/auth.ts`      | `id`, `password`                                             |
-| `LoginResponse` | `types/auth.ts`      | `TokenPair` + `user: VUser`                                  |
-| `Role`          | `types/constants.ts` | `{ MEMBER:1, LEAD:2, ADMIN:3, GUEST:4 }`                     |
-| `Team`          | `types/constants.ts` | `{ ENGINE:1, ANALYST:2 }`                                    |
-| `RoleType`      | `types/constants.ts` | `Role` 값의 union 타입                                       |
-| `TeamType`      | `types/constants.ts` | `Team` 값의 union 타입                                       |
+| export           | 파일                 | 설명                                                         |
+| ---------------- | -------------------- | ------------------------------------------------------------ |
+| `User`           | `types/auth.ts`      | DB 유저 전체 필드                                            |
+| `VUser`          | `types/auth.ts`      | 뷰용 유저 (team_name, role_name 등 문자열)                   |
+| `TokenPair`      | `types/auth.ts`      | `access_token`, `refresh_token`                              |
+| `AuthPayload`    | `types/auth.ts`      | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
+| `LoginRequest`   | `types/auth.ts`      | `id`, `password`                                             |
+| `LoginResponse`  | `types/auth.ts`      | `TokenPair` + `user: VUser`                                  |
+| `Role`           | `types/constants.ts` | `{ MEMBER:1, LEAD:2, ADMIN:3, GUEST:4 }`                     |
+| `Team`           | `types/constants.ts` | `{ ENGINE:1, ANALYST:2 }`                                    |
+| `RoleType`       | `types/constants.ts` | `Role` 값의 union 타입                                       |
+| `TeamType`       | `types/constants.ts` | `Team` 값의 union 타입                                       |
+| `SignupRequest`  | `types/signup.ts`    | 회원가입 요청 타입                                           |
+| `SignupResponse` | `types/signup.ts`    | 회원가입 응답 타입                                           |
 
 ### Utils
 

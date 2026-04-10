@@ -27,10 +27,13 @@ common/
 
 ## 앱에서 사용하는 방법
 
-앱의 `vite.config.ts` 또는 `tsconfig.json`에서 `@irms/common`을 alias로 등록한 뒤 import한다.
+앱의 `vite.config.ts`와 `tsconfig.json`에서 `@common`을 alias로 등록한 뒤 import한다.
 
 ```ts
-import { useAuth, apiClient, Layout, Role } from "@irms/common";
+import { useAuth } from "@common/hooks/useAuth";
+import apiClient from "@common/services/apiClient";
+import { Layout } from "@common/components/Layout";
+import { Role } from "@common/types/constants";
 ```
 
 상세 사용법은 각 정책 문서 참조:

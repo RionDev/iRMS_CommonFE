@@ -1,6 +1,6 @@
 # 공통 UI 컴포넌트
 
-`@irms/common`에서 제공하는 UI 컴포넌트 사용법.
+`@common`에서 제공하는 UI 컴포넌트 사용법.
 
 모든 컴포넌트는 인라인 스타일 기반이며 Tailwind/CSS 모듈 의존성이 없다.
 공용 배경색, 폰트, 주요 색상은 `src/styles/theme.ts`의 `theme`에서 관리한다.
@@ -8,7 +8,7 @@
 ## 1. Button
 
 ```tsx
-import { Button } from '@irms/common';
+import { Button } from "@common";
 
 // primary (기본) — 파란색 배경
 <Button onClick={handleClick}>저장</Button>
@@ -36,7 +36,7 @@ import { Button } from '@irms/common';
 ## 2. Input
 
 ```tsx
-import { Input } from '@irms/common';
+import { Input } from "@common";
 
 // 기본
 <Input
@@ -68,7 +68,7 @@ import { Input } from '@irms/common';
 ## 3. Modal
 
 ```tsx
-import { Modal } from "@irms/common";
+import { Modal } from "@common";
 
 const [isOpen, setIsOpen] = useState(false);
 
@@ -97,7 +97,7 @@ const [isOpen, setIsOpen] = useState(false);
 필요하면 공통 사이드 메뉴를 렌더링한다.
 
 ```tsx
-import { Layout } from "@irms/common";
+import { Layout } from "@common";
 
 function App() {
   return (
@@ -128,7 +128,7 @@ function App() {
 공통 사이드 메뉴 UI. 메뉴 항목 자체는 각 앱이 데이터로 정의한다.
 
 ```tsx
-import { SideNav } from "@irms/common";
+import { SideNav } from "@common";
 
 <SideNav
   items={[
@@ -166,7 +166,7 @@ import { SideNav } from "@irms/common";
 `LoginPage` 내부에서 사용하는 폼 컴포넌트. 직접 사용할 일은 거의 없다.
 
 ```tsx
-import { LoginForm } from "@irms/common";
+import { LoginForm } from "@common";
 
 <LoginForm
   onSubmit={(id, password) => handleLogin(id, password)}

@@ -32,7 +32,7 @@ import {
   saveTokens,
   clearTokens,
   decodeToken,
-} from "@irms/common";
+} from "@common/utils/token";
 ```
 
 ## 앱 진입점 초기화
@@ -41,7 +41,7 @@ import {
 
 ```tsx
 // main.tsx 또는 App.tsx
-import { useAuthStore } from "@irms/common";
+import { useAuthStore } from "@common/stores/authStore";
 
 const { initialize } = useAuthStore.getState();
 initialize();
@@ -55,7 +55,7 @@ initialize();
 
 ```tsx
 // App.tsx 라우터 설정
-import { LoginPage } from "@irms/common";
+import { LoginPage } from "@common/pages/LoginPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -75,22 +75,21 @@ function App() {
 
 ## 앱 진입 규칙
 
-현재 루트 gateway 기준 앱 진입 규칙은 다음과 같다.
+각 앱은 자체 `/login` 라우트를 가지며, 미인증 시 자기 앱 범위 내에서 로그인 페이지로 이동한다.
 
-- `/login` → `/auth/login`
-- `/auth` → `/login?redirect=/auth/password`
-- `/admin` → `/login?redirect=/admin/users`
-- `/login?redirect=...` → `/auth/login?redirect=...`
-- 이미 로그인된 상태에서 `LoginPage`에 들어오면 `redirect` 목적지로 즉시 이동
+- portal: 미인증 → `/login?redirect=...`
+- auth: 미인증 → `/auth/login?redirect=...`
+- admin: 미인증 → `/admin/login?redirect=...`
 
-즉, 앱 루트 경로의 로그인 진입 규칙은 gateway가 먼저 정하고, 실제 로그인 화면은 auth 앱이 공통으로 제공한다.
+앱 간 로그인 리다이렉트는 없다. 각 앱이 공통 `LoginPage`를 독립적으로 사용한다.
+이미 로그인된 상태에서 `LoginPage`에 들어오면 `redirect` 목적지로 즉시 이동한다.
 
 ## useAuth — 인증 보호 훅
 
 인증이 필요한 페이지에서 사용한다. 미인증 상태면 자동으로 `/login`으로 redirect한다.
 
 ```tsx
-import { useAuth } from "@irms/common";
+import { useAuth } from "@common/hooks/useAuth";
 
 function MyPage() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -114,7 +113,8 @@ function MyPage() {
 특정 역할만 접근 가능한 페이지/컴포넌트에서 사용한다.
 
 ```tsx
-import { useRequireRole, Role } from "@irms/common";
+import { useRequireRole } from "@common/hooks/useAuth";
+import { Role } from "@common/types/constants";
 
 function AdminPage() {
   const user = useRequireRole(Role.ADMIN);
@@ -128,7 +128,7 @@ function AdminPage() {
 ### Role 상수
 
 ```ts
-import { Role } from "@irms/common";
+import { Role } from "@common/types/constants";
 
 Role.MEMBER; // 1
 Role.LEAD; // 2
