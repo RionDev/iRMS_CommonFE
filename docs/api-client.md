@@ -20,17 +20,10 @@ const res = await apiClient.post<MyResponse>("/api/some/endpoint", requestBody);
 
 ## 환경변수
 
-`apiClient`는 `VITE_API_BASE_URL` 환경변수를 baseURL로 사용한다.
+`apiClient`는 `VITE_API_BASE_URL` 환경변수를 baseURL로 사용한다. 값이 비어 있으면 같은 origin으로 요청한다.
 
-```text
-# .env.development
-VITE_API_BASE_URL=http://localhost:8080
-
-# .env.production
-VITE_API_BASE_URL=https://api.irms.example.com
-```
-
-각 앱의 `.env` 파일에 설정한다.
+- **개발 환경**: `.env` 불필요. gateway nginx가 `/api/*`를 BE로 프록시한다.
+- **배포 빌드**: `scripts/build.sh <API_BASE_URL>`이 값을 주입한다.
 
 ## Request 인터셉터 — 토큰 자동 첨부
 
