@@ -8,8 +8,7 @@ import {
 } from "../utils/token";
 
 
-const configuredBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
-const apiBaseUrl = import.meta.env.DEV ? "" : configuredBaseUrl;
+const apiBaseUrl = "";
 
 const apiClient = axios.create({
   baseURL: apiBaseUrl,
