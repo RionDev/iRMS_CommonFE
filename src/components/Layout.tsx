@@ -221,6 +221,35 @@ function LogoutButton({ onLogout }: { onLogout: () => void }) {
   );
 }
 
+function PwChangeButton({ onClick }: { onClick: () => void }) {
+  const [hover, setHover] = useState(false);
+  const [active, setActive] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => { setHover(false); setActive(false); }}
+      onMouseDown={() => setActive(true)}
+      onMouseUp={() => setActive(false)}
+      style={{
+        width: "100%",
+        background: active ? theme.colors.borderStrong : hover ? theme.colors.surfaceMuted : theme.colors.pageBackground,
+        border: "none",
+        padding: "8px 12px",
+        borderRadius: theme.radius.sm,
+        cursor: "pointer",
+        fontSize: "13px",
+        fontFamily: theme.fontFamily,
+        color: theme.colors.text,
+        transition: "background 0.15s",
+      }}
+    >
+      비밀번호 변경
+    </button>
+  );
+}
+
 function ProfileMenu({
   user,
 }: {
@@ -320,31 +349,18 @@ function ProfileMenu({
                   : ""}
                 {RoleLabel[user.role] ?? `역할 ${user.role}`}
               </span>
-              <span style={{ fontSize: "13px", color: theme.colors.textMuted }}>
-                {user.id}
-              </span>
+            </div>
+            <div style={{ fontSize: "13px", color: theme.colors.textMuted, marginTop: "4px" }}>
+              {user.id}
             </div>
           </div>
           <div style={{ padding: "12px 16px" }}>
-            <button
+            <PwChangeButton
               onClick={() => {
                 setOpen(false);
                 setPwModalOpen(true);
               }}
-              style={{
-                width: "100%",
-                background: theme.colors.surfaceMuted,
-                border: "none",
-                padding: "8px 12px",
-                borderRadius: theme.radius.sm,
-                cursor: "pointer",
-                fontSize: "13px",
-                fontFamily: theme.fontFamily,
-                color: theme.colors.text,
-              }}
-            >
-              비밀번호 변경
-            </button>
+            />
           </div>
         </div>
       )}
