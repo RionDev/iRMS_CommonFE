@@ -293,9 +293,9 @@ function ProfileMenu({
             color: theme.colors.text,
             borderRadius: theme.radius.md,
             boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-            minWidth: "200px",
             zIndex: 1000,
             overflow: "hidden",
+            whiteSpace: "nowrap",
           }}
         >
           <div
@@ -309,7 +309,6 @@ function ProfileMenu({
                 display: "flex",
                 alignItems: "baseline",
                 gap: "8px",
-                marginBottom: "4px",
               }}
             >
               <span style={{ fontWeight: 600, fontSize: "15px" }}>
@@ -321,15 +320,9 @@ function ProfileMenu({
                   : ""}
                 {RoleLabel[user.role] ?? `역할 ${user.role}`}
               </span>
-            </div>
-            <div
-              style={{
-                fontSize: "13px",
-                color: theme.colors.textMuted,
-                marginTop: "4px",
-              }}
-            >
-              {user.id}
+              <span style={{ fontSize: "13px", color: theme.colors.textMuted }}>
+                {user.id}
+              </span>
             </div>
           </div>
           <div style={{ padding: "12px 16px" }}>
@@ -340,8 +333,8 @@ function ProfileMenu({
               }}
               style={{
                 width: "100%",
-                background: "none",
-                border: `1px solid ${theme.colors.border}`,
+                background: theme.colors.surfaceMuted,
+                border: "none",
                 padding: "8px 12px",
                 borderRadius: theme.radius.sm,
                 cursor: "pointer",
