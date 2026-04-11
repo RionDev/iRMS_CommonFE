@@ -12,6 +12,7 @@ interface LayoutProps {
   title: string;
   children: ReactNode;
   sideNavItems?: SideNavItem[];
+  version?: string;
 }
 
 const RoleLabel: Record<number, string> = { 1: "멤버", 2: "리드", 3: "관리자", 4: "게스트" };
@@ -167,13 +168,15 @@ function ProfileMenu({ user, onLogout }: { user: { id: string; name: string; rol
   );
 }
 
-export function Layout({ title, children, sideNavItems = [] }: LayoutProps) {
+export function Layout({ title, children, sideNavItems = [], version }: LayoutProps) {
   const { user, isAuthenticated, logout } = useAuthStore();
 
   return (
     <div
       style={{
         minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
         backgroundColor: theme.colors.pageBackground,
         color: theme.colors.text,
         fontFamily: theme.fontFamily,
@@ -196,9 +199,12 @@ export function Layout({ title, children, sideNavItems = [] }: LayoutProps) {
       </header>
       <main
         style={{
+          flex: 1,
           padding: "24px",
           maxWidth: theme.layout.contentMaxWidth,
           margin: "0 auto",
+          width: "100%",
+          boxSizing: "border-box",
         }}
       >
         <div style={{ display: "flex", gap: "24px", alignItems: "flex-start" }}>
@@ -206,6 +212,17 @@ export function Layout({ title, children, sideNavItems = [] }: LayoutProps) {
           <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
         </div>
       </main>
+      <footer
+        style={{
+          padding: "12px 24px",
+          textAlign: "center",
+          fontSize: "12px",
+          color: theme.colors.textMuted,
+          borderTop: `1px solid ${theme.colors.border}`,
+        }}
+      >
+        {version && `v${version}`}
+      </footer>
     </div>
   );
 }
