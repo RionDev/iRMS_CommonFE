@@ -279,11 +279,10 @@ function FeatureLink({ label, href }: { label: string; href: string }) {
   );
 }
 
-function AppNavButton({ app }: { app: AppNavItem }) {
+function AppLauncher({ user }: { user: { role: number } }) {
   const [open, setOpen] = useState(false);
   const [hover, setHover] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const isActive = window.location.pathname.startsWith(app.basePath);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -293,6 +292,8 @@ function AppNavButton({ app }: { app: AppNavItem }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  const visibleApps = APP_NAV.filter((app) => !app.requiredRole || user.role === app.requiredRole);
+
   return (
     <div ref={ref} style={{ position: "relative" }}>
       <button
@@ -300,37 +301,73 @@ function AppNavButton({ app }: { app: AppNavItem }) {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{
-          background: open || isActive ? "rgba(255,255,255,0.2)" : hover ? "rgba(255,255,255,0.1)" : "none",
+          background: open ? "rgba(255,255,255,0.15)" : hover ? "rgba(255,255,255,0.1)" : "none",
           border: "none",
           color: theme.colors.primaryText,
           cursor: "pointer",
-          fontSize: "14px",
-          fontFamily: theme.fontFamily,
-          padding: "6px 12px",
+          padding: "6px",
+          display: "flex",
+          alignItems: "center",
           borderRadius: theme.radius.sm,
           transition: "background 0.15s",
-          fontWeight: isActive ? 600 : 400,
         }}
       >
-        {app.label}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="6" cy="6" r="2" />
+          <circle cx="12" cy="6" r="2" />
+          <circle cx="18" cy="6" r="2" />
+          <circle cx="6" cy="12" r="2" />
+          <circle cx="12" cy="12" r="2" />
+          <circle cx="18" cy="12" r="2" />
+          <circle cx="6" cy="18" r="2" />
+          <circle cx="12" cy="18" r="2" />
+          <circle cx="18" cy="18" r="2" />
+        </svg>
       </button>
+      {hover && !open && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 6px)",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(0,0,0,0.75)",
+            color: "#fff",
+            fontSize: "12px",
+            padding: "4px 10px",
+            borderRadius: theme.radius.sm,
+            whiteSpace: "nowrap",
+            pointerEvents: "none",
+          }}
+        >
+          앱
+        </div>
+      )}
       {open && (
         <div
           style={{
             position: "absolute",
-            top: "calc(100% + 8px)",
-            left: 0,
+            top: "calc(100% + 6px)",
+            right: 0,
             background: "#fff",
             color: theme.colors.text,
             borderRadius: theme.radius.md,
             boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-            minWidth: "160px",
+            minWidth: "200px",
             zIndex: 1000,
             overflow: "hidden",
           }}
         >
-          {app.features.map((feature) => (
-            <FeatureLink key={feature.href} label={feature.label} href={feature.href} />
+          {visibleApps.map((app, i) => (
+            <div key={app.basePath}>
+              {i > 0 && <div style={{ borderTop: `1px solid ${theme.colors.border}` }} />}
+              <div style={{ padding: "12px 16px 4px", fontSize: "12px", fontWeight: 600, color: theme.colors.textMuted }}>
+                {app.label}
+              </div>
+              {app.features.map((feature) => (
+                <FeatureLink key={feature.href} label={feature.label} href={feature.href} />
+              ))}
+            </div>
           ))}
         </div>
       )}
@@ -362,20 +399,10 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
           alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <h1 style={{ margin: 0, fontSize: "18px", userSelect: "none" }}>iRMS — {title}</h1>
-          {isAuthenticated && user && (
-            <nav style={{ display: "flex", gap: "4px" }}>
-              {APP_NAV
-                .filter((app) => !app.requiredRole || user.role === app.requiredRole)
-                .map((app) => (
-                  <AppNavButton key={app.basePath} app={app} />
-                ))}
-            </nav>
-          )}
-        </div>
+        <h1 style={{ margin: 0, fontSize: "18px", userSelect: "none" }}>iRMS — {title}</h1>
         {isAuthenticated && user && (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <AppLauncher user={user} />
             <ProfileMenu user={user} />
             <LogoutButton onLogout={logout} />
           </div>
