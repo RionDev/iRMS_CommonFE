@@ -140,12 +140,17 @@ function ProfileMenu({ user }: { user: { id: string; name: string; role: number;
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  const [hover, setHover] = useState(false);
+
   return (
-    <div ref={ref} style={{ position: "relative" }}>
+    <div ref={ref} style={{ position: "relative" }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
       <button
         onClick={() => setOpen((v) => !v)}
         style={{
-          background: "none",
+          background: hover || open ? "rgba(255,255,255,0.15)" : "none",
           border: "none",
           color: theme.colors.primaryText,
           cursor: "pointer",
@@ -153,10 +158,30 @@ function ProfileMenu({ user }: { user: { id: string; name: string; role: number;
           fontFamily: theme.fontFamily,
           padding: "4px 8px",
           borderRadius: theme.radius.sm,
+          transition: "background 0.15s",
         }}
       >
         {user.name} ▾
       </button>
+      {hover && !open && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 6px)",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(0,0,0,0.75)",
+            color: "#fff",
+            fontSize: "12px",
+            padding: "4px 10px",
+            borderRadius: theme.radius.sm,
+            whiteSpace: "nowrap",
+            pointerEvents: "none",
+          }}
+        >
+          계정 정보
+        </div>
+      )}
       {open && (
         <div
           style={{
@@ -228,7 +253,7 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
           alignItems: "center",
         }}
       >
-        <h1 style={{ margin: 0, fontSize: "18px" }}>iRMS — {title}</h1>
+        <h1 style={{ margin: 0, fontSize: "18px", userSelect: "none" }}>iRMS — {title}</h1>
         {isAuthenticated && user && (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <ProfileMenu user={user} />
