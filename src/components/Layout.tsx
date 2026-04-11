@@ -305,10 +305,22 @@ function ProfileMenu({
             }}
           >
             <div
-              style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "4px" }}
+              style={{
+                display: "flex",
+                alignItems: "baseline",
+                gap: "8px",
+                marginBottom: "4px",
+              }}
             >
-              <span style={{ fontWeight: 600, fontSize: "15px" }}>{user.name}</span>
-              <span style={{ fontSize: "13px", color: theme.colors.textMuted }}>{user.id}</span>
+              <span style={{ fontWeight: 600, fontSize: "15px" }}>
+                {user.name}
+              </span>
+              <span style={{ fontSize: "13px", color: theme.colors.textMuted }}>
+                {user.team
+                  ? `${TeamLabel[user.team] ?? `팀 ${user.team}`} · `
+                  : ""}
+                {RoleLabel[user.role] ?? `역할 ${user.role}`}
+              </span>
             </div>
             <div
               style={{
@@ -317,10 +329,7 @@ function ProfileMenu({
                 marginTop: "4px",
               }}
             >
-              {user.team
-                ? `${TeamLabel[user.team] ?? `팀 ${user.team}`} · `
-                : ""}
-              {RoleLabel[user.role] ?? `역할 ${user.role}`}
+              {user.id}
             </div>
           </div>
           <div style={{ padding: "12px 16px" }}>
