@@ -305,12 +305,10 @@ function ProfileMenu({
             }}
           >
             <div
-              style={{ fontWeight: 600, fontSize: "15px", marginBottom: "4px" }}
+              style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "4px" }}
             >
-              {user.name}
-            </div>
-            <div style={{ fontSize: "13px", color: theme.colors.textMuted }}>
-              {user.id}
+              <span style={{ fontWeight: 600, fontSize: "15px" }}>{user.name}</span>
+              <span style={{ fontSize: "13px", color: theme.colors.textMuted }}>{user.id}</span>
             </div>
             <div
               style={{
