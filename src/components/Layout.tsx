@@ -7,6 +7,7 @@ import { Button } from "./Button";
 import apiClient from "../services/apiClient";
 import type { SideNavItem } from "./SideNav";
 import { SideNav } from "./SideNav";
+import { Role } from "../types/constants";
 
 interface LayoutProps {
   title: string;
@@ -17,6 +18,30 @@ interface LayoutProps {
 
 const RoleLabel: Record<number, string> = { 1: "멤버", 2: "리드", 3: "관리자", 4: "게스트" };
 const TeamLabel: Record<number, string> = { 1: "엔진팀", 2: "분석팀" };
+
+interface AppNavItem {
+  label: string;
+  basePath: string;
+  features: { label: string; href: string }[];
+  requiredRole?: number;
+}
+
+const APP_NAV: AppNavItem[] = [
+  {
+    label: "인증",
+    basePath: "/auth",
+    features: [{ label: "비밀번호 변경", href: "/auth/password" }],
+  },
+  {
+    label: "관리자",
+    basePath: "/admin",
+    features: [
+      { label: "회원 목록", href: "/admin/users" },
+      { label: "가입 승인", href: "/admin/approval" },
+    ],
+    requiredRole: Role.ADMIN,
+  },
+];
 
 function ChangePasswordModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -229,6 +254,90 @@ function ProfileMenu({ user }: { user: { id: string; name: string; role: number;
   );
 }
 
+function FeatureLink({ label, href }: { label: string; href: string }) {
+  const [hover, setHover] = useState(false);
+  const isActive = window.location.pathname === href;
+
+  return (
+    <a
+      href={href}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        display: "block",
+        padding: "10px 16px",
+        textDecoration: "none",
+        fontSize: "14px",
+        color: isActive ? theme.colors.primary : theme.colors.text,
+        fontWeight: isActive ? 600 : 400,
+        backgroundColor: hover ? theme.colors.pageBackground : "transparent",
+        transition: "background-color 0.15s",
+      }}
+    >
+      {label}
+    </a>
+  );
+}
+
+function AppNavButton({ app }: { app: AppNavItem }) {
+  const [open, setOpen] = useState(false);
+  const [hover, setHover] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const isActive = window.location.pathname.startsWith(app.basePath);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  return (
+    <div ref={ref} style={{ position: "relative" }}>
+      <button
+        onClick={() => setOpen((v: boolean) => !v)}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        style={{
+          background: open || isActive ? "rgba(255,255,255,0.2)" : hover ? "rgba(255,255,255,0.1)" : "none",
+          border: "none",
+          color: theme.colors.primaryText,
+          cursor: "pointer",
+          fontSize: "14px",
+          fontFamily: theme.fontFamily,
+          padding: "6px 12px",
+          borderRadius: theme.radius.sm,
+          transition: "background 0.15s",
+          fontWeight: isActive ? 600 : 400,
+        }}
+      >
+        {app.label}
+      </button>
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 8px)",
+            left: 0,
+            background: "#fff",
+            color: theme.colors.text,
+            borderRadius: theme.radius.md,
+            boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+            minWidth: "160px",
+            zIndex: 1000,
+            overflow: "hidden",
+          }}
+        >
+          {app.features.map((feature) => (
+            <FeatureLink key={feature.href} label={feature.label} href={feature.href} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function Layout({ title, children, sideNavItems = [], version }: LayoutProps) {
   const { user, isAuthenticated, logout } = useAuthStore();
 
@@ -253,7 +362,18 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
           alignItems: "center",
         }}
       >
-        <h1 style={{ margin: 0, fontSize: "18px", userSelect: "none" }}>iRMS — {title}</h1>
+        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <h1 style={{ margin: 0, fontSize: "18px", userSelect: "none" }}>iRMS — {title}</h1>
+          {isAuthenticated && user && (
+            <nav style={{ display: "flex", gap: "4px" }}>
+              {APP_NAV
+                .filter((app) => !app.requiredRole || user.role === app.requiredRole)
+                .map((app) => (
+                  <AppNavButton key={app.basePath} app={app} />
+                ))}
+            </nav>
+          )}
+        </div>
         {isAuthenticated && user && (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <ProfileMenu user={user} />
