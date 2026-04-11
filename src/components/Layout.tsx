@@ -221,8 +221,6 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
       >
         <div
           style={{
-            maxWidth: theme.layout.contentMaxWidth,
-            margin: "0 auto",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
