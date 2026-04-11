@@ -1,13 +1,19 @@
-import { type ReactNode, type FormEvent, useState, useRef, useEffect } from "react";
+import {
+  type FormEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import apiClient from "../services/apiClient";
 import { useAuthStore } from "../stores/authStore";
 import { theme } from "../styles/theme";
-import { Modal } from "./Modal";
-import { Input } from "./Input";
+import { Role } from "../types/constants";
 import { Button } from "./Button";
-import apiClient from "../services/apiClient";
+import { Input } from "./Input";
+import { Modal } from "./Modal";
 import type { SideNavItem } from "./SideNav";
 import { SideNav } from "./SideNav";
-import { Role } from "../types/constants";
 
 interface LayoutProps {
   title: string;
@@ -16,7 +22,12 @@ interface LayoutProps {
   version?: string;
 }
 
-const RoleLabel: Record<number, string> = { 1: "멤버", 2: "리드", 3: "관리자", 4: "게스트" };
+const RoleLabel: Record<number, string> = {
+  1: "멤버",
+  2: "리드",
+  3: "관리자",
+  4: "게스트",
+};
 const TeamLabel: Record<number, string> = { 1: "엔진팀", 2: "분석팀" };
 
 interface AppNavItem {
@@ -43,7 +54,13 @@ const APP_NAV: AppNavItem[] = [
   },
 ];
 
-function ChangePasswordModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+function ChangePasswordModal({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -58,7 +75,10 @@ function ChangePasswordModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     setError(null);
   };
 
-  const handleClose = () => { reset(); onClose(); };
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -82,18 +102,58 @@ function ChangePasswordModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     <Modal isOpen={isOpen} onClose={handleClose} title="비밀번호 변경">
       {success ? (
         <>
-          <p style={{ color: theme.colors.success, fontSize: "14px", margin: "8px 0 16px" }}>비밀번호가 변경되었습니다.</p>
-          <Button type="button" onClick={handleClose} style={{ width: "100%" }}>확인</Button>
+          <p
+            style={{
+              color: theme.colors.success,
+              fontSize: "14px",
+              margin: "8px 0 16px",
+            }}
+          >
+            비밀번호가 변경되었습니다.
+          </p>
+          <Button type="button" onClick={handleClose} style={{ width: "100%" }}>
+            확인
+          </Button>
         </>
       ) : (
         <>
           <form onSubmit={handleSubmit}>
-            <Input label="현재 비밀번호" type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required />
-            <Input label="새 비밀번호" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-            <Input label="새 비밀번호 확인" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-            <Button type="submit" style={{ width: "100%", marginTop: "8px" }}>변경하기</Button>
+            <Input
+              label="현재 비밀번호"
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+            />
+            <Input
+              label="새 비밀번호"
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+            <Input
+              label="새 비밀번호 확인"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <Button type="submit" style={{ width: "100%", marginTop: "8px" }}>
+              변경하기
+            </Button>
           </form>
-          {error && <p style={{ color: theme.colors.danger, marginTop: "12px", fontSize: "14px" }}>{error}</p>}
+          {error && (
+            <p
+              style={{
+                color: theme.colors.danger,
+                marginTop: "12px",
+                fontSize: "14px",
+              }}
+            >
+              {error}
+            </p>
+          )}
         </>
       )}
     </Modal>
@@ -123,7 +183,16 @@ function LogoutButton({ onLogout }: { onLogout: () => void }) {
           transition: "background 0.15s",
         }}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
           <polyline points="16 17 21 12 16 7" />
           <line x1="21" y1="12" x2="9" y2="12" />
@@ -152,14 +221,19 @@ function LogoutButton({ onLogout }: { onLogout: () => void }) {
   );
 }
 
-function ProfileMenu({ user }: { user: { id: string; name: string; role: number; team: number } }) {
+function ProfileMenu({
+  user,
+}: {
+  user: { id: string; name: string; role: number; team: number };
+}) {
   const [open, setOpen] = useState(false);
   const [pwModalOpen, setPwModalOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -168,7 +242,9 @@ function ProfileMenu({ user }: { user: { id: string; name: string; role: number;
   const [hover, setHover] = useState(false);
 
   return (
-    <div ref={ref} style={{ position: "relative" }}
+    <div
+      ref={ref}
+      style={{ position: "relative" }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -222,16 +298,39 @@ function ProfileMenu({ user }: { user: { id: string; name: string; role: number;
             overflow: "hidden",
           }}
         >
-          <div style={{ padding: "16px", borderBottom: `1px solid ${theme.colors.border}` }}>
-            <div style={{ fontWeight: 600, fontSize: "15px", marginBottom: "4px" }}>{user.name}</div>
-            <div style={{ fontSize: "13px", color: theme.colors.textMuted }}>{user.id}</div>
-            <div style={{ fontSize: "13px", color: theme.colors.textMuted, marginTop: "4px" }}>
-              {user.team ? `${TeamLabel[user.team] ?? `팀 ${user.team}`} · ` : ""}{RoleLabel[user.role] ?? `역할 ${user.role}`}
+          <div
+            style={{
+              padding: "16px",
+              borderBottom: `1px solid ${theme.colors.border}`,
+            }}
+          >
+            <div
+              style={{ fontWeight: 600, fontSize: "15px", marginBottom: "4px" }}
+            >
+              {user.name}
+            </div>
+            <div style={{ fontSize: "13px", color: theme.colors.textMuted }}>
+              {user.id}
+            </div>
+            <div
+              style={{
+                fontSize: "13px",
+                color: theme.colors.textMuted,
+                marginTop: "4px",
+              }}
+            >
+              {user.team
+                ? `${TeamLabel[user.team] ?? `팀 ${user.team}`} · `
+                : ""}
+              {RoleLabel[user.role] ?? `역할 ${user.role}`}
             </div>
           </div>
           <div style={{ padding: "12px 16px" }}>
             <button
-              onClick={() => { setOpen(false); setPwModalOpen(true); }}
+              onClick={() => {
+                setOpen(false);
+                setPwModalOpen(true);
+              }}
               style={{
                 width: "100%",
                 background: "none",
@@ -249,7 +348,10 @@ function ProfileMenu({ user }: { user: { id: string; name: string; role: number;
           </div>
         </div>
       )}
-      <ChangePasswordModal isOpen={pwModalOpen} onClose={() => setPwModalOpen(false)} />
+      <ChangePasswordModal
+        isOpen={pwModalOpen}
+        onClose={() => setPwModalOpen(false)}
+      />
     </div>
   );
 }
@@ -286,13 +388,16 @@ function AppLauncher({ user }: { user: { role: number } }) {
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const visibleApps = APP_NAV.filter((app) => !app.requiredRole || user.role === app.requiredRole);
+  const visibleApps = APP_NAV.filter(
+    (app) => !app.requiredRole || user.role === app.requiredRole,
+  );
 
   return (
     <div ref={ref} style={{ position: "relative" }}>
@@ -301,7 +406,11 @@ function AppLauncher({ user }: { user: { role: number } }) {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{
-          background: open ? "rgba(255,255,255,0.15)" : hover ? "rgba(255,255,255,0.1)" : "none",
+          background: open
+            ? "rgba(255,255,255,0.15)"
+            : hover
+              ? "rgba(255,255,255,0.1)"
+              : "none",
           border: "none",
           color: theme.colors.primaryText,
           cursor: "pointer",
@@ -360,12 +469,27 @@ function AppLauncher({ user }: { user: { role: number } }) {
         >
           {visibleApps.map((app, i) => (
             <div key={app.basePath}>
-              {i > 0 && <div style={{ borderTop: `1px solid ${theme.colors.border}` }} />}
-              <div style={{ padding: "12px 16px 4px", fontSize: "12px", fontWeight: 600, color: theme.colors.textMuted }}>
+              {i > 0 && (
+                <div
+                  style={{ borderTop: `1px solid ${theme.colors.border}` }}
+                />
+              )}
+              <div
+                style={{
+                  padding: "12px 16px 4px",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  color: theme.colors.textMuted,
+                }}
+              >
                 {app.label}
               </div>
               {app.features.map((feature) => (
-                <FeatureLink key={feature.href} label={feature.label} href={feature.href} />
+                <FeatureLink
+                  key={feature.href}
+                  label={feature.label}
+                  href={feature.href}
+                />
               ))}
             </div>
           ))}
@@ -375,7 +499,12 @@ function AppLauncher({ user }: { user: { role: number } }) {
   );
 }
 
-export function Layout({ title, children, sideNavItems = [], version }: LayoutProps) {
+export function Layout({
+  title,
+  children,
+  sideNavItems = [],
+  version,
+}: LayoutProps) {
   const { user, isAuthenticated, logout } = useAuthStore();
 
   return (
@@ -399,7 +528,14 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
           alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", userSelect: "none" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            userSelect: "none",
+          }}
+        >
           <span style={{ fontWeight: 700, fontSize: "18px" }}>iRMS</span>
           <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
           <span style={{ fontSize: "16px", fontWeight: 400 }}>{title}</span>
@@ -407,7 +543,16 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
         {isAuthenticated && user && (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <ProfileMenu user={user} />
-            <span style={{ opacity: 0.3, fontWeight: 300, fontSize: "18px", margin: "0 4px" }}>|</span>
+            <span
+              style={{
+                opacity: 0.3,
+                fontWeight: 300,
+                fontSize: "18px",
+                margin: "0 4px",
+              }}
+            >
+              |
+            </span>
             <AppLauncher user={user} />
             <LogoutButton onLogout={logout} />
           </div>
@@ -444,22 +589,36 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontWeight: 700, color: theme.colors.text }}>iRMS</span>
-            <span style={{ color: theme.colors.border, fontWeight: 300 }}>|</span>
-            <span style={{ color: theme.colors.textMuted, whiteSpace: "nowrap" }}>
+            <span
+              style={{ color: theme.colors.textMuted, whiteSpace: "nowrap" }}
+            >
               ISARC Resource Management System
             </span>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "12px", color: theme.colors.textMuted }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              fontSize: "12px",
+              color: theme.colors.textMuted,
+            }}
+          >
             {version && (
               <>
-                <span style={{ fontStyle: "italic", opacity: 0.7 }}>Version {version}</span>
-                <span style={{ color: theme.colors.border, fontSize: "11px" }}>|</span>
+                <span style={{ fontStyle: "italic", opacity: 0.7 }}>
+                  Version {version}
+                </span>
+                <span style={{ color: theme.colors.border, fontSize: "11px" }}>
+                  |
+                </span>
               </>
             )}
             <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
               <span style={{ fontWeight: 300 }}>Developed by</span>
-              <span style={{ fontWeight: 500, color: theme.colors.text }}>Engine Team</span>
+              <span style={{ fontWeight: 500, color: theme.colors.text }}>
+                Engine Team
+              </span>
             </div>
           </div>
         </div>
