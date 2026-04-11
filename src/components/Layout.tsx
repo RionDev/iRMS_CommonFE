@@ -399,11 +399,16 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
           alignItems: "center",
         }}
       >
-        <h1 style={{ margin: 0, fontSize: "18px", userSelect: "none" }}>iRMS — {title}</h1>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", userSelect: "none" }}>
+          <span style={{ fontWeight: 700, fontSize: "18px" }}>iRMS</span>
+          <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
+          <span style={{ fontSize: "16px", fontWeight: 400 }}>{title}</span>
+        </div>
         {isAuthenticated && user && (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <AppLauncher user={user} />
             <ProfileMenu user={user} />
+            <span style={{ opacity: 0.3, fontWeight: 300, fontSize: "18px", margin: "0 4px" }}>|</span>
+            <AppLauncher user={user} />
             <LogoutButton onLogout={logout} />
           </div>
         )}
