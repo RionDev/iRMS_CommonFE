@@ -75,7 +75,7 @@ function ChangePasswordModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   );
 }
 
-function ProfileMenu({ user, onLogout }: { user: { id: string; name: string; role: number; team: number }; onLogout: () => void }) {
+function ProfileMenu({ user }: { user: { id: string; name: string; role: number; team: number } }) {
   const [open, setOpen] = useState(false);
   const [pwModalOpen, setPwModalOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -127,14 +127,14 @@ function ProfileMenu({ user, onLogout }: { user: { id: string; name: string; rol
               {user.team ? `${TeamLabel[user.team] ?? `팀 ${user.team}`} · ` : ""}{RoleLabel[user.role] ?? `역할 ${user.role}`}
             </div>
           </div>
-          <div style={{ display: "flex", gap: "8px", padding: "12px 16px" }}>
+          <div style={{ padding: "12px 16px" }}>
             <button
               onClick={() => { setOpen(false); setPwModalOpen(true); }}
               style={{
-                flex: 1,
+                width: "100%",
                 background: "none",
                 border: `1px solid ${theme.colors.border}`,
-                padding: "6px 12px",
+                padding: "8px 12px",
                 borderRadius: theme.radius.sm,
                 cursor: "pointer",
                 fontSize: "13px",
@@ -143,22 +143,6 @@ function ProfileMenu({ user, onLogout }: { user: { id: string; name: string; rol
               }}
             >
               비밀번호 변경
-            </button>
-            <button
-              onClick={() => { setOpen(false); onLogout(); }}
-              style={{
-                flex: 1,
-                background: "none",
-                border: `1px solid ${theme.colors.danger}`,
-                padding: "6px 12px",
-                borderRadius: theme.radius.sm,
-                cursor: "pointer",
-                fontSize: "13px",
-                fontFamily: theme.fontFamily,
-                color: theme.colors.danger,
-              }}
-            >
-              로그아웃
             </button>
           </div>
         </div>
@@ -194,7 +178,29 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
       >
         <h1 style={{ margin: 0, fontSize: "18px" }}>iRMS — {title}</h1>
         {isAuthenticated && user && (
-          <ProfileMenu user={user} onLogout={logout} />
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <ProfileMenu user={user} />
+            <button
+              onClick={logout}
+              title="로그아웃"
+              style={{
+                background: "none",
+                border: "none",
+                color: theme.colors.primaryText,
+                cursor: "pointer",
+                padding: "4px",
+                display: "flex",
+                alignItems: "center",
+                opacity: 0.85,
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </button>
+          </div>
         )}
       </header>
       <main
