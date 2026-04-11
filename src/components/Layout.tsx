@@ -75,6 +75,58 @@ function ChangePasswordModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   );
 }
 
+function LogoutButton({ onLogout }: { onLogout: () => void }) {
+  const [hover, setHover] = useState(false);
+
+  return (
+    <div
+      style={{ position: "relative", display: "inline-flex" }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <button
+        onClick={onLogout}
+        style={{
+          background: hover ? "rgba(255,255,255,0.15)" : "none",
+          border: "none",
+          color: theme.colors.primaryText,
+          cursor: "pointer",
+          padding: "6px",
+          display: "flex",
+          alignItems: "center",
+          borderRadius: theme.radius.sm,
+          transition: "background 0.15s",
+        }}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      </button>
+      {hover && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 6px)",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(0,0,0,0.75)",
+            color: "#fff",
+            fontSize: "12px",
+            padding: "4px 10px",
+            borderRadius: theme.radius.sm,
+            whiteSpace: "nowrap",
+            pointerEvents: "none",
+          }}
+        >
+          로그아웃
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ProfileMenu({ user }: { user: { id: string; name: string; role: number; team: number } }) {
   const [open, setOpen] = useState(false);
   const [pwModalOpen, setPwModalOpen] = useState(false);
@@ -180,26 +232,7 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
         {isAuthenticated && user && (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <ProfileMenu user={user} />
-            <button
-              onClick={logout}
-              title="로그아웃"
-              style={{
-                background: "none",
-                border: "none",
-                color: theme.colors.primaryText,
-                cursor: "pointer",
-                padding: "4px",
-                display: "flex",
-                alignItems: "center",
-                opacity: 0.85,
-              }}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                <polyline points="16 17 21 12 16 7" />
-                <line x1="21" y1="12" x2="9" y2="12" />
-              </svg>
-            </button>
+            <LogoutButton onLogout={logout} />
           </div>
         )}
       </header>
