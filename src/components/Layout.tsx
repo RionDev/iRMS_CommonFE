@@ -214,14 +214,41 @@ export function Layout({ title, children, sideNavItems = [], version }: LayoutPr
       </main>
       <footer
         style={{
-          padding: "12px 24px",
-          textAlign: "center",
-          fontSize: "12px",
-          color: theme.colors.textMuted,
+          padding: "16px 24px",
+          backgroundColor: theme.colors.surface,
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
-        {version && `v${version}`}
+        <div
+          style={{
+            maxWidth: theme.layout.contentMaxWidth,
+            margin: "0 auto",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            fontSize: "13px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontWeight: 700, color: theme.colors.text }}>iRMS</span>
+            <span style={{ color: theme.colors.border, fontWeight: 300 }}>|</span>
+            <span style={{ color: theme.colors.textMuted, whiteSpace: "nowrap" }}>
+              ISARC Resource Management System
+            </span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "12px", color: theme.colors.textMuted }}>
+            {version && (
+              <>
+                <span style={{ fontStyle: "italic", opacity: 0.7 }}>Version {version}</span>
+                <span style={{ color: theme.colors.border, fontSize: "11px" }}>|</span>
+              </>
+            )}
+            <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <span style={{ fontWeight: 300 }}>Developed by</span>
+              <span style={{ fontWeight: 500, color: theme.colors.text }}>Engine Team</span>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
