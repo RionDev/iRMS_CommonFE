@@ -26,11 +26,11 @@
 
 ### Hooks
 
-| export           | 파일               | 반환값                                                                |
-| ---------------- | ------------------ | --------------------------------------------------------------------- |
-| `useAuth`        | `hooks/useAuth.ts` | `{ user, isAuthenticated, logout }` — 미인증 시 `/login`으로 redirect |
-| `useRequireRole` | `hooks/useAuth.ts` | `user` — 허용되지 않은 role이면 Error throw                           |
-| `useApi`         | `hooks/useApi.ts`  | `{ data, loading, error, execute }` — fetcher 함수 래핑               |
+| export         | 파일               | 반환값                                                                     |
+| -------------- | ------------------ | -------------------------------------------------------------------------- |
+| `useAuth`      | `hooks/useAuth.ts` | `{ user, isAuthenticated, logout }` — 미인증 시 `/login`으로 redirect      |
+| `useAppAccess` | `hooks/useAuth.ts` | `user` — `appsStore`에서 앱 경로 접근 권한 확인, 미허용 시 포털로 redirect |
+| `useApi`       | `hooks/useApi.ts`  | `{ data, loading, error, execute }` — fetcher 함수 래핑                    |
 
 ### Services
 
@@ -46,24 +46,22 @@
 
 | export         | 파일                  | 상태/액션                                                              |
 | -------------- | --------------------- | ---------------------------------------------------------------------- |
+| `useAppsStore` | `stores/appsStore.ts` | `apps`, `loaded`, `fetchApps()`, `clear()` — 접근 가능 앱 목록         |
 | `useAuthStore` | `stores/authStore.ts` | `user`, `isAuthenticated`, `login(tokens)`, `logout()`, `initialize()` |
 
 ### Types
 
-| export           | 파일                 | 설명                                                         |
-| ---------------- | -------------------- | ------------------------------------------------------------ |
-| `User`           | `types/auth.ts`      | DB 유저 전체 필드                                            |
-| `VUser`          | `types/auth.ts`      | 뷰용 유저 (team_name, role_name 등 문자열)                   |
-| `TokenPair`      | `types/auth.ts`      | `access_token`, `refresh_token`                              |
-| `AuthPayload`    | `types/auth.ts`      | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
-| `LoginRequest`   | `types/auth.ts`      | `id`, `password`                                             |
-| `LoginResponse`  | `types/auth.ts`      | `TokenPair` + `user: VUser`                                  |
-| `Role`           | `types/constants.ts` | `{ MEMBER:1, LEAD:2, ADMIN:3, GUEST:4 }`                     |
-| `Team`           | `types/constants.ts` | `{ ENGINE:1, ANALYST:2 }`                                    |
-| `RoleType`       | `types/constants.ts` | `Role` 값의 union 타입                                       |
-| `TeamType`       | `types/constants.ts` | `Team` 값의 union 타입                                       |
-| `SignupRequest`  | `types/signup.ts`    | 회원가입 요청 타입                                           |
-| `SignupResponse` | `types/signup.ts`    | 회원가입 응답 타입                                           |
+| export           | 파일                  | 설명                                                         |
+| ---------------- | --------------------- | ------------------------------------------------------------ |
+| `User`           | `types/auth.ts`       | DB 유저 전체 필드                                            |
+| `VUser`          | `types/auth.ts`       | 뷰용 유저 (team_name, role_name 등 문자열)                   |
+| `TokenPair`      | `types/auth.ts`       | `access_token`, `refresh_token`                              |
+| `AuthPayload`    | `types/auth.ts`       | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
+| `LoginRequest`   | `types/auth.ts`       | `id`, `password`                                             |
+| `LoginResponse`  | `types/auth.ts`       | `TokenPair` + `user: VUser`                                  |
+| `AppInfo`        | `stores/appsStore.ts` | `{ idx, path, name }` — 앱 정보 타입                         |
+| `SignupRequest`  | `types/signup.ts`     | 회원가입 요청 타입                                           |
+| `SignupResponse` | `types/signup.ts`     | 회원가입 응답 타입                                           |
 
 ### Utils
 
@@ -80,9 +78,9 @@
 - 앱에서 Axios 인스턴스를 직접 생성하지 않는다 — `apiClient` 사용
 - 앱에서 인증 상태를 별도 store로 관리하지 않는다 — `useAuthStore` 사용
 - 앱에서 로그인 페이지를 별도 구현하지 않는다 — `LoginPage` 사용
-- 앱에서 `useAuth`, `useRequireRole`을 재구현하지 않는다
-- `Role`, `Team` 상수를 앱마다 재정의하지 않는다 — 이 모듈에서 import
-- `Layout`은 `useAuthStore`를 직접 참조하므로 앱에서 store를 props로 전달하지 않아도 된다
+- 앱에서 `useAuth`, `useAppAccess`를 재구현하지 않는다
+- 앱 접근 권한은 `useAppAccess(path)`로 검사한다 — DB `apps` 테이블 기반
+- `Layout`은 `useAuthStore`, `useAppsStore`를 직접 참조하므로 앱에서 store를 props로 전달하지 않아도 된다
 - `initialize()`는 앱 진입점(`main.tsx` 또는 `App.tsx`)에서 최초 1회 호출한다
 
 ## 정책 문서

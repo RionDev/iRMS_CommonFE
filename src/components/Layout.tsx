@@ -6,9 +6,9 @@ import {
   useState,
 } from "react";
 import apiClient from "../services/apiClient";
+import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
 import { theme } from "../styles/theme";
-import { Role } from "../types/constants";
 import { Button } from "./Button";
 import { Input } from "./Input";
 import { Modal } from "./Modal";
@@ -23,18 +23,17 @@ interface LayoutProps {
 }
 
 const RoleLabel: Record<number, string> = {
-  1: "멤버",
-  2: "리드",
-  3: "관리자",
-  4: "게스트",
+  1: "Admin",
+  2: "Lead",
+  3: "Member",
+  4: "Guest",
 };
-const TeamLabel: Record<number, string> = { 1: "엔진팀", 2: "분석팀" };
+const TeamLabel: Record<number, string> = { 1: "Engine", 2: "Analyst" };
 
 interface AppNavItem {
   label: string;
   basePath: string;
   features: { label: string; href: string }[];
-  requiredRole?: number;
 }
 
 const APP_NAV: AppNavItem[] = [
@@ -50,7 +49,6 @@ const APP_NAV: AppNavItem[] = [
       { label: "회원 목록", href: "/admin/users" },
       { label: "가입 승인", href: "/admin/approval" },
     ],
-    requiredRole: Role.ADMIN,
   },
 ];
 
@@ -397,10 +395,11 @@ function FeatureLink({ label, href }: { label: string; href: string }) {
   );
 }
 
-function AppLauncher({ user }: { user: { role: number } }) {
+function AppLauncher() {
   const [open, setOpen] = useState(false);
   const [hover, setHover] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const { apps } = useAppsStore();
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -411,8 +410,8 @@ function AppLauncher({ user }: { user: { role: number } }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const visibleApps = APP_NAV.filter(
-    (app) => !app.requiredRole || user.role === app.requiredRole,
+  const visibleApps = APP_NAV.filter((app) =>
+    apps.some((a) => a.path === app.basePath),
   );
 
   return (
@@ -569,7 +568,7 @@ export function Layout({
             >
               |
             </span>
-            <AppLauncher user={user} />
+            <AppLauncher />
             <LogoutButton onLogout={logout} />
           </div>
         )}

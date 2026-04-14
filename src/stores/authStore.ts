@@ -9,6 +9,7 @@ import {
   isBlockedToken,
   saveTokens,
 } from "../utils/token";
+import { useAppsStore } from "./appsStore";
 
 const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
 
@@ -34,10 +35,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     saveTokens(tokens);
     set({ user: payload, isAuthenticated: true });
+    useAppsStore.getState().fetchApps();
   },
 
   logout: () => {
     clearTokens();
+    useAppsStore.getState().clear();
     set({ user: null, isAuthenticated: false });
   },
 
@@ -49,6 +52,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       const payload = decodeToken(token);
       if (payload.exp * 1000 > Date.now() && !isBlockedToken(token)) {
         set({ user: payload, isAuthenticated: true });
+        useAppsStore.getState().fetchApps();
         return;
       }
     } catch {
@@ -76,6 +80,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       saveTokens(res.data);
       const payload = decodeToken(res.data.access_token);
       set({ user: payload, isAuthenticated: true });
+      useAppsStore.getState().fetchApps();
     } catch {
       clearTokens();
     }

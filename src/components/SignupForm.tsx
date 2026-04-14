@@ -1,7 +1,6 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
 import { theme } from "../styles/theme";
-import { Role, Team } from "../types/constants";
 import { Button } from "./Button";
 import { Input } from "./Input";
 
@@ -28,8 +27,8 @@ export function SignupForm({
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [role, setRole] = useState<number>(Role.MEMBER);
-  const [team, setTeam] = useState<number | null>(Team.ENGINE);
+  const [role, setRole] = useState<number>(3);
+  const [team, setTeam] = useState<number | null>(1);
 
   const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
@@ -49,16 +48,16 @@ export function SignupForm({
       password,
       password_confirm: passwordConfirm,
       role,
-      team: role === Role.GUEST ? null : team,
+      team: role === 4 ? null : team,
     });
   };
 
   const handleRoleChange = (value: number) => {
     setRole(value);
-    if (value === Role.GUEST) {
+    if (value === 4) {
       setTeam(null);
     } else if (team === null) {
-      setTeam(Team.ENGINE);
+      setTeam(1);
     }
   };
 
@@ -113,9 +112,9 @@ export function SignupForm({
             backgroundColor: theme.colors.surface,
           }}
         >
-          <option value={Role.MEMBER}>Member</option>
-          <option value={Role.LEAD}>Lead</option>
-          <option value={Role.GUEST}>Guest</option>
+          <option value={3}>Member</option>
+          <option value={2}>Lead</option>
+          <option value={4}>Guest</option>
         </select>
       </div>
       <Input
@@ -150,7 +149,7 @@ export function SignupForm({
         <select
           value={team ?? ""}
           onChange={(e) => setTeam(Number(e.target.value))}
-          disabled={role === Role.GUEST}
+          disabled={role === 4}
           style={{
             width: "100%",
             padding: "8px",
@@ -160,12 +159,12 @@ export function SignupForm({
             fontFamily: theme.fontFamily,
             boxSizing: "border-box",
             backgroundColor: theme.colors.surface,
-            opacity: role === Role.GUEST ? 0.6 : 1,
+            opacity: role === 4 ? 0.6 : 1,
           }}
         >
-          {role === Role.GUEST && <option value="">선택 안 함</option>}
-          <option value={Team.ENGINE}>엔진팀</option>
-          <option value={Team.ANALYST}>분석팀</option>
+          {role === 4 && <option value="">선택 안 함</option>}
+          <option value={1}>Engine</option>
+          <option value={2}>Analyst</option>
         </select>
       </div>
       {(idError ?? error) && (

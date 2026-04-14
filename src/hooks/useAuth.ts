@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
 
 export function useAuth() {
@@ -6,18 +7,21 @@ export function useAuth() {
   return { user, isAuthenticated, logout };
 }
 
-export function useRequireRole(...allowedRoles: number[]) {
+export function useAppAccess(appPath: string) {
   const { user } = useAuth();
+  const { apps, loaded } = useAppsStore();
   const handledRef = useRef(false);
 
   useEffect(() => {
-    const unauthorized = !!user && !allowedRoles.includes(user.role);
-    if (!unauthorized || handledRef.current) return;
+    if (!user || !loaded || handledRef.current) return;
+
+    const hasAccess = apps.some((a) => a.path === appPath);
+    if (hasAccess) return;
 
     handledRef.current = true;
     alert("권한이 없습니다.");
     window.location.href = "/portal";
-  }, [allowedRoles, user]);
+  }, [user, apps, loaded, appPath]);
 
   return user;
 }
