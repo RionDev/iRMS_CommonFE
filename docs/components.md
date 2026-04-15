@@ -3,9 +3,63 @@
 `@common`에서 제공하는 UI 컴포넌트 사용법.
 
 모든 컴포넌트는 인라인 스타일 기반이며 Tailwind/CSS 모듈 의존성이 없다.
-공용 배경색, 폰트, 주요 색상은 `src/styles/theme.ts`의 `theme`에서 관리한다.
+공용 디자인 토큰(색상, 폰트, radius 등)은 `src/styles/theme.ts`에서 관리하며
+런타임에는 `useThemeStore().theme`으로 구독해 다크모드 전환에 반응한다.
 
-## 1. Button
+## 1. AppLayout
+
+모든 앱(포털, 어드민 등)이 공유하는 표준 템플릿. 사이드바 + 헤더 + 메인 + 푸터 구조.
+
+사이드바는 항상 렌더링되며 (상단 앱 브랜드 + 메뉴 + 하단 로그아웃),
+헤더에는 햄버거(사이드바 접기/펼치기), "IRMS | 타이틀", 프로필 메뉴, 다크모드 토글, 앱 런처가 있다.
+콘텐츠 영역은 좌측 정렬 최대 너비(기본 960px)이며, 앱 전체 최소 너비(기본 1180px) 이하에서는 페이지에 가로 스크롤이 생긴다.
+
+```tsx
+import { AppLayout } from "@common";
+
+function UserListPage() {
+  return (
+    <AppLayout
+      title="회원 목록"
+      appName="ADMIN"
+      sidebarItems={adminNavItems}
+      version={__APP_VERSION__}
+    >
+      <h2>회원 목록</h2>
+      <UserTable ... />
+    </AppLayout>
+  );
+}
+```
+
+### 1.1. Props
+
+| prop              | 타입            | 기본값     | 설명                                                               |
+| ----------------- | --------------- | ---------- | ------------------------------------------------------------------ |
+| `title`           | `string`        | —          | 헤더에 `IRMS \| {title}` 형태로 표시                               |
+| `appName`         | `string`        | —          | 사이드바 상단 브랜드의 앱 이름 (예: `"ADMIN"`, `"PORTAL"`)         |
+| `sidebarItems`    | `SidebarItem[]` | `[]`       | 사이드바 메뉴 항목. 빈 배열이면 브랜드 + 로그아웃만 표시           |
+| `version`         | `string`        | —          | 푸터 "Version X.X.X" 표시 (`__APP_VERSION__` 주입값)               |
+| `contentMaxWidth` | `string`        | `"960px"`  | 메인 영역 최대 너비. FHD 절반 브라우저에서 꽉 차는 크기            |
+| `appMinWidth`     | `string`        | `"1180px"` | 앱 최소 너비. 이보다 작으면 페이지 가로 스크롤 발생                |
+| `children`        | `ReactNode`     | —          | 메인 영역 콘텐츠                                                   |
+
+### 1.2. SidebarItem
+
+| 필드    | 타입        | 설명                                      |
+| ------- | ----------- | ----------------------------------------- |
+| `label` | `string`    | 메뉴 표시 이름                            |
+| `to`    | `string`    | 앱 basename 기준 이동 경로 (react-router) |
+| `icon`  | `ReactNode` | (선택) SVG 등 아이콘 노드                 |
+
+사이드바 접힘 상태는 `IRMS_SIDEBAR_COLLAPSED` localStorage 키로 유지된다 (페이지 이동/새로고침 후에도 유지).
+
+`AppLayout`은 `useAuthStore`, `useAppsStore`, `useThemeStore`를 직접 참조하므로
+앱에서 store를 props로 전달하지 않는다.
+
+---
+
+## 2. Button
 
 ```tsx
 import { Button } from "@common";
@@ -23,7 +77,7 @@ import { Button } from "@common";
 <Button style={{ width: '100%' }}>전체 너비</Button>
 ```
 
-### 1.1. Props
+### 2.1. Props
 
 | prop      | 타입                       | 기본값      | 설명                                              |
 | --------- | -------------------------- | ----------- | ------------------------------------------------- |
@@ -33,7 +87,7 @@ import { Button } from "@common";
 
 ---
 
-## 2. Input
+## 3. Input
 
 ```tsx
 import { Input } from "@common";
@@ -55,7 +109,7 @@ import { Input } from "@common";
 />
 ```
 
-### 2.1. Props
+### 3.1. Props
 
 | prop    | 타입                  | 기본값 | 설명                                          |
 | ------- | --------------------- | ------ | --------------------------------------------- |
@@ -65,7 +119,7 @@ import { Input } from "@common";
 
 ---
 
-## 3. Modal
+## 4. Modal
 
 ```tsx
 import { Modal } from "@common";
@@ -78,7 +132,7 @@ const [isOpen, setIsOpen] = useState(false);
 </Modal>;
 ```
 
-### 3.1. Props
+### 4.1. Props
 
 | prop       | 타입         | 설명                        |
 | ---------- | ------------ | --------------------------- |
@@ -91,79 +145,54 @@ const [isOpen, setIsOpen] = useState(false);
 
 ---
 
-## 4. Layout
+## 5. Theme
 
-앱 전체를 감싸는 공통 레이아웃. 헤더에 앱 제목과 로그인 사용자 이름/로그아웃 버튼을 표시하고,
-필요하면 공통 사이드 메뉴를 렌더링한다.
+디자인 토큰은 `src/styles/theme.ts`에서 관리한다.
+런타임에는 `useThemeStore`를 통해 light/dark 테마를 선택한다.
 
 ```tsx
-import { Layout } from "@common";
+import { useThemeStore } from "@common";
 
-function App() {
+function MyCard() {
+  const { theme } = useThemeStore();
   return (
-    <Layout
-      title="관리자"
-      sideNavItems={[{ label: "회원 목록", to: "/users" }]}
+    <div
+      style={{
+        backgroundColor: theme.colors.surface,
+        color: theme.colors.text,
+        borderRadius: theme.radius.md,
+        boxShadow: theme.shadow.card,
+      }}
     >
-      <SomePage />
-    </Layout>
+      ...
+    </div>
   );
 }
 ```
 
-### 4.1. Props
-
-| prop           | 타입            | 설명                                |
-| -------------- | --------------- | ----------------------------------- |
-| `title`        | `string`        | 헤더에 `iRMS — {title}` 형태로 표시 |
-| `children`     | `ReactNode`     | 본문 컨텐츠                         |
-| `sideNavItems` | `SideNavItem[]` | 앱별 사이드 메뉴 항목 목록          |
-
-`useAuthStore`를 내부에서 직접 참조한다. 인증된 상태이면 헤더에 사용자 이름과 로그아웃 버튼이 표시된다.
-
----
-
-## 5. SideNav
-
-공통 사이드 메뉴 UI. 메뉴 항목 자체는 각 앱이 데이터로 정의한다.
-
-```tsx
-import { SideNav } from "@common";
-
-<SideNav
-  items={[
-    { label: "회원 목록", to: "/users" },
-    { label: "가입 승인", to: "/approval" },
-  ]}
-/>;
-```
-
-### 5.1. SideNavItem
-
-| 필드    | 타입     | 설명                       |
-| ------- | -------- | -------------------------- |
-| `label` | `string` | 메뉴 표시 이름             |
-| `to`    | `string` | 앱 basename 기준 이동 경로 |
-
----
-
-## 6. Theme
-
-공용 디자인 토큰은 `src/styles/theme.ts`의 `theme`에서 관리한다.
+### 5.1. 테마 구조
 
 - `theme.fontFamily`
-- `theme.colors`
-- `theme.radius`
-- `theme.shadow`
-- `theme.layout`
+- `theme.colors` — `pageBackground`, `surface`, `primary`, `text`, `danger`, `sidebarBackground` 등
+- `theme.radius` — `sm`, `md`, `lg`
+- `theme.shadow.card`
+- `theme.layout` — `contentMaxWidth`, `sideNavWidth`
 
-배경, 폰트, 주요 색상은 앱에서 직접 하드코딩하지 않고 이 값을 우선 사용한다.
+### 5.2. 정적 참조 (특수 케이스만)
+
+모듈 레벨 상수에서 색상이 필요하고 다크모드 반영이 불필요한 경우에만 `theme`(= `lightTheme` alias)를 정적 import할 수 있다. 일반 UI 코드는 `useThemeStore().theme`을 사용한다.
+
+```tsx
+import { lightTheme, darkTheme, theme } from "@common";
+```
+
+자세한 다크모드 상태 관리는 [stores.md](stores.md)의 themeStore 섹션 참조.
 
 ---
 
-## 7. LoginForm
+## 6. LoginForm / SignupForm
 
-`LoginPage` 내부에서 사용하는 폼 컴포넌트. 직접 사용할 일은 거의 없다.
+각각 `LoginPage`, `SignupPage` 내부에서 사용하는 폼 컴포넌트. 직접 사용할 일은 거의 없다.
 
 ```tsx
 import { LoginForm } from "@common";
@@ -175,10 +204,10 @@ import { LoginForm } from "@common";
 />;
 ```
 
-### 5.1. Props
+### 6.1. Props
 
 | prop       | 타입                                     | 설명                                           |
 | ---------- | ---------------------------------------- | ---------------------------------------------- |
-| `onSubmit` | `(id: string, password: string) => void` | 폼 submit 시 호출                              |
+| `onSubmit` | `(id: string, password: string) => void` | 폼 submit 시 호출 (LoginForm)                  |
 | `loading`  | `boolean`                                | `true`이면 버튼 비활성화 + "로그인 중..." 표시 |
 | `error`    | `string \| null`                         | 에러 메시지 표시                               |

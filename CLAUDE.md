@@ -13,16 +13,17 @@
 
 ### Components
 
-| export       | 파일                        | Props                                                         |
-| ------------ | --------------------------- | ------------------------------------------------------------- |
-| `Button`     | `components/Button.tsx`     | `variant?: 'primary'\|'secondary'` + 기본 button 속성         |
-| `Input`      | `components/Input.tsx`      | `label?: string`, `error?: string` + 기본 input 속성          |
-| `Modal`      | `components/Modal.tsx`      | `isOpen`, `onClose`, `title`, `children`                      |
-| `Layout`     | `components/Layout.tsx`     | `title: string`, `children` — 헤더(로그아웃 포함) + 본문 래퍼 |
-| `LoginForm`  | `components/LoginForm.tsx`  | `onSubmit`, `loading?`, `error?` — LoginPage 내부용           |
-| `SideNav`    | `components/SideNav.tsx`    | `items: SideNavItem[]` — 앱별 사이드 메뉴 렌더링              |
-| `SignupForm` | `components/SignupForm.tsx` | `onSubmit`, `loading?`, `error?` — SignupPage 내부용          |
-| `theme`      | `styles/theme.ts`           | 색상, spacing, radius, shadow 등 공통 디자인 토큰             |
+| export       | 파일                        | Props / 설명                                                    |
+| ------------ | --------------------------- | --------------------------------------------------------------- |
+| `AppLayout`  | `components/AppLayout.tsx`  | 사이드바 + 헤더 + 메인 + 푸터 통합 레이아웃 (앱 공통 템플릿)    |
+| `Button`     | `components/Button.tsx`     | `variant?: 'primary'\|'secondary'` + 기본 button 속성           |
+| `Input`      | `components/Input.tsx`      | `label?: string`, `error?: string` + 기본 input 속성            |
+| `Modal`      | `components/Modal.tsx`      | `isOpen`, `onClose`, `title`, `children`                        |
+| `LoginForm`  | `components/LoginForm.tsx`  | `onSubmit`, `loading?`, `error?` — LoginPage 내부용             |
+| `SignupForm` | `components/SignupForm.tsx` | `onSubmit`, `loading?`, `error?` — SignupPage 내부용            |
+| `lightTheme` | `styles/theme.ts`           | Light 테마 객체                                                 |
+| `darkTheme`  | `styles/theme.ts`           | Dark 테마 객체                                                  |
+| `theme`      | `styles/theme.ts`           | `lightTheme` alias (정적; 런타임 다크모드 반영 안 됨)           |
 
 ### Hooks
 
@@ -44,24 +45,28 @@
 
 ### Stores
 
-| export         | 파일                  | 상태/액션                                                              |
-| -------------- | --------------------- | ---------------------------------------------------------------------- |
-| `useAppsStore` | `stores/appsStore.ts` | `apps`, `loaded`, `fetchApps()`, `clear()` — 접근 가능 앱 목록         |
-| `useAuthStore` | `stores/authStore.ts` | `user`, `isAuthenticated`, `login(tokens)`, `logout()`, `initialize()` |
+| export          | 파일                   | 상태/액션                                                              |
+| --------------- | ---------------------- | ---------------------------------------------------------------------- |
+| `useAppsStore`  | `stores/appsStore.ts`  | `apps`, `loaded`, `fetchApps()`, `clear()` — 접근 가능 앱 목록         |
+| `useAuthStore`  | `stores/authStore.ts`  | `user`, `isAuthenticated`, `login(tokens)`, `logout()`, `initialize()` |
+| `useThemeStore` | `stores/themeStore.ts` | `isDarkMode`, `theme`, `toggleDarkMode()`, `setDarkMode()` — 다크모드  |
 
 ### Types
 
-| export           | 파일                  | 설명                                                         |
-| ---------------- | --------------------- | ------------------------------------------------------------ |
-| `User`           | `types/auth.ts`       | DB 유저 전체 필드                                            |
-| `VUser`          | `types/auth.ts`       | 뷰용 유저 (team_name, role_name 등 문자열)                   |
-| `TokenPair`      | `types/auth.ts`       | `access_token`, `refresh_token`                              |
-| `AuthPayload`    | `types/auth.ts`       | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
-| `LoginRequest`   | `types/auth.ts`       | `id`, `password`                                             |
-| `LoginResponse`  | `types/auth.ts`       | `TokenPair` + `user: VUser`                                  |
-| `AppInfo`        | `stores/appsStore.ts` | `{ idx, path, name }` — 앱 정보 타입                         |
-| `SignupRequest`  | `types/signup.ts`     | 회원가입 요청 타입                                           |
-| `SignupResponse` | `types/signup.ts`     | 회원가입 응답 타입                                           |
+| export           | 파일                       | 설명                                                         |
+| ---------------- | -------------------------- | ------------------------------------------------------------ |
+| `User`           | `types/auth.ts`            | DB 유저 전체 필드                                            |
+| `VUser`          | `types/auth.ts`            | 뷰용 유저 (team_name, role_name 등 문자열)                   |
+| `TokenPair`      | `types/auth.ts`            | `access_token`, `refresh_token`                              |
+| `AuthPayload`    | `types/auth.ts`            | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
+| `LoginRequest`   | `types/auth.ts`            | `id`, `password`                                             |
+| `LoginResponse`  | `types/auth.ts`            | `TokenPair` + `user: VUser`                                  |
+| `AppInfo`        | `stores/appsStore.ts`      | `{ idx, path, name }` — 앱 정보 타입                         |
+| `SignupRequest`  | `types/signup.ts`          | 회원가입 요청 타입                                           |
+| `SignupResponse` | `types/signup.ts`          | 회원가입 응답 타입                                           |
+| `SidebarItem`    | `components/AppLayout.tsx` | `{ label, to, icon? }` — AppLayout 사이드바 메뉴 항목        |
+| `Theme`          | `styles/theme.ts`          | 테마 객체 타입 (`fontFamily`, `colors`, `radius` 등)         |
+| `ThemeColors`    | `styles/theme.ts`          | 테마 색상 토큰 타입                                          |
 
 ### Utils
 
@@ -80,7 +85,8 @@
 - 앱에서 로그인 페이지를 별도 구현하지 않는다 — `LoginPage` 사용
 - 앱에서 `useAuth`, `useAppAccess`를 재구현하지 않는다
 - 앱 접근 권한은 `useAppAccess(path)`로 검사한다 — DB `apps` 테이블 기반
-- `Layout`은 `useAuthStore`, `useAppsStore`를 직접 참조하므로 앱에서 store를 props로 전달하지 않아도 된다
+- `AppLayout`은 `useAuthStore`, `useAppsStore`, `useThemeStore`를 직접 참조하므로 앱에서 store를 props로 전달하지 않아도 된다
+- 앱 내부 페이지/컴포넌트는 `theme`를 정적 import 하지 않고 `useThemeStore().theme`로 구독해 다크모드 전환에 반응한다
 - `initialize()`는 앱 진입점(`main.tsx` 또는 `App.tsx`)에서 최초 1회 호출한다
 
 ## 정책 문서

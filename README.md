@@ -32,15 +32,16 @@ common/
 ```ts
 import { useAuth } from "@common/hooks/useAuth";
 import apiClient from "@common/services/apiClient";
-import { Layout } from "@common/components/Layout";
+import { AppLayout } from "@common/components/AppLayout";
+import { useThemeStore } from "@common/stores/themeStore";
 import { Role } from "@common/types/constants";
 ```
 
 상세 사용법은 각 정책 문서 참조:
 
-| 문서                                     | 내용                                                    |
-| ---------------------------------------- | ------------------------------------------------------- |
-| [docs/components.md](docs/components.md) | Button, Input, Modal, Layout, SideNav, LoginForm, theme |
-| [docs/auth.md](docs/auth.md)             | 인증 훅, 토큰 관리, LoginPage                           |
-| [docs/api-client.md](docs/api-client.md) | Axios 인스턴스, 인터셉터, 환경변수                      |
-| [docs/stores.md](docs/stores.md)         | authStore 사용법, 초기화                                |
+| 문서                                     | 내용                                                      |
+| ---------------------------------------- | --------------------------------------------------------- |
+| [docs/components.md](docs/components.md) | AppLayout, Button, Input, Modal, LoginForm, theme         |
+| [docs/auth.md](docs/auth.md)             | 인증 훅, 토큰 관리, LoginPage                             |
+| [docs/api-client.md](docs/api-client.md) | Axios 인스턴스, 인터셉터, 환경변수                        |
+| [docs/stores.md](docs/stores.md)         | authStore, appsStore, themeStore (다크모드) 사용법        |

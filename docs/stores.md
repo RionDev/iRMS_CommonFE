@@ -70,7 +70,73 @@ login({ access_token: "...", refresh_token: "..." });
 3. 만료되지 않았으면 `user`, `isAuthenticated` 설정
 4. 만료됐거나 디코딩 실패 시 토큰 삭제 (상태는 초기값 유지)
 
-## 1.4. 앱별 store 추가 규칙
+## 2. themeStore
+
+다크모드(light/dark 테마) 전역 store. 모든 앱에서 공유되며 `AppLayout` 헤더의 토글 버튼으로 전환한다.
+
+```ts
+import { useThemeStore } from "@common";
+```
+
+### 2.1. 상태
+
+| 상태         | 타입      | 설명                                           |
+| ------------ | --------- | ---------------------------------------------- |
+| `isDarkMode` | `boolean` | 현재 다크모드 여부                             |
+| `theme`      | `Theme`   | 현재 활성 테마 객체 (`lightTheme`/`darkTheme`) |
+
+### 2.2. 액션
+
+| 액션             | 시그니처                    | 설명                                  |
+| ---------------- | --------------------------- | ------------------------------------- |
+| `toggleDarkMode` | `() => void`                | light ↔ dark 전환 + localStorage 저장 |
+| `setDarkMode`    | `(isDark: boolean) => void` | 명시적 설정                           |
+
+### 2.3. 사용 패턴
+
+UI 컴포넌트는 `theme`를 `useThemeStore`로 구독해야 다크모드 전환에 반응한다.
+
+```tsx
+import { useThemeStore } from "@common";
+
+function MyCard() {
+  const { theme } = useThemeStore();
+  return (
+    <div style={{ backgroundColor: theme.colors.surface, color: theme.colors.text }}>
+      ...
+    </div>
+  );
+}
+```
+
+### 2.4. 초기값 결정 규칙
+
+1. `localStorage["IRMS_THEME_MODE"]` 이 있으면 그 값 사용 (`"dark"` / `"light"`)
+2. 없으면 시스템 설정 `prefers-color-scheme: dark` 감지
+3. `toggle`/`set` 호출 시마다 localStorage에 기록
+
+> **주의:** 정적 import (`import { theme } from "@common"`)는 `lightTheme` alias이므로 다크모드 전환에 반응하지 않는다. 일반 UI 코드에서는 반드시 `useThemeStore().theme`를 사용한다.
+
+## 3. appsStore
+
+로그인 사용자가 접근 가능한 앱 목록을 관리한다.
+
+```ts
+import { useAppsStore } from "@common";
+```
+
+### 3.1. 상태 / 액션
+
+| 이름         | 타입                       | 설명                                    |
+| ------------ | -------------------------- | --------------------------------------- |
+| `apps`       | `AppInfo[]`                | 접근 가능 앱 목록 (`{idx, path, name}`) |
+| `loaded`     | `boolean`                  | 최초 로드 완료 여부                     |
+| `fetchApps`  | `() => Promise<void>`      | BE에서 앱 목록 조회                     |
+| `clear`      | `() => void`               | 로그아웃 시 초기화                      |
+
+`AppLayout`의 헤더 AppLauncher와 `useAppAccess` 훅에서 내부적으로 사용한다.
+
+## 4. 앱별 store 추가 규칙
 
 공통 인증 상태 외에 앱 고유의 상태가 필요하면 해당 앱 내에 별도 store를 만든다.
 
