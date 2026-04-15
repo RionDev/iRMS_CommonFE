@@ -121,6 +121,10 @@ function ChangePasswordModal({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (currentPassword === newPassword) {
+      setError("새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+      return;
+    }
     if (newPassword !== confirmPassword) {
       setError("새 비밀번호가 일치하지 않습니다.");
       return;
