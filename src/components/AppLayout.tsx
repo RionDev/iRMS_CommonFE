@@ -661,13 +661,66 @@ function SidebarLogoutButton({
   );
 }
 
+function SidebarToggleButton({
+  collapsed,
+  onToggle,
+}: {
+  collapsed: boolean;
+  onToggle: () => void;
+}) {
+  const { theme } = useThemeStore();
+  const [hover, setHover] = useState(false);
+
+  return (
+    <button
+      onClick={onToggle}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      title={collapsed ? "메뉴 열기" : "메뉴 접기"}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "8px",
+        borderRadius: theme.radius.sm,
+        border: "none",
+        background: hover ? theme.colors.sidebarHover : "transparent",
+        color: theme.colors.sidebarText,
+        cursor: "pointer",
+        transition: "background-color 0.2s ease",
+      }}
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+        <line x1="9" x2="9" y1="3" y2="21" />
+        {collapsed ? (
+          <path d="m14 9 3 3-3 3" />
+        ) : (
+          <path d="m16 15-3-3 3-3" />
+        )}
+      </svg>
+    </button>
+  );
+}
+
 function Sidebar({
   items,
   collapsed,
+  onToggle,
   onLogout,
 }: {
   items: SidebarItem[];
   collapsed: boolean;
+  onToggle: () => void;
   onLogout: () => void;
 }) {
   const { theme } = useThemeStore();
@@ -693,49 +746,49 @@ function Sidebar({
           borderBottom: `1px solid ${theme.colors.sidebarBorder}`,
           display: "flex",
           alignItems: "center",
-          justifyContent: collapsed ? "center" : "flex-start",
+          justifyContent: collapsed ? "center" : "space-between",
+          gap: "4px",
           height: "64px",
           boxSizing: "border-box",
         }}
       >
-        <a
-          href="/"
-          title="포털로 이동"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            color: theme.colors.sidebarText,
-            textDecoration: "none",
-            borderRadius: theme.radius.sm,
-            padding: collapsed ? "10px 0" : "10px 12px",
-            justifyContent: collapsed ? "center" : "flex-start",
-            width: collapsed ? "auto" : "100%",
-            transition: "background-color 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = theme.colors.sidebarHover;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "transparent";
-          }}
-        >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        {!collapsed && (
+          <a
+            href="/"
+            title="포털로 이동"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              color: theme.colors.sidebarText,
+              textDecoration: "none",
+              borderRadius: theme.radius.sm,
+              padding: "10px 12px",
+              transition: "background-color 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor =
+                theme.colors.sidebarHover;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "transparent";
+            }}
           >
-            <rect x="3" y="3" width="7" height="7" />
-            <rect x="14" y="3" width="7" height="7" />
-            <rect x="3" y="14" width="7" height="7" />
-            <rect x="14" y="14" width="7" height="7" />
-          </svg>
-          {!collapsed && (
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+            </svg>
             <span
               style={{
                 fontWeight: 700,
@@ -744,8 +797,9 @@ function Sidebar({
             >
               IRMS
             </span>
-          )}
-        </a>
+          </a>
+        )}
+        <SidebarToggleButton collapsed={collapsed} onToggle={onToggle} />
       </div>
 
       <nav
@@ -814,7 +868,12 @@ export function AppLayout({
         fontFamily: theme.fontFamily,
       }}
     >
-      <Sidebar items={sidebarItems} collapsed={collapsed} onLogout={logout} />
+      <Sidebar
+        items={sidebarItems}
+        collapsed={collapsed}
+        onToggle={toggleCollapsed}
+        onLogout={logout}
+      />
 
       <div
         style={{
@@ -840,40 +899,29 @@ export function AppLayout({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "16px",
+              gap: "12px",
               userSelect: "none",
             }}
           >
-            <HeaderIconButton
-              onClick={toggleCollapsed}
-              tooltip={collapsed ? "메뉴 열기" : "메뉴 접기"}
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            </HeaderIconButton>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <span style={{ fontWeight: 700, fontSize: "18px" }}>
-                {appName}
-              </span>
-              <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
-              <span style={{ fontSize: "16px", fontWeight: 400 }}>{title}</span>
-            </div>
+            <span style={{ fontWeight: 700, fontSize: "18px" }}>
+              {appName}
+            </span>
+            <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
+            <span style={{ fontSize: "16px", fontWeight: 400 }}>{title}</span>
           </div>
           {isAuthenticated && user && (
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <ProfileMenu user={user} />
+              <span
+                style={{
+                  opacity: 0.3,
+                  fontWeight: 300,
+                  fontSize: "18px",
+                  margin: "0 4px",
+                }}
+              >
+                |
+              </span>
               <ThemeToggle />
               <AppLauncher />
             </div>
