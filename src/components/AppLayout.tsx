@@ -10,6 +10,7 @@ import apiClient from "../services/apiClient";
 import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
 import { useThemeStore } from "../stores/themeStore";
+import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 import { Input } from "./Input";
 import { Modal } from "./Modal";
@@ -469,19 +470,21 @@ function ProfileMenu({
     >
       <button
         onClick={() => setOpen((v) => !v)}
+        title={`${user.name} 님`}
+        aria-label={`${user.name} 님 프로필 메뉴`}
         style={{
           background: hover || open ? "rgba(255,255,255,0.15)" : "none",
           border: "none",
-          color: theme.colors.primaryText,
           cursor: "pointer",
-          fontSize: "14px",
-          fontFamily: theme.fontFamily,
-          padding: "4px 10px",
-          borderRadius: theme.radius.sm,
+          padding: "4px",
+          borderRadius: "50%",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
           transition: "background 0.15s",
         }}
       >
-        {user.name} 님
+        <Avatar name={user.name} size={32} />
       </button>
       {open && (
         <div
@@ -686,42 +689,63 @@ function Sidebar({
     >
       <div
         style={{
-          padding: collapsed ? "18px 0" : "18px 20px",
+          padding: "0 8px",
           borderBottom: `1px solid ${theme.colors.sidebarBorder}`,
           display: "flex",
           alignItems: "center",
           justifyContent: collapsed ? "center" : "flex-start",
-          gap: "8px",
           height: "64px",
           boxSizing: "border-box",
         }}
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <a
+          href="/"
+          title="포털로 이동"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            color: theme.colors.sidebarText,
+            textDecoration: "none",
+            borderRadius: theme.radius.sm,
+            padding: collapsed ? "10px 0" : "10px 12px",
+            justifyContent: collapsed ? "center" : "flex-start",
+            width: collapsed ? "auto" : "100%",
+            transition: "background-color 0.2s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = theme.colors.sidebarHover;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "transparent";
+          }}
         >
-          <rect x="3" y="3" width="7" height="7" />
-          <rect x="14" y="3" width="7" height="7" />
-          <rect x="3" y="14" width="7" height="7" />
-          <rect x="14" y="14" width="7" height="7" />
-        </svg>
-        {!collapsed && (
-          <span
-            style={{
-              fontWeight: 700,
-              fontSize: "18px",
-              color: theme.colors.sidebarText,
-            }}
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            IRMS
-          </span>
-        )}
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+          </svg>
+          {!collapsed && (
+            <span
+              style={{
+                fontWeight: 700,
+                fontSize: "18px",
+              }}
+            >
+              IRMS
+            </span>
+          )}
+        </a>
       </div>
 
       <nav

@@ -59,7 +59,41 @@ function UserListPage() {
 
 ---
 
-## 2. Button
+## 2. Avatar
+
+사용자 이름을 기반으로 결정론적으로 생성되는 원형 아바타.
+외부 이미지 없이 이니셜 + 배경색으로 그린다.
+
+- 이니셜: 한글은 앞 2글자(1글자 이름은 그대로), 영문은 공백 분리 단어의 첫글자 최대 2개(대문자)
+- 배경색: 이름 해시 → 10색 고정 팔레트에서 선택. 같은 이름은 항상 같은 색
+- 다크모드 대응: light/dark 팔레트 2세트 (themeStore 구독)
+- 빈 이름 fallback: `"?"` + 회색 배경
+
+```tsx
+import { Avatar } from "@common";
+
+// 헤더 프로필 (기본 32px)
+<Avatar name={user.name} />
+
+// 상세 페이지
+<Avatar name={user.name} size={80} />
+
+// 툴팁 커스터마이즈
+<Avatar name={user.name} size={32} title={`${user.name} 님`} />
+```
+
+### 2.1. Props
+
+| prop    | 타입            | 기본값       | 설명                                                    |
+| ------- | --------------- | ------------ | ------------------------------------------------------- |
+| `name`  | `string`        | —            | 이니셜 및 색상 산출 기준. 빈 문자열이면 `?` + 회색 배경 |
+| `size`  | `number`        | `32`         | 지름(px). 폰트는 `size * 0.4`                           |
+| `title` | `string`        | `name`       | hover 툴팁. 기본은 `name`                               |
+| `style` | `CSSProperties` | —            | 추가 스타일 (기본 스타일에 병합)                        |
+
+---
+
+## 3. Button
 
 ```tsx
 import { Button } from "@common";
@@ -87,7 +121,7 @@ import { Button } from "@common";
 
 ---
 
-## 3. Input
+## 4. Input
 
 ```tsx
 import { Input } from "@common";
@@ -109,7 +143,7 @@ import { Input } from "@common";
 />
 ```
 
-### 3.1. Props
+### 4.1. Props
 
 | prop    | 타입                  | 기본값 | 설명                                          |
 | ------- | --------------------- | ------ | --------------------------------------------- |
@@ -119,7 +153,7 @@ import { Input } from "@common";
 
 ---
 
-## 4. Modal
+## 5. Modal
 
 ```tsx
 import { Modal } from "@common";
@@ -132,7 +166,7 @@ const [isOpen, setIsOpen] = useState(false);
 </Modal>;
 ```
 
-### 4.1. Props
+### 5.1. Props
 
 | prop       | 타입         | 설명                        |
 | ---------- | ------------ | --------------------------- |
@@ -145,7 +179,7 @@ const [isOpen, setIsOpen] = useState(false);
 
 ---
 
-## 5. Theme
+## 6. Theme
 
 디자인 토큰은 `src/styles/theme.ts`에서 관리한다.
 런타임에는 `useThemeStore`를 통해 light/dark 테마를 선택한다.
@@ -170,7 +204,7 @@ function MyCard() {
 }
 ```
 
-### 5.1. 테마 구조
+### 6.1. 테마 구조
 
 - `theme.fontFamily`
 - `theme.colors` — `pageBackground`, `surface`, `primary`, `text`, `danger`, `sidebarBackground` 등
@@ -178,7 +212,7 @@ function MyCard() {
 - `theme.shadow.card`
 - `theme.layout` — `contentMaxWidth`, `sideNavWidth`
 
-### 5.2. 정적 참조 (특수 케이스만)
+### 6.2. 정적 참조 (특수 케이스만)
 
 모듈 레벨 상수에서 색상이 필요하고 다크모드 반영이 불필요한 경우에만 `theme`(= `lightTheme` alias)를 정적 import할 수 있다. 일반 UI 코드는 `useThemeStore().theme`을 사용한다.
 
@@ -190,7 +224,7 @@ import { lightTheme, darkTheme, theme } from "@common";
 
 ---
 
-## 6. LoginForm / SignupForm
+## 7. LoginForm / SignupForm
 
 각각 `LoginPage`, `SignupPage` 내부에서 사용하는 폼 컴포넌트. 직접 사용할 일은 거의 없다.
 
@@ -204,7 +238,7 @@ import { LoginForm } from "@common";
 />;
 ```
 
-### 6.1. Props
+### 7.1. Props
 
 | prop       | 타입                                     | 설명                                           |
 | ---------- | ---------------------------------------- | ---------------------------------------------- |

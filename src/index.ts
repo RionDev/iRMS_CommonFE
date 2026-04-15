@@ -5,6 +5,7 @@ export { SignupPage } from "./pages/SignupPage";
 // Components
 export { AppLayout } from "./components/AppLayout";
 export type { SidebarItem } from "./components/AppLayout";
+export { Avatar } from "./components/Avatar";
 export { Button } from "./components/Button";
 export { Input } from "./components/Input";
 export { LoginForm } from "./components/LoginForm";

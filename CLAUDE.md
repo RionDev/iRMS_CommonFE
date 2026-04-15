@@ -16,6 +16,7 @@
 | export       | 파일                        | Props / 설명                                                    |
 | ------------ | --------------------------- | --------------------------------------------------------------- |
 | `AppLayout`  | `components/AppLayout.tsx`  | 사이드바 + 헤더 + 메인 + 푸터 통합 레이아웃 (앱 공통 템플릿)    |
+| `Avatar`     | `components/Avatar.tsx`     | `name`, `size?`, `title?` — 이름 기반 이니셜 원형 아바타 (해시 색) |
 | `Button`     | `components/Button.tsx`     | `variant?: 'primary'\|'secondary'` + 기본 button 속성           |
 | `Input`      | `components/Input.tsx`      | `label?: string`, `error?: string` + 기본 input 속성            |
 | `Modal`      | `components/Modal.tsx`      | `isOpen`, `onClose`, `title`, `children`                        |
