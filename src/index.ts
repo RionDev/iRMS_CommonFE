@@ -7,12 +7,8 @@ export { AppLayout } from "./components/AppLayout";
 export type { SidebarItem } from "./components/AppLayout";
 export { Button } from "./components/Button";
 export { Input } from "./components/Input";
-export { Layout } from "./components/Layout";
 export { LoginForm } from "./components/LoginForm";
 export { Modal } from "./components/Modal";
-
-export { SideNav } from "./components/SideNav";
-export type { SideNavItem } from "./components/SideNav";
 export { SignupForm } from "./components/SignupForm";
 export { theme, lightTheme, darkTheme } from "./styles/theme";
 export type { Theme, ThemeColors } from "./styles/theme";

@@ -33,10 +33,10 @@ function getInitialCollapsed(): boolean {
 interface AppLayoutProps {
   /** 헤더 breadcrumb 타이틀 (현재 페이지 이름) */
   title: string;
-  /** 사이드바 상단 앱 이름 (예: "ADMIN") */
+  /** 사이드바 상단 앱 이름 (예: "ADMIN", "PORTAL") */
   appName: string;
-  /** 사이드바 메뉴 항목 */
-  sidebarItems: SidebarItem[];
+  /** 사이드바 메뉴 항목. 빈 배열이면 메뉴 없이 브랜드 + 로그아웃만 표시. */
+  sidebarItems?: SidebarItem[];
   /** 하단 푸터 버전 표시 */
   version?: string;
   /**
@@ -74,7 +74,16 @@ const APP_NAV: AppNavItem[] = [
     label: "관리자",
     href: "/admin/",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
@@ -133,7 +142,13 @@ function ChangePasswordModal({
     <Modal isOpen={isOpen} onClose={handleClose} title="비밀번호 변경">
       {success ? (
         <>
-          <p style={{ color: theme.colors.success, fontSize: "14px", margin: "8px 0 16px" }}>
+          <p
+            style={{
+              color: theme.colors.success,
+              fontSize: "14px",
+              margin: "8px 0 16px",
+            }}
+          >
             비밀번호가 변경되었습니다.
           </p>
           <Button type="button" onClick={handleClose} style={{ width: "100%" }}>
@@ -169,7 +184,13 @@ function ChangePasswordModal({
             </Button>
           </form>
           {error && (
-            <p style={{ color: theme.colors.danger, marginTop: "12px", fontSize: "14px" }}>
+            <p
+              style={{
+                color: theme.colors.danger,
+                marginTop: "12px",
+                fontSize: "14px",
+              }}
+            >
               {error}
             </p>
           )}
@@ -261,7 +282,16 @@ function ThemeToggle() {
         }}
       >
         {isDarkMode ? (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <circle cx="12" cy="12" r="5" />
             <line x1="12" y1="1" x2="12" y2="3" />
             <line x1="12" y1="21" x2="12" y2="23" />
@@ -273,7 +303,16 @@ function ThemeToggle() {
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
           </svg>
         ) : (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
         )}
@@ -326,7 +365,15 @@ function AppTile({ app }: { app: AppNavItem }) {
       }}
     >
       {app.icon}
-      <span style={{ fontSize: "10px", fontWeight: isActive ? 600 : 400, textAlign: "center", lineHeight: 1, whiteSpace: "nowrap" }}>
+      <span
+        style={{
+          fontSize: "10px",
+          fontWeight: isActive ? 600 : 400,
+          textAlign: "center",
+          lineHeight: 1,
+          whiteSpace: "nowrap",
+        }}
+      >
         {app.label}
       </span>
     </a>
@@ -341,7 +388,8 @@ function AppLauncher() {
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -405,7 +453,8 @@ function ProfileMenu({
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -455,14 +504,26 @@ function ProfileMenu({
               borderBottom: `1px solid ${theme.colors.border}`,
             }}
           >
-            <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-              <span style={{ fontWeight: 600, fontSize: "15px" }}>{user.name}</span>
+            <div
+              style={{ display: "flex", alignItems: "baseline", gap: "8px" }}
+            >
+              <span style={{ fontWeight: 600, fontSize: "15px" }}>
+                {user.name}
+              </span>
               <span style={{ fontSize: "13px", color: theme.colors.textMuted }}>
-                {user.team ? `${TeamLabel[user.team] ?? `팀 ${user.team}`} · ` : ""}
+                {user.team
+                  ? `${TeamLabel[user.team] ?? `팀 ${user.team}`} · `
+                  : ""}
                 {RoleLabel[user.role] ?? `역할 ${user.role}`}
               </span>
             </div>
-            <div style={{ fontSize: "13px", color: theme.colors.textMuted, marginTop: "4px" }}>
+            <div
+              style={{
+                fontSize: "13px",
+                color: theme.colors.textMuted,
+                marginTop: "4px",
+              }}
+            >
               {user.id}
             </div>
           </div>
@@ -489,7 +550,10 @@ function ProfileMenu({
           </div>
         </div>
       )}
-      <ChangePasswordModal isOpen={pwModalOpen} onClose={() => setPwModalOpen(false)} />
+      <ChangePasswordModal
+        isOpen={pwModalOpen}
+        onClose={() => setPwModalOpen(false)}
+      />
     </div>
   );
 }
@@ -520,7 +584,9 @@ function SidebarNavItem({
         textDecoration: "none",
         fontSize: "14px",
         fontWeight: 500,
-        color: isActive ? theme.colors.sidebarActiveText : theme.colors.sidebarText,
+        color: isActive
+          ? theme.colors.sidebarActiveText
+          : theme.colors.sidebarText,
         backgroundColor: isActive
           ? theme.colors.sidebarActive
           : hover
@@ -573,7 +639,16 @@ function SidebarLogoutButton({
         transition: "background-color 0.2s ease, color 0.2s ease",
       }}
     >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
         <polyline points="16 17 21 12 16 7" />
         <line x1="21" y1="12" x2="9" y2="12" />
@@ -623,7 +698,16 @@ function Sidebar({
           boxSizing: "border-box",
         }}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <rect x="3" y="3" width="7" height="7" />
           <rect x="14" y="3" width="7" height="7" />
           <rect x="3" y="14" width="7" height="7" />
@@ -631,17 +715,38 @@ function Sidebar({
         </svg>
         {!collapsed && (
           <>
-            <span style={{ fontWeight: 700, fontSize: "18px", color: theme.colors.sidebarText }}>
+            <span
+              style={{
+                fontWeight: 700,
+                fontSize: "18px",
+                color: theme.colors.sidebarText,
+              }}
+            >
               IRMS
             </span>
-            <span style={{ fontSize: "12px", color: theme.colors.sidebarTextMuted, fontWeight: 500, letterSpacing: "1px" }}>
+            <span
+              style={{
+                fontSize: "12px",
+                color: theme.colors.sidebarTextMuted,
+                fontWeight: 500,
+                letterSpacing: "1px",
+              }}
+            >
               {appName}
             </span>
           </>
         )}
       </div>
 
-      <nav style={{ flex: 1, padding: "12px 8px", display: "flex", flexDirection: "column", gap: "4px" }}>
+      <nav
+        style={{
+          flex: 1,
+          padding: "12px 8px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "4px",
+        }}
+      >
         {items.map((item) => (
           <SidebarNavItem key={item.to} item={item} collapsed={collapsed} />
         ))}
@@ -666,7 +771,7 @@ function Sidebar({
 export function AppLayout({
   title,
   appName,
-  sidebarItems,
+  sidebarItems = [],
   version,
   contentMaxWidth = "960px",
   appMinWidth = "1180px",
@@ -706,7 +811,14 @@ export function AppLayout({
         onLogout={logout}
       />
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minWidth: 0,
+        }}
+      >
         <header
           style={{
             backgroundColor: theme.colors.primary,
@@ -719,12 +831,28 @@ export function AppLayout({
             flexShrink: 0,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "16px", userSelect: "none" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+              userSelect: "none",
+            }}
+          >
             <HeaderIconButton
               onClick={toggleCollapsed}
               tooltip={collapsed ? "메뉴 열기" : "메뉴 접기"}
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <line x1="3" y1="12" x2="21" y2="12" />
                 <line x1="3" y1="18" x2="21" y2="18" />
@@ -769,21 +897,33 @@ export function AppLayout({
             fontSize: "12px",
             height: "48px",
             flexShrink: 0,
+            userSelect: "none",
           }}
         >
           <span style={{ color: theme.colors.textMuted }}>
-            RMS - Resource Management System
+            iRMS - ISARC Resource Management System
           </span>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", color: theme.colors.textMuted }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              color: theme.colors.textMuted,
+            }}
+          >
             {version && (
               <>
-                <span style={{ fontStyle: "italic", opacity: 0.7 }}>Version {version}</span>
+                <span style={{ fontStyle: "italic", opacity: 0.7 }}>
+                  Version {version}
+                </span>
                 <span style={{ color: theme.colors.border }}>|</span>
               </>
             )}
             <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
               <span style={{ fontWeight: 300 }}>Powered by</span>
-              <span style={{ fontWeight: 500, color: theme.colors.text }}>Engine Team</span>
+              <span style={{ fontWeight: 500, color: theme.colors.text }}>
+                Engine Team
+              </span>
             </div>
           </div>
         </footer>
