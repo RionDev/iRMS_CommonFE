@@ -11,6 +11,7 @@ import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
 import { useThemeStore } from "../stores/themeStore";
 import { ROLE_LABEL, type RoleType } from "../types/constants";
+import { hasAppAccess } from "../utils/appPath";
 import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 import { Input } from "./Input";
@@ -442,13 +443,7 @@ function AppLauncher() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const normalizePath = (p: string): string => {
-    const s = p.trim();
-    return s.length > 1 && s.endsWith("/") ? s.slice(0, -1) : s;
-  };
-  const visibleApps = APP_NAV.filter((app) =>
-    apps.some((a) => normalizePath(a.path) === normalizePath(app.href)),
-  );
+  const visibleApps = APP_NAV.filter((app) => hasAppAccess(apps, app.href));
 
   return (
     <div ref={ref} style={{ position: "relative" }}>

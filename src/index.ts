@@ -59,3 +59,4 @@ export {
   getRefreshToken,
   saveTokens,
 } from "./utils/token";
+export { hasAppAccess } from "./utils/appPath";

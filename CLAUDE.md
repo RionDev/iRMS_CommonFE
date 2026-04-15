@@ -85,13 +85,14 @@
 
 ### Utils
 
-| export            | 파일             | 설명                                   |
-| ----------------- | ---------------- | -------------------------------------- |
-| `getAccessToken`  | `utils/token.ts` | localStorage에서 access token 읽기     |
-| `getRefreshToken` | `utils/token.ts` | localStorage에서 refresh token 읽기    |
-| `saveTokens`      | `utils/token.ts` | access/refresh token localStorage 저장 |
-| `clearTokens`     | `utils/token.ts` | access/refresh token localStorage 삭제 |
-| `decodeToken`     | `utils/token.ts` | JWT payload 디코딩 → `AuthPayload`     |
+| export            | 파일               | 설명                                                          |
+| ----------------- | ------------------ | ------------------------------------------------------------- |
+| `getAccessToken`  | `utils/token.ts`   | localStorage에서 access token 읽기                            |
+| `getRefreshToken` | `utils/token.ts`   | localStorage에서 refresh token 읽기                           |
+| `saveTokens`      | `utils/token.ts`   | access/refresh token localStorage 저장                        |
+| `clearTokens`     | `utils/token.ts`   | access/refresh token localStorage 삭제                        |
+| `decodeToken`     | `utils/token.ts`   | JWT payload 디코딩 → `AuthPayload`                            |
+| `hasAppAccess`    | `utils/appPath.ts` | 접근 가능 앱 목록에 특정 경로가 포함되는지 판정 (경로 정규화) |
 
 ## 규칙
 

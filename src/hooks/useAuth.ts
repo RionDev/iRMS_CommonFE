@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
+import { hasAppAccess } from "../utils/appPath";
 
 export function useAuth() {
   const { user, isAuthenticated, logout } = useAuthStore();
@@ -15,8 +16,7 @@ export function useAppAccess(appPath: string) {
   useEffect(() => {
     if (!user || !loaded || handledRef.current) return;
 
-    const hasAccess = apps.some((a) => a.path === appPath);
-    if (hasAccess) return;
+    if (hasAppAccess(apps, appPath)) return;
 
     handledRef.current = true;
     alert("권한이 없습니다.");
