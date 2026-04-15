@@ -1,4 +1,4 @@
-import type { RoleType } from "./constants";
+import type { RoleType, TeamType } from "./constants";
 
 /**
  * 내부 DB 레코드 기반 사용자 (보통 FE 에서 직접 다루지 않음).
@@ -8,7 +8,7 @@ export interface User {
   idx: number;
   id: string;
   name: string;
-  team: number | null;
+  team: TeamType | null;
   role: RoleType;
   status: number;
   last_at: string | null;
@@ -42,7 +42,7 @@ export interface AuthPayload {
   id: string;
   name: string;
   role: RoleType;
-  team: number | null;
+  team: TeamType | null;
   exp: number;
 }
 

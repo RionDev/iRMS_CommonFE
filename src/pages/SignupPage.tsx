@@ -3,7 +3,7 @@ import { Modal } from "../components/Modal";
 import { SignupForm } from "../components/SignupForm";
 import { signup } from "../services/signupService";
 import { useThemeStore } from "../stores/themeStore";
-import type { RoleType } from "../types/constants";
+import type { RoleType, TeamType } from "../types/constants";
 
 interface SignupPageProps {
   loginUrl?: string;
@@ -21,7 +21,7 @@ export function SignupPage({ loginUrl = "/login" }: SignupPageProps) {
     password: string;
     password_confirm: string;
     role: RoleType;
-    team: number | null;
+    team: TeamType | null;
   }) => {
     if (data.password !== data.password_confirm) {
       setError("비밀번호가 일치하지 않습니다.");

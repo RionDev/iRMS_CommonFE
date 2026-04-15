@@ -44,8 +44,11 @@ export {
   ROLE_LABEL,
   ROLE_OPTIONS,
   SIGNUP_ROLE_OPTIONS,
+  Team,
+  TEAM_LABEL,
+  TEAM_OPTIONS,
 } from "./types/constants";
-export type { RoleType } from "./types/constants";
+export type { RoleType, TeamType } from "./types/constants";
 export type { SignupRequest, SignupResponse } from "./types/signup";
 
 // Utils

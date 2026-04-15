@@ -1,7 +1,14 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
 import { useThemeStore } from "../stores/themeStore";
-import { Role, SIGNUP_ROLE_OPTIONS, type RoleType } from "../types/constants";
+import {
+  Role,
+  SIGNUP_ROLE_OPTIONS,
+  Team,
+  TEAM_OPTIONS,
+  type RoleType,
+  type TeamType,
+} from "../types/constants";
 import { Button } from "./Button";
 import { Input } from "./Input";
 
@@ -12,7 +19,7 @@ interface SignupFormProps {
     password: string;
     password_confirm: string;
     role: RoleType;
-    team: number | null;
+    team: TeamType | null;
   }) => void;
   loading?: boolean;
   error?: string | null;
@@ -30,7 +37,7 @@ export function SignupForm({
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [role, setRole] = useState<RoleType>(Role.MEMBER);
-  const [team, setTeam] = useState<number | null>(1);
+  const [team, setTeam] = useState<TeamType | null>(Team.ENGINE);
 
   const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
@@ -59,7 +66,7 @@ export function SignupForm({
     if (value === Role.GUEST) {
       setTeam(null);
     } else if (team === null) {
-      setTeam(1);
+      setTeam(Team.ENGINE);
     }
   };
 
@@ -154,7 +161,7 @@ export function SignupForm({
         </label>
         <select
           value={team ?? ""}
-          onChange={(e) => setTeam(Number(e.target.value))}
+          onChange={(e) => setTeam(e.target.value as TeamType)}
           disabled={role === Role.GUEST}
           style={{
             ...selectStyle,
@@ -162,8 +169,11 @@ export function SignupForm({
           }}
         >
           {role === Role.GUEST && <option value="">선택 안 함</option>}
-          <option value={1}>Engine</option>
-          <option value={2}>Analyst</option>
+          {TEAM_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
       </div>
       {(idError ?? error) && (

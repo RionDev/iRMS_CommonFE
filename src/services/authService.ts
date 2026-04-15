@@ -13,6 +13,6 @@ export async function refresh(refreshToken: string): Promise<TokenPair> {
   return res.data;
 }
 
-export async function logout(): Promise<void> {
-  await apiClient.post("/api/auth/logout");
+export async function logout(refreshToken: string): Promise<void> {
+  await apiClient.post("/api/auth/logout", { refresh_token: refreshToken });
 }

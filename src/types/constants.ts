@@ -41,3 +41,28 @@ export const SIGNUP_ROLE_OPTIONS: ReadonlyArray<{
   { value: Role.MEMBER, label: ROLE_LABEL.MEMBER },
   { value: Role.GUEST, label: ROLE_LABEL.GUEST },
 ];
+
+/**
+ * 팀(Team) 상수 / 타입 / 라벨
+ *
+ * BE 와 규약: 전 구간 대문자 영어 string ("ENGINE"|"ANALYST") 로 주고받는다.
+ * DB `users.team` 컬럼만 int idx 로 저장되며 BE 내부에서 변환한다.
+ */
+export const Team = {
+  ENGINE: "ENGINE",
+  ANALYST: "ANALYST",
+} as const;
+
+export type TeamType = (typeof Team)[keyof typeof Team];
+
+/** 팀 code → 한국어 표시 라벨 */
+export const TEAM_LABEL: Record<TeamType, string> = {
+  ENGINE: "Engine",
+  ANALYST: "Analyst",
+};
+
+/** `<option>` 생성용 */
+export const TEAM_OPTIONS: ReadonlyArray<{ value: TeamType; label: string }> = [
+  { value: Team.ENGINE, label: TEAM_LABEL.ENGINE },
+  { value: Team.ANALYST, label: TEAM_LABEL.ANALYST },
+];

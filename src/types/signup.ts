@@ -1,4 +1,4 @@
-import type { RoleType } from "./constants";
+import type { RoleType, TeamType } from "./constants";
 
 export interface SignupRequest {
   id: string;
@@ -6,7 +6,7 @@ export interface SignupRequest {
   password: string;
   password_confirm: string;
   role: RoleType;
-  team: number | null;
+  team: TeamType | null;
 }
 
 export interface SignupResponse {
