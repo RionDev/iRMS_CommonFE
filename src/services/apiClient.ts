@@ -109,31 +109,19 @@ apiClient.interceptors.response.use(
       }
     }
 
-    // 401 이외의 HTTP 에러 — alert로 표시
+    // 401 이외의 HTTP 에러 — 차단 계정만 리다이렉트, 나머지는 호출부에서 처리
     const status = error.response?.status;
     const detail: string | undefined = error.response?.data?.detail;
 
     if (status === 403) {
       if (isRateLimitBlockedDetail(detail)) {
-        alert(detail ?? "차단된 계정입니다.");
         redirectToLogin();
       } else {
         const token = getAccessToken();
         if (token && isBlockedToken(token)) {
-          alert("차단된 계정입니다.");
           redirectToLogin();
-        } else {
-          alert(detail ?? "접근 권한이 없습니다.");
         }
       }
-    } else if (status === 404) {
-      alert(detail ?? "요청한 리소스를 찾을 수 없습니다.");
-    } else if (status === 409) {
-      alert(detail ?? "요청이 충돌했습니다. 다시 시도해 주세요.");
-    } else if (status && status >= 500) {
-      alert(detail ?? "서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
-    } else if (!error.response) {
-      alert("네트워크 오류가 발생했습니다. 연결 상태를 확인해 주세요.");
     }
 
     return Promise.reject(error);
