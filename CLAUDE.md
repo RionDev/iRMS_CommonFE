@@ -61,7 +61,7 @@
 | `TokenPair`      | `types/auth.ts`            | `access_token`, `refresh_token`                              |
 | `AuthPayload`    | `types/auth.ts`            | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
 | `LoginRequest`   | `types/auth.ts`            | `id`, `password`                                             |
-| `LoginResponse`  | `types/auth.ts`            | `TokenPair` + `user: VUser`                                  |
+| `LoginResponse`  | `types/auth.ts`            | `access_token`, `refresh_token` (현재 `TokenPair` 와 동일)   |
 | `AppInfo`        | `stores/appsStore.ts`      | `{ idx, path, name }` — 앱 정보 타입                         |
 | `SignupRequest`  | `types/signup.ts`          | 회원가입 요청 타입                                           |
 | `SignupResponse` | `types/signup.ts`          | 회원가입 응답 타입                                           |
