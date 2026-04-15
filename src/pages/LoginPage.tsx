@@ -5,7 +5,7 @@ import { LoginForm } from "../components/LoginForm";
 import { Modal } from "../components/Modal";
 import { login } from "../services/authService";
 import { useAuthStore } from "../stores/authStore";
-import { theme } from "../styles/theme";
+import { useThemeStore } from "../stores/themeStore";
 
 interface LoginPageProps {
   signupUrl?: string;
@@ -16,6 +16,7 @@ export function LoginPage({
   signupUrl = "/signup",
   defaultRedirect = "/",
 }: LoginPageProps) {
+  const { theme } = useThemeStore();
   type AuthState = ReturnType<typeof useAuthStore.getState>;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

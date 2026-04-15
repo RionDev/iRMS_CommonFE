@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes } from "react";
-import { theme } from "../styles/theme";
+import { useThemeStore } from "../stores/themeStore";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -7,6 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Input({ label, error, style, ...props }: InputProps) {
+  const { theme } = useThemeStore();
   return (
     <div style={{ marginBottom: "12px" }}>
       {label && (

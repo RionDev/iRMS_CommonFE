@@ -1,6 +1,6 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
-import { theme } from "../styles/theme";
+import { useThemeStore } from "../stores/themeStore";
 import { Button } from "./Button";
 import { Input } from "./Input";
 
@@ -22,6 +22,7 @@ export function SignupForm({
   loading = false,
   error,
 }: SignupFormProps) {
+  const { theme } = useThemeStore();
   const [id, setId] = useState("");
   const [idError, setIdError] = useState<string | null>(null);
   const [name, setName] = useState("");

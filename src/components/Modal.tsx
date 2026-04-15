@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { theme } from "../styles/theme";
+import { useThemeStore } from "../stores/themeStore";
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,6 +9,7 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+  const { theme } = useThemeStore();
   if (!isOpen) return null;
 
   return (

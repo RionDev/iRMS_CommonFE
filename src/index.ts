@@ -3,6 +3,8 @@ export { LoginPage } from "./pages/LoginPage";
 export { SignupPage } from "./pages/SignupPage";
 
 // Components
+export { AppLayout } from "./components/AppLayout";
+export type { SidebarItem } from "./components/AppLayout";
 export { Button } from "./components/Button";
 export { Input } from "./components/Input";
 export { Layout } from "./components/Layout";
@@ -12,7 +14,8 @@ export { Modal } from "./components/Modal";
 export { SideNav } from "./components/SideNav";
 export type { SideNavItem } from "./components/SideNav";
 export { SignupForm } from "./components/SignupForm";
-export { theme } from "./styles/theme";
+export { theme, lightTheme, darkTheme } from "./styles/theme";
+export type { Theme, ThemeColors } from "./styles/theme";
 
 // Hooks
 export { useApi } from "./hooks/useApi";
@@ -27,6 +30,7 @@ export { signup } from "./services/signupService";
 export { useAppsStore } from "./stores/appsStore";
 export type { AppInfo } from "./stores/appsStore";
 export { useAuthStore } from "./stores/authStore";
+export { useThemeStore } from "./stores/themeStore";
 
 
 // Types

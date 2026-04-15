@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { theme } from "../styles/theme";
+import { useThemeStore } from "../stores/themeStore";
 
 export interface SideNavItem {
   label: string;
@@ -11,6 +11,7 @@ interface SideNavProps {
 }
 
 export function SideNav({ items }: SideNavProps) {
+  const { theme } = useThemeStore();
   return (
     <aside
       style={{

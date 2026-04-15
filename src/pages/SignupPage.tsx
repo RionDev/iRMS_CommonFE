@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Modal } from "../components/Modal";
 import { SignupForm } from "../components/SignupForm";
 import { signup } from "../services/signupService";
-import { theme } from "../styles/theme";
+import { useThemeStore } from "../stores/themeStore";
 
 interface SignupPageProps {
   loginUrl?: string;
 }
 
 export function SignupPage({ loginUrl = "/login" }: SignupPageProps) {
+  const { theme } = useThemeStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);

@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes } from "react";
-import { theme } from "../styles/theme";
+import { useThemeStore } from "../stores/themeStore";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary";
@@ -11,6 +11,7 @@ export function Button({
   style,
   ...props
 }: ButtonProps) {
+  const { theme } = useThemeStore();
   const baseStyle: React.CSSProperties = {
     padding: "8px 16px",
     border: "none",

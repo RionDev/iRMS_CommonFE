@@ -8,7 +8,7 @@ import {
 import apiClient from "../services/apiClient";
 import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
-import { theme } from "../styles/theme";
+import { useThemeStore } from "../stores/themeStore";
 import { Button } from "./Button";
 import { Input } from "./Input";
 import { Modal } from "./Modal";
@@ -41,7 +41,7 @@ const APP_NAV: AppNavItem[] = [
     label: "관리자",
     href: "/admin/",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={theme.colors.primary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
@@ -58,6 +58,7 @@ function ChangePasswordModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const { theme } = useThemeStore();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -158,6 +159,7 @@ function ChangePasswordModal({
 }
 
 function LogoutButton({ onLogout }: { onLogout: () => void }) {
+  const { theme } = useThemeStore();
   const [hover, setHover] = useState(false);
 
   return (
@@ -219,6 +221,7 @@ function LogoutButton({ onLogout }: { onLogout: () => void }) {
 }
 
 function PwChangeButton({ onClick }: { onClick: () => void }) {
+  const { theme } = useThemeStore();
   const [hover, setHover] = useState(false);
   const [active, setActive] = useState(false);
 
@@ -252,6 +255,7 @@ function ProfileMenu({
 }: {
   user: { id: string; name: string; role: number; team: number };
 }) {
+  const { theme } = useThemeStore();
   const [open, setOpen] = useState(false);
   const [pwModalOpen, setPwModalOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -315,7 +319,7 @@ function ProfileMenu({
             position: "absolute",
             top: "calc(100% + 6px)",
             right: 0,
-            background: "#fff",
+            background: theme.colors.surface,
             color: theme.colors.text,
             borderRadius: theme.radius.md,
             boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
@@ -370,6 +374,7 @@ function ProfileMenu({
 }
 
 function AppTile({ app }: { app: AppNavItem }) {
+  const { theme } = useThemeStore();
   const [hover, setHover] = useState(false);
   const isActive = window.location.pathname.startsWith(app.href);
 
@@ -401,6 +406,7 @@ function AppTile({ app }: { app: AppNavItem }) {
 }
 
 function AppLauncher() {
+  const { theme } = useThemeStore();
   const [open, setOpen] = useState(false);
   const [hover, setHover] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -478,7 +484,7 @@ function AppLauncher() {
             position: "absolute",
             top: "calc(100% + 6px)",
             right: 0,
-            background: "#fff",
+            background: theme.colors.surface,
             color: theme.colors.text,
             borderRadius: theme.radius.md,
             boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
@@ -498,12 +504,84 @@ function AppLauncher() {
   );
 }
 
+function ThemeToggle({
+  isDarkMode,
+  onToggle,
+}: {
+  isDarkMode: boolean;
+  onToggle: () => void;
+}) {
+  const { theme } = useThemeStore();
+  const [hover, setHover] = useState(false);
+
+  return (
+    <div
+      style={{ position: "relative", display: "inline-flex" }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <button
+        onClick={onToggle}
+        style={{
+          background: hover ? "rgba(255,255,255,0.15)" : "none",
+          border: "none",
+          color: theme.colors.primaryText,
+          cursor: "pointer",
+          padding: "6px",
+          display: "flex",
+          alignItems: "center",
+          borderRadius: theme.radius.sm,
+          transition: "background 0.15s",
+        }}
+      >
+        {isDarkMode ? (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        ) : (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        )}
+      </button>
+      {hover && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 6px)",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(0,0,0,0.75)",
+            color: "#fff",
+            fontSize: "12px",
+            padding: "4px 10px",
+            borderRadius: theme.radius.sm,
+            whiteSpace: "nowrap",
+            pointerEvents: "none",
+          }}
+        >
+          {isDarkMode ? "라이트 모드" : "다크 모드"}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function Layout({
   title,
   children,
   sideNavItems = [],
   version,
 }: LayoutProps) {
+  const { theme, isDarkMode, toggleDarkMode } = useThemeStore();
   const { user, isAuthenticated, logout } = useAuthStore();
 
   return (
@@ -572,6 +650,7 @@ export function Layout({
               |
             </span>
             <AppLauncher />
+            <ThemeToggle isDarkMode={isDarkMode} onToggle={toggleDarkMode} />
             <LogoutButton onLogout={logout} />
           </div>
         )}
