@@ -382,33 +382,18 @@ function AppTile({ app }: { app: AppNavItem }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: "4px",
-        padding: "8px 6px",
+        gap: "2px",
+        padding: "6px 4px",
         borderRadius: theme.radius.sm,
         textDecoration: "none",
         color: isActive ? theme.colors.primary : theme.colors.text,
         backgroundColor: hover ? theme.colors.pageBackground : "transparent",
         transition: "background-color 0.15s",
         cursor: "pointer",
-        width: "56px",
       }}
     >
-      <div
-        style={{
-          width: "32px",
-          height: "32px",
-          borderRadius: "50%",
-          backgroundColor: isActive
-            ? `${theme.colors.primary}18`
-            : theme.colors.pageBackground,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {app.icon}
-      </div>
-      <span style={{ fontSize: "11px", fontWeight: isActive ? 600 : 400, textAlign: "center" }}>
+      {app.icon}
+      <span style={{ fontSize: "10px", fontWeight: isActive ? 600 : 400, textAlign: "center", lineHeight: 1, whiteSpace: "nowrap" }}>
         {app.label}
       </span>
     </a>
@@ -498,10 +483,10 @@ function AppLauncher() {
             borderRadius: theme.radius.md,
             boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
             zIndex: 1000,
-            padding: "8px",
+            padding: "6px",
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "2px",
+            gap: "0px",
           }}
         >
           {visibleApps.map((app) => (
