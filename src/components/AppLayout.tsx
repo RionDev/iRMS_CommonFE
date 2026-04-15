@@ -32,8 +32,12 @@ function getInitialCollapsed(): boolean {
 }
 
 interface AppLayoutProps {
-  /** 헤더 breadcrumb 타이틀 (현재 페이지 이름) */
-  title: string;
+  /**
+   * 헤더에 `{appName} | {title}` 형태로 표시되는 현재 페이지 이름.
+   * 생략하거나 빈 문자열이면 구분자와 함께 숨겨져 `{appName}`만 표시된다
+   * (예: 포털처럼 단일 랜딩 페이지).
+   */
+  title?: string;
   /** 사이드바 상단 앱 이름 (예: "ADMIN", "PORTAL") */
   appName: string;
   /** 사이드바 메뉴 항목. 빈 배열이면 메뉴 없이 브랜드 + 로그아웃만 표시. */
@@ -947,8 +951,14 @@ export function AppLayout({
             <span style={{ fontWeight: 700, fontSize: "18px" }}>
               {appName}
             </span>
-            <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
-            <span style={{ fontSize: "16px", fontWeight: 400 }}>{title}</span>
+            {title && (
+              <>
+                <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
+                <span style={{ fontSize: "16px", fontWeight: 400 }}>
+                  {title}
+                </span>
+              </>
+            )}
           </div>
           {isAuthenticated && user && (
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
