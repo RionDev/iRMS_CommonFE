@@ -106,22 +106,21 @@ function MyPage() {
 
 `react-router-dom`의 `useNavigate`, `useLocation`을 사용하므로 `BrowserRouter` 내부에서만 호출 가능하다.
 
-## useRequireRole — 역할 기반 접근 제어
+## useAppAccess — 앱(경로) 기반 접근 제어
 
-특정 역할만 접근 가능한 페이지/컴포넌트에서 사용한다.
+특정 앱/페이지 경로에 대한 접근 권한을 검사한다. `apps` 테이블의 `min_role`, `team` 과 `GET /api/app/me` 결과를 기준으로 한다.
 
 ```tsx
-import { useRequireRole } from "@common/hooks/useAuth";
-import { Role } from "@common/types/constants";
+import { useAppAccess } from "@common/hooks/useAuth";
 
 function AdminPage() {
-  const user = useRequireRole(Role.ADMIN);
-  // role이 ADMIN이 아니면 Error('권한이 없습니다') throw
+  const user = useAppAccess("/admin");
+  // appsStore에 "/admin"이 없으면 alert 후 /portal 리다이렉트
   return <div>관리자 페이지</div>;
 }
 ```
 
-`useAuth()`를 내부 호출하므로 미인증 시 `/login` redirect도 함께 동작한다.
+페이지 단위로 권한을 세분화하려면 `apps` 테이블에 해당 경로를 레코드로 등록하고, 페이지에서 `useAppAccess("/admin/apps")` 처럼 경로별로 호출한다.
 
 ### Role 상수
 

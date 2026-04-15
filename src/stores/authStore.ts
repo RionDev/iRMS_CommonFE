@@ -1,5 +1,6 @@
 import axios from "axios";
 import { create } from "zustand";
+import { logout as apiLogout } from "../services/authService";
 import type { AuthPayload, TokenPair } from "../types/auth";
 import {
   clearTokens,
@@ -17,7 +18,7 @@ interface AuthState {
   user: AuthPayload | null;
   isAuthenticated: boolean;
   login: (tokens: TokenPair) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   initialize: () => Promise<void>;
 }
 
@@ -38,7 +39,17 @@ export const useAuthStore = create<AuthState>((set) => ({
     useAppsStore.getState().fetchApps();
   },
 
-  logout: () => {
+  logout: async () => {
+    // BE에 refresh token 무효화 요청 (await: 요청이 Authorization 헤더 세팅 후 전송되도록)
+    // 네트워크 실패해도 로컬 정리는 진행 — UX 우선
+    const refreshToken = getRefreshToken();
+    if (refreshToken) {
+      try {
+        await apiLogout(refreshToken);
+      } catch {
+        // 로그아웃 실패는 무시 — 로컬은 어차피 정리되므로 사용자 입장에선 로그아웃 완료
+      }
+    }
     clearTokens();
     useAppsStore.getState().clear();
     set({ user: null, isAuthenticated: false });

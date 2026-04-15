@@ -22,7 +22,9 @@ function resolveApiUrl(path: string): string {
 function isAuthRequest(url?: string): boolean {
   return (
     !!url &&
-    (url.includes("/api/auth/login") || url.includes("/api/auth/refresh"))
+    (url.includes("/api/auth/login") ||
+      url.includes("/api/auth/refresh") ||
+      url.includes("/api/auth/logout"))
   );
 }
 

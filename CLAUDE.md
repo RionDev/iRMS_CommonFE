@@ -42,7 +42,7 @@
 | `login`               | `services/authService.ts`   | `POST /api/auth/login`                          |
 | `refresh`             | `services/authService.ts`   | `POST /api/auth/refresh`                        |
 | `logout`              | `services/authService.ts`   | `POST /api/auth/logout`                         |
-| `signup`              | `services/signupService.ts` | `POST /api/auth/signup`                         |
+| `signup`              | `services/signupService.ts` | `POST /api/user/register`                       |
 
 ### Stores
 
