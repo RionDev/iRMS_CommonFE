@@ -442,8 +442,12 @@ function AppLauncher() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  const normalizePath = (p: string): string => {
+    const s = p.trim();
+    return s.length > 1 && s.endsWith("/") ? s.slice(0, -1) : s;
+  };
   const visibleApps = APP_NAV.filter((app) =>
-    apps.some((a) => app.href.startsWith(a.path)),
+    apps.some((a) => normalizePath(a.path) === normalizePath(app.href)),
   );
 
   return (

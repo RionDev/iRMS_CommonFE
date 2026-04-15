@@ -19,7 +19,6 @@ export function useAppAccess(appPath: string) {
     if (hasAccess) return;
 
     handledRef.current = true;
-    alert("권한이 없습니다.");
     window.location.href = "/portal";
   }, [user, apps, loaded, appPath]);
 
