@@ -546,7 +546,26 @@ export function Layout({
             userSelect: "none",
           }}
         >
-          <span style={{ fontWeight: 700, fontSize: "18px" }}>iRMS</span>
+          <a
+            href="/"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontWeight: 700,
+              fontSize: "18px",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+            </svg>
+            iRMS
+          </a>
           <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
           <span style={{ fontSize: "16px", fontWeight: 400 }}>{title}</span>
         </div>
