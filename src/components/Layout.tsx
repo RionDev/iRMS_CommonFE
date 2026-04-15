@@ -38,11 +38,6 @@ interface AppNavItem {
 
 const APP_NAV: AppNavItem[] = [
   {
-    label: "인증",
-    basePath: "/auth",
-    features: [{ label: "비밀번호 변경", href: "/auth/password" }],
-  },
-  {
     label: "관리자",
     basePath: "/admin",
     features: [
@@ -86,7 +81,7 @@ function ChangePasswordModal({
       return;
     }
     try {
-      await apiClient.post("/api/auth/change-password", {
+      await apiClient.post("/api/user/change-password", {
         current_password: currentPassword,
         new_password: newPassword,
       });

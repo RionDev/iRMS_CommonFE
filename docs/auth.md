@@ -7,13 +7,12 @@
 현재 `@common`은 루트 `common/src`를 가리키지 않고, **각 앱 내부의 `apps/<app>/common/src`** 를 가리킨다.
 
 - admin 앱: `@common -> apps/admin/common/src`
-- auth 앱: `@common -> apps/auth/common/src`
 - portal 앱: `@common -> apps/portal/common/src`
 
 따라서 인증 로직(`utils/token.ts`, `services/apiClient.ts`, `stores/authStore.ts` 등)을 수정할 때는 다음 원칙을 따른다.
 
 - 한 앱만 수정하면 다른 앱에는 반영되지 않는다.
-- 공통 정책 변경은 `admin/auth/portal`의 동일 파일에 **동일하게 반영**해야 한다.
+- 공통 정책 변경은 `admin/portal`의 동일 파일에 **동일하게 반영**해야 한다.
 - 루트 `common/src` 변경만으로는 각 앱 동작이 자동으로 바뀌지 않는다(현재 alias 구조 기준).
 
 ## 토큰 저장 방식
@@ -78,7 +77,6 @@ function App() {
 각 앱은 자체 `/login` 라우트를 가지며, 미인증 시 자기 앱 범위 내에서 로그인 페이지로 이동한다.
 
 - portal: 미인증 → `/login?redirect=...`
-- auth: 미인증 → `/auth/login?redirect=...`
 - admin: 미인증 → `/admin/login?redirect=...`
 
 앱 간 로그인 리다이렉트는 없다. 각 앱이 공통 `LoginPage`를 독립적으로 사용한다.
