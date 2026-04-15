@@ -16,7 +16,7 @@
 | export       | 파일                        | Props / 설명                                                    |
 | ------------ | --------------------------- | --------------------------------------------------------------- |
 | `AppLayout`  | `components/AppLayout.tsx`  | 사이드바 + 헤더 + 메인 + 푸터 통합 레이아웃 (앱 공통 템플릿)    |
-| `Avatar`     | `components/Avatar.tsx`     | `name`, `size?`, `title?` — 이름 기반 이니셜 원형 아바타 (해시 색) |
+| `Avatar`     | `components/Avatar.tsx`     | 이름 기반 이니셜 원형 아바타 (해시 색상)                        |
 | `Button`     | `components/Button.tsx`     | `variant?: 'primary'\|'secondary'` + 기본 button 속성           |
 | `Input`      | `components/Input.tsx`      | `label?: string`, `error?: string` + 기본 input 속성            |
 | `Modal`      | `components/Modal.tsx`      | `isOpen`, `onClose`, `title`, `children`                        |
@@ -88,6 +88,7 @@
 - 앱 접근 권한은 `useAppAccess(path)`로 검사한다 — DB `apps` 테이블 기반
 - `AppLayout`은 `useAuthStore`, `useAppsStore`, `useThemeStore`를 직접 참조하므로 앱에서 store를 props로 전달하지 않아도 된다
 - 앱 내부 페이지/컴포넌트는 `theme`를 정적 import 하지 않고 `useThemeStore().theme`로 구독해 다크모드 전환에 반응한다
+- 페이지 이름은 `AppLayout`의 `title` prop으로만 표시한다 — body 최상단에 같은 제목(`<h2>`)을 다시 출력하지 않는다 (헤더에 `{appName} | {title}`로 이미 노출됨)
 - `initialize()`는 앱 진입점(`main.tsx` 또는 `App.tsx`)에서 최초 1회 호출한다
 
 ## 정책 문서
