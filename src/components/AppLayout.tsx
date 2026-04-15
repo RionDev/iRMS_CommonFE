@@ -57,12 +57,11 @@ interface AppLayoutProps {
 }
 
 const RoleLabel: Record<number, string> = {
-  1: "Admin",
-  2: "Lead",
-  3: "Member",
-  4: "Guest",
+  1: "관리자",
+  2: "리드",
+  3: "멤버",
+  4: "게스트",
 };
-const TeamLabel: Record<number, string> = { 1: "Engine", 2: "Analyst" };
 
 interface AppNavItem {
   label: string;
@@ -198,6 +197,52 @@ function ChangePasswordModal({
         </>
       )}
     </Modal>
+  );
+}
+
+function PwChangeButton({ onClick }: { onClick: () => void }) {
+  const { theme } = useThemeStore();
+  const [hover, setHover] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "8px",
+        padding: "10px 16px",
+        border: "none",
+        background: hover ? `${theme.colors.danger}1a` : "transparent",
+        color: theme.colors.danger,
+        cursor: "pointer",
+        fontSize: "14px",
+        fontWeight: 500,
+        fontFamily: theme.fontFamily,
+        borderRadius: theme.radius.sm,
+        transition: "background-color 0.2s ease",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="7.5" cy="15.5" r="5.5" />
+        <path d="m21 2-9.6 9.6" />
+        <path d="m15.5 7.5 3 3L22 7l-3-3" />
+      </svg>
+      비밀번호 변경
+    </button>
   );
 }
 
@@ -505,51 +550,48 @@ function ProfileMenu({
             style={{
               padding: "16px",
               borderBottom: `1px solid ${theme.colors.border}`,
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
             }}
           >
+            <Avatar name={user.name} size={48} />
             <div
-              style={{ display: "flex", alignItems: "baseline", gap: "8px" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "2px",
+                minWidth: 0,
+              }}
             >
-              <span style={{ fontWeight: 600, fontSize: "15px" }}>
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: "15px",
+                  color: theme.colors.text,
+                }}
+              >
                 {user.name}
               </span>
-              <span style={{ fontSize: "13px", color: theme.colors.textMuted }}>
-                {user.team
-                  ? `${TeamLabel[user.team] ?? `팀 ${user.team}`} · `
-                  : ""}
+              <span
+                style={{ fontSize: "13px", color: theme.colors.textMuted }}
+              >
+                {user.id}
+              </span>
+              <span
+                style={{ fontSize: "13px", color: theme.colors.textMuted }}
+              >
                 {RoleLabel[user.role] ?? `역할 ${user.role}`}
               </span>
             </div>
-            <div
-              style={{
-                fontSize: "13px",
-                color: theme.colors.textMuted,
-                marginTop: "4px",
-              }}
-            >
-              {user.id}
-            </div>
           </div>
-          <div style={{ padding: "12px 16px" }}>
-            <button
+          <div style={{ padding: "8px" }}>
+            <PwChangeButton
               onClick={() => {
                 setOpen(false);
                 setPwModalOpen(true);
               }}
-              style={{
-                width: "100%",
-                background: theme.colors.pageBackground,
-                border: "none",
-                padding: "8px 12px",
-                borderRadius: theme.radius.sm,
-                cursor: "pointer",
-                fontSize: "13px",
-                fontFamily: theme.fontFamily,
-                color: theme.colors.text,
-              }}
-            >
-              비밀번호 변경
-            </button>
+            />
           </div>
         </div>
       )}
