@@ -659,12 +659,10 @@ function SidebarLogoutButton({
 }
 
 function Sidebar({
-  appName,
   items,
   collapsed,
   onLogout,
 }: {
-  appName: string;
   items: SidebarItem[];
   collapsed: boolean;
   onLogout: () => void;
@@ -714,27 +712,15 @@ function Sidebar({
           <rect x="14" y="14" width="7" height="7" />
         </svg>
         {!collapsed && (
-          <>
-            <span
-              style={{
-                fontWeight: 700,
-                fontSize: "18px",
-                color: theme.colors.sidebarText,
-              }}
-            >
-              IRMS
-            </span>
-            <span
-              style={{
-                fontSize: "12px",
-                color: theme.colors.sidebarTextMuted,
-                fontWeight: 500,
-                letterSpacing: "1px",
-              }}
-            >
-              {appName}
-            </span>
-          </>
+          <span
+            style={{
+              fontWeight: 700,
+              fontSize: "18px",
+              color: theme.colors.sidebarText,
+            }}
+          >
+            IRMS
+          </span>
         )}
       </div>
 
@@ -805,7 +791,6 @@ export function AppLayout({
       }}
     >
       <Sidebar
-        appName={appName}
         items={sidebarItems}
         collapsed={collapsed}
         onLogout={logout}
@@ -859,7 +844,7 @@ export function AppLayout({
               </svg>
             </HeaderIconButton>
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <span style={{ fontWeight: 700, fontSize: "18px" }}>IRMS</span>
+              <span style={{ fontWeight: 700, fontSize: "18px" }}>{appName}</span>
               <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
               <span style={{ fontSize: "16px", fontWeight: 400 }}>{title}</span>
             </div>
