@@ -33,6 +33,7 @@ const TeamLabel: Record<number, string> = { 1: "Engine", 2: "Analyst" };
 interface AppNavItem {
   label: string;
   basePath: string;
+  icon: ReactNode;
   features: { label: string; href: string }[];
 }
 
@@ -40,6 +41,14 @@ const APP_NAV: AppNavItem[] = [
   {
     label: "관리자",
     basePath: "/admin",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
     features: [
       { label: "회원 목록", href: "/admin/users" },
       { label: "가입 승인", href: "/admin/approval" },
@@ -490,8 +499,12 @@ function AppLauncher() {
                   fontSize: "12px",
                   fontWeight: 600,
                   color: theme.colors.textMuted,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
                 }}
               >
+                {app.icon}
                 {app.label}
               </div>
               {app.features.map((feature) => (
