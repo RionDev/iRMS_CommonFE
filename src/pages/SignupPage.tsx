@@ -3,6 +3,7 @@ import { Modal } from "../components/Modal";
 import { SignupForm } from "../components/SignupForm";
 import { signup } from "../services/signupService";
 import { useThemeStore } from "../stores/themeStore";
+import type { RoleType } from "../types/constants";
 
 interface SignupPageProps {
   loginUrl?: string;
@@ -19,7 +20,7 @@ export function SignupPage({ loginUrl = "/login" }: SignupPageProps) {
     name: string;
     password: string;
     password_confirm: string;
-    role: number;
+    role: RoleType;
     team: number | null;
   }) => {
     if (data.password !== data.password_confirm) {

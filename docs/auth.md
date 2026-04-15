@@ -125,14 +125,24 @@ function AdminPage() {
 
 ### Role 상수
 
-```ts
-import { Role } from "@common/types/constants";
+BE 와 합의된 규약: 전 구간 **대문자 영어 string** (`"ADMIN" | "LEAD" | "MEMBER" | "GUEST"`) 으로 주고받는다. FE 는 숫자↔문자열 변환을 하지 않는다.
 
-Role.MEMBER; // 1
-Role.LEAD; // 2
-Role.ADMIN; // 3
-Role.GUEST; // 4
+```ts
+import { Role, ROLE_LABEL, type RoleType } from "@common/types/constants";
+
+Role.ADMIN; // "ADMIN"
+Role.LEAD; // "LEAD"
+Role.MEMBER; // "MEMBER"
+Role.GUEST; // "GUEST"
+
+// 사용자에게 보여줄 한국어 라벨
+ROLE_LABEL["ADMIN"]; // "관리자"
+
+// 타입
+const role: RoleType = Role.ADMIN;
 ```
+
+폼 `<option>` 생성은 `ROLE_OPTIONS` / `SIGNUP_ROLE_OPTIONS` 를 사용한다.
 
 ## AuthPayload 타입
 
@@ -143,8 +153,8 @@ interface AuthPayload {
   sub: number; // 유저 idx
   id: string; // 로그인 ID
   name: string; // 이름
-  role: number; // Role 상수 값
-  team: number; // Team 상수 값
+  role: RoleType; // 대문자 영어 문자열 ("ADMIN" | "LEAD" | "MEMBER" | "GUEST")
+  team: number | null; // Team idx (Guest 는 null)
   exp: number; // 만료 시각 (Unix timestamp, 초 단위)
 }
 ```

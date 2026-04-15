@@ -39,6 +39,13 @@ export type {
   User,
   VUser,
 } from "./types/auth";
+export {
+  Role,
+  ROLE_LABEL,
+  ROLE_OPTIONS,
+  SIGNUP_ROLE_OPTIONS,
+} from "./types/constants";
+export type { RoleType } from "./types/constants";
 export type { SignupRequest, SignupResponse } from "./types/signup";
 
 // Utils

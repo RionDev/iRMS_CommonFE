@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
 import { useThemeStore } from "../stores/themeStore";
+import { Role, SIGNUP_ROLE_OPTIONS, type RoleType } from "../types/constants";
 import { Button } from "./Button";
 import { Input } from "./Input";
 
@@ -10,7 +11,7 @@ interface SignupFormProps {
     name: string;
     password: string;
     password_confirm: string;
-    role: number;
+    role: RoleType;
     team: number | null;
   }) => void;
   loading?: boolean;
@@ -28,7 +29,7 @@ export function SignupForm({
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [role, setRole] = useState<number>(3);
+  const [role, setRole] = useState<RoleType>(Role.MEMBER);
   const [team, setTeam] = useState<number | null>(1);
 
   const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -49,17 +50,28 @@ export function SignupForm({
       password,
       password_confirm: passwordConfirm,
       role,
-      team: role === 4 ? null : team,
+      team: role === Role.GUEST ? null : team,
     });
   };
 
-  const handleRoleChange = (value: number) => {
+  const handleRoleChange = (value: RoleType) => {
     setRole(value);
-    if (value === 4) {
+    if (value === Role.GUEST) {
       setTeam(null);
     } else if (team === null) {
       setTeam(1);
     }
+  };
+
+  const selectStyle = {
+    width: "100%",
+    padding: "8px",
+    border: `1px solid ${theme.colors.border}`,
+    borderRadius: theme.radius.sm,
+    fontSize: "14px",
+    fontFamily: theme.fontFamily,
+    boxSizing: "border-box" as const,
+    backgroundColor: theme.colors.surface,
   };
 
   return (
@@ -101,21 +113,14 @@ export function SignupForm({
         </label>
         <select
           value={role}
-          onChange={(e) => handleRoleChange(Number(e.target.value))}
-          style={{
-            width: "100%",
-            padding: "8px",
-            border: `1px solid ${theme.colors.border}`,
-            borderRadius: theme.radius.sm,
-            fontSize: "14px",
-            fontFamily: theme.fontFamily,
-            boxSizing: "border-box",
-            backgroundColor: theme.colors.surface,
-          }}
+          onChange={(e) => handleRoleChange(e.target.value as RoleType)}
+          style={selectStyle}
         >
-          <option value={3}>Member</option>
-          <option value={2}>Lead</option>
-          <option value={4}>Guest</option>
+          {SIGNUP_ROLE_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
       </div>
       <Input
@@ -150,20 +155,13 @@ export function SignupForm({
         <select
           value={team ?? ""}
           onChange={(e) => setTeam(Number(e.target.value))}
-          disabled={role === 4}
+          disabled={role === Role.GUEST}
           style={{
-            width: "100%",
-            padding: "8px",
-            border: `1px solid ${theme.colors.border}`,
-            borderRadius: theme.radius.sm,
-            fontSize: "14px",
-            fontFamily: theme.fontFamily,
-            boxSizing: "border-box",
-            backgroundColor: theme.colors.surface,
-            opacity: role === 4 ? 0.6 : 1,
+            ...selectStyle,
+            opacity: role === Role.GUEST ? 0.6 : 1,
           }}
         >
-          {role === 4 && <option value="">선택 안 함</option>}
+          {role === Role.GUEST && <option value="">선택 안 함</option>}
           <option value={1}>Engine</option>
           <option value={2}>Analyst</option>
         </select>

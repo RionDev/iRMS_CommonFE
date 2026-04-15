@@ -10,6 +10,7 @@ import apiClient from "../services/apiClient";
 import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
 import { useThemeStore } from "../stores/themeStore";
+import { ROLE_LABEL, type RoleType } from "../types/constants";
 import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 import { Input } from "./Input";
@@ -59,13 +60,6 @@ interface AppLayoutProps {
   appMinWidth?: string;
   children: ReactNode;
 }
-
-const RoleLabel: Record<number, string> = {
-  1: "관리자",
-  2: "리드",
-  3: "멤버",
-  4: "게스트",
-};
 
 interface AppNavItem {
   label: string;
@@ -492,7 +486,7 @@ function AppLauncher() {
 function ProfileMenu({
   user,
 }: {
-  user: { id: string; name: string; role: number; team: number };
+  user: { id: string; name: string; role: RoleType; team: number | null };
 }) {
   const { theme } = useThemeStore();
   const [open, setOpen] = useState(false);
@@ -584,7 +578,7 @@ function ProfileMenu({
               <span
                 style={{ fontSize: "13px", color: theme.colors.textMuted }}
               >
-                {RoleLabel[user.role] ?? `역할 ${user.role}`}
+                {ROLE_LABEL[user.role] ?? user.role}
               </span>
             </div>
           </div>

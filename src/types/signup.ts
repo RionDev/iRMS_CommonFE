@@ -1,9 +1,11 @@
+import type { RoleType } from "./constants";
+
 export interface SignupRequest {
   id: string;
   name: string;
   password: string;
   password_confirm: string;
-  role: number;
+  role: RoleType;
   team: number | null;
 }
 

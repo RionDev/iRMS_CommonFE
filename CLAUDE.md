@@ -57,7 +57,7 @@
 | export           | 파일                       | 설명                                                         |
 | ---------------- | -------------------------- | ------------------------------------------------------------ |
 | `User`           | `types/auth.ts`            | DB 유저 전체 필드                                            |
-| `VUser`          | `types/auth.ts`            | 뷰용 유저 (team_name, role_name 등 문자열)                   |
+| `VUser`          | `types/auth.ts`            | 뷰용 유저 (v_users 기반; role/team/status 모두 name 문자열)  |
 | `TokenPair`      | `types/auth.ts`            | `access_token`, `refresh_token`                              |
 | `AuthPayload`    | `types/auth.ts`            | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
 | `LoginRequest`   | `types/auth.ts`            | `id`, `password`                                             |
@@ -66,8 +66,18 @@
 | `SignupRequest`  | `types/signup.ts`          | 회원가입 요청 타입                                           |
 | `SignupResponse` | `types/signup.ts`          | 회원가입 응답 타입                                           |
 | `SidebarItem`    | `components/AppLayout.tsx` | `{ label, to, icon? }` — AppLayout 사이드바 메뉴 항목        |
+| `RoleType`       | `types/constants.ts`       | `"ADMIN" \| "LEAD" \| "MEMBER" \| "GUEST"` 유니온 타입       |
 | `Theme`          | `styles/theme.ts`          | 테마 객체 타입 (`fontFamily`, `colors`, `radius` 등)         |
 | `ThemeColors`    | `styles/theme.ts`          | 테마 색상 토큰 타입                                          |
+
+### Constants
+
+| export                | 파일                 | 설명                                                      |
+| --------------------- | -------------------- | --------------------------------------------------------- |
+| `Role`                | `types/constants.ts` | `{ ADMIN, LEAD, MEMBER, GUEST }` — 값은 대문자 string     |
+| `ROLE_LABEL`          | `types/constants.ts` | `RoleType` → 한국어 표시 라벨 (예: `ADMIN` → `관리자`)    |
+| `ROLE_OPTIONS`        | `types/constants.ts` | 관리자 편집 폼용 전체 option 배열                         |
+| `SIGNUP_ROLE_OPTIONS` | `types/constants.ts` | 자가 가입 폼용 option (MEMBER/GUEST 만)                   |
 
 ### Utils
 
@@ -89,6 +99,7 @@
 - `AppLayout`은 `useAuthStore`, `useAppsStore`, `useThemeStore`를 직접 참조하므로 앱에서 store를 props로 전달하지 않아도 된다
 - 앱 내부 페이지/컴포넌트는 `theme`를 정적 import 하지 않고 `useThemeStore().theme`로 구독해 다크모드 전환에 반응한다
 - 페이지 이름은 `AppLayout`의 `title` prop으로만 표시한다 — body 최상단에 같은 제목(`<h2>`)을 다시 출력하지 않는다 (헤더에 `{appName} | {title}`로 이미 노출됨)
+- **Role은 대문자 영어 문자열**(`"ADMIN" | "LEAD" | "MEMBER" | "GUEST"`)로 주고받는다 — BE/JWT/FE 공통 규약. 숫자 변환 금지. 사용자 표시 문구는 `ROLE_LABEL` 로 조회한다.
 - `initialize()`는 앱 진입점(`main.tsx` 또는 `App.tsx`)에서 최초 1회 호출한다
 
 ## 정책 문서
