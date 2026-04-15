@@ -7,7 +7,6 @@ import {
   saveTokens,
 } from "../utils/token";
 
-
 const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
 
 const apiClient = axios.create({
@@ -19,6 +18,15 @@ function resolveApiUrl(path: string): string {
   return apiBaseUrl ? `${apiBaseUrl}${path}` : path;
 }
 
+/** 토큰 없이 호출하는 엔드포인트 (Authorization 헤더 첨부 스킵) */
+function isTokenlessRequest(url?: string): boolean {
+  return (
+    !!url &&
+    (url.includes("/api/auth/login") || url.includes("/api/auth/refresh"))
+  );
+}
+
+/** 응답 에러 인터셉터의 retry/alert 로직을 스킵할 엔드포인트 (auth 전체) */
 function isAuthRequest(url?: string): boolean {
   return (
     !!url &&
@@ -51,14 +59,13 @@ function isRateLimitBlockedDetail(detail?: string): boolean {
 
 apiClient.interceptors.request.use((config) => {
   const token = getAccessToken();
-  if (!token) return config;
 
-  if (isBlockedToken(token)) {
+  if (token && isBlockedToken(token)) {
     redirectToLogin();
     return Promise.reject(new Error("Blocked account"));
   }
 
-  if (!isAuthRequest(config.url)) {
+  if (token && !isTokenlessRequest(config.url)) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
