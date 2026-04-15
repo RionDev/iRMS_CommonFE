@@ -34,15 +34,15 @@ function UserListPage() {
 
 ### 1.1. Props
 
-| prop              | 타입            | 기본값     | 설명                                                               |
-| ----------------- | --------------- | ---------- | ------------------------------------------------------------------ |
-| `title`           | `string`        | —          | 헤더에 `{appName} \| {title}` 형태로 표시되는 현재 페이지 이름     |
-| `appName`         | `string`        | —          | 헤더 좌측 앱 이름 (예: `"ADMIN"`, `"PORTAL"`)                      |
-| `sidebarItems`    | `SidebarItem[]` | `[]`       | 사이드바 메뉴 항목. 빈 배열이면 브랜드 + 로그아웃만 표시           |
-| `version`         | `string`        | —          | 푸터 "Version X.X.X" 표시 (`__APP_VERSION__` 주입값)               |
-| `contentMaxWidth` | `string`        | `"960px"`  | 메인 영역 최대 너비. FHD 절반 브라우저에서 꽉 차는 크기            |
-| `appMinWidth`     | `string`        | `"1180px"` | 앱 최소 너비. 이보다 작으면 페이지 가로 스크롤 발생                |
-| `children`        | `ReactNode`     | —          | 메인 영역 콘텐츠                                                   |
+| prop              | 타입            | 기본값     | 설명                                                           |
+| ----------------- | --------------- | ---------- | -------------------------------------------------------------- |
+| `title`           | `string`        | —          | 헤더에 `{appName} \| {title}` 형태로 표시되는 현재 페이지 이름 |
+| `appName`         | `string`        | —          | 헤더 좌측 앱 이름 (예: `"ADMIN"`, `"PORTAL"`)                  |
+| `sidebarItems`    | `SidebarItem[]` | `[]`       | 사이드바 메뉴 항목. 빈 배열이면 브랜드 + 로그아웃만 표시       |
+| `version`         | `string`        | —          | 푸터 "Version X.X.X" 표시 (`__APP_VERSION__` 주입값)           |
+| `contentMaxWidth` | `string`        | `"960px"`  | 메인 영역 최대 너비. FHD 절반 브라우저에서 꽉 차는 크기        |
+| `appMinWidth`     | `string`        | `"1180px"` | 앱 최소 너비. 이보다 작으면 페이지 가로 스크롤 발생            |
+| `children`        | `ReactNode`     | —          | 메인 영역 콘텐츠                                               |
 
 ### 1.2. SidebarItem
 
@@ -84,12 +84,12 @@ import { Avatar } from "@common";
 
 ### 2.1. Props
 
-| prop    | 타입            | 기본값       | 설명                                                    |
-| ------- | --------------- | ------------ | ------------------------------------------------------- |
-| `name`  | `string`        | —            | 이니셜 및 색상 산출 기준. 빈 문자열이면 `?` + 회색 배경 |
-| `size`  | `number`        | `32`         | 지름(px). 폰트는 `size * 0.4`                           |
-| `title` | `string`        | `name`       | hover 툴팁. 기본은 `name`                               |
-| `style` | `CSSProperties` | —            | 추가 스타일 (기본 스타일에 병합)                        |
+| prop    | 타입            | 기본값 | 설명                                                    |
+| ------- | --------------- | ------ | ------------------------------------------------------- |
+| `name`  | `string`        | —      | 이니셜 및 색상 산출 기준. 빈 문자열이면 `?` + 회색 배경 |
+| `size`  | `number`        | `32`   | 지름(px). 폰트는 `size * 0.4`                           |
+| `title` | `string`        | `name` | hover 툴팁. 기본은 `name`                               |
+| `style` | `CSSProperties` | —      | 추가 스타일 (기본 스타일에 병합)                        |
 
 ---
 

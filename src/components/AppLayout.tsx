@@ -814,11 +814,7 @@ export function AppLayout({
         fontFamily: theme.fontFamily,
       }}
     >
-      <Sidebar
-        items={sidebarItems}
-        collapsed={collapsed}
-        onLogout={logout}
-      />
+      <Sidebar items={sidebarItems} collapsed={collapsed} onLogout={logout} />
 
       <div
         style={{
@@ -868,7 +864,9 @@ export function AppLayout({
               </svg>
             </HeaderIconButton>
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <span style={{ fontWeight: 700, fontSize: "18px" }}>{appName}</span>
+              <span style={{ fontWeight: 700, fontSize: "18px" }}>
+                {appName}
+              </span>
               <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
               <span style={{ fontSize: "16px", fontWeight: 400 }}>{title}</span>
             </div>
