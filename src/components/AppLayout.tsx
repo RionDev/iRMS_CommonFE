@@ -217,14 +217,14 @@ function PwChangeButton({ onClick }: { onClick: () => void }) {
         gap: "8px",
         padding: "10px 16px",
         border: "none",
-        background: hover ? `${theme.colors.danger}1a` : "transparent",
-        color: theme.colors.danger,
+        background: hover ? theme.colors.surfaceMuted : "transparent",
+        color: theme.colors.textMuted,
         cursor: "pointer",
         fontSize: "14px",
         fontWeight: 500,
         fontFamily: theme.fontFamily,
         borderRadius: theme.radius.sm,
-        transition: "background-color 0.2s ease",
+        transition: "background-color 0.2s ease, color 0.2s ease",
       }}
     >
       <svg
@@ -237,9 +237,8 @@ function PwChangeButton({ onClick }: { onClick: () => void }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <circle cx="7.5" cy="15.5" r="5.5" />
-        <path d="m21 2-9.6 9.6" />
-        <path d="m15.5 7.5 3 3L22 7l-3-3" />
+        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+        <circle cx="12" cy="12" r="3" />
       </svg>
       비밀번호 변경
     </button>
@@ -953,7 +952,8 @@ export function AppLayout({
           </div>
           {isAuthenticated && user && (
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <ProfileMenu user={user} />
+              <AppLauncher />
+              <ThemeToggle />
               <span
                 style={{
                   opacity: 0.3,
@@ -964,8 +964,7 @@ export function AppLayout({
               >
                 |
               </span>
-              <ThemeToggle />
-              <AppLauncher />
+              <ProfileMenu user={user} />
             </div>
           )}
         </header>
