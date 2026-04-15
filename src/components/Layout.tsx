@@ -41,7 +41,7 @@ const APP_NAV: AppNavItem[] = [
     label: "관리자",
     href: "/admin/",
     icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={theme.colors.primary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={theme.colors.primary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
@@ -382,21 +382,21 @@ function AppTile({ app }: { app: AppNavItem }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: "8px",
-        padding: "12px 8px",
-        borderRadius: theme.radius.md,
+        gap: "4px",
+        padding: "8px 6px",
+        borderRadius: theme.radius.sm,
         textDecoration: "none",
         color: isActive ? theme.colors.primary : theme.colors.text,
         backgroundColor: hover ? theme.colors.pageBackground : "transparent",
         transition: "background-color 0.15s",
         cursor: "pointer",
-        width: "80px",
+        width: "56px",
       }}
     >
       <div
         style={{
-          width: "48px",
-          height: "48px",
+          width: "32px",
+          height: "32px",
           borderRadius: "50%",
           backgroundColor: isActive
             ? `${theme.colors.primary}18`
@@ -495,13 +495,13 @@ function AppLauncher() {
             right: 0,
             background: "#fff",
             color: theme.colors.text,
-            borderRadius: theme.radius.lg,
+            borderRadius: theme.radius.md,
             boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
             zIndex: 1000,
-            padding: "16px",
+            padding: "8px",
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "4px",
+            gap: "2px",
           }}
         >
           {visibleApps.map((app) => (
