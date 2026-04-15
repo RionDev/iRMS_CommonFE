@@ -32,27 +32,22 @@ const TeamLabel: Record<number, string> = { 1: "Engine", 2: "Analyst" };
 
 interface AppNavItem {
   label: string;
-  basePath: string;
+  href: string;
   icon: ReactNode;
-  features: { label: string; href: string }[];
 }
 
 const APP_NAV: AppNavItem[] = [
   {
     label: "관리자",
-    basePath: "/admin",
+    href: "/admin/",
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={theme.colors.primary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
-    features: [
-      { label: "회원 목록", href: "/admin/users" },
-      { label: "가입 승인", href: "/admin/approval" },
-    ],
   },
 ];
 
@@ -374,27 +369,48 @@ function ProfileMenu({
   );
 }
 
-function FeatureLink({ label, href }: { label: string; href: string }) {
+function AppTile({ app }: { app: AppNavItem }) {
   const [hover, setHover] = useState(false);
-  const isActive = window.location.pathname === href;
+  const isActive = window.location.pathname.startsWith(app.href);
 
   return (
     <a
-      href={href}
+      href={app.href}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
-        display: "block",
-        padding: "10px 16px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "8px",
+        padding: "12px 8px",
+        borderRadius: theme.radius.md,
         textDecoration: "none",
-        fontSize: "14px",
         color: isActive ? theme.colors.primary : theme.colors.text,
-        fontWeight: isActive ? 600 : 400,
         backgroundColor: hover ? theme.colors.pageBackground : "transparent",
         transition: "background-color 0.15s",
+        cursor: "pointer",
+        width: "80px",
       }}
     >
-      {label}
+      <div
+        style={{
+          width: "48px",
+          height: "48px",
+          borderRadius: "50%",
+          backgroundColor: isActive
+            ? `${theme.colors.primary}18`
+            : theme.colors.pageBackground,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {app.icon}
+      </div>
+      <span style={{ fontSize: "11px", fontWeight: isActive ? 600 : 400, textAlign: "center" }}>
+        {app.label}
+      </span>
     </a>
   );
 }
@@ -415,7 +431,7 @@ function AppLauncher() {
   }, []);
 
   const visibleApps = APP_NAV.filter((app) =>
-    apps.some((a) => a.path === app.basePath),
+    apps.some((a) => app.href.startsWith(a.path)),
   );
 
   return (
@@ -479,42 +495,17 @@ function AppLauncher() {
             right: 0,
             background: "#fff",
             color: theme.colors.text,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.radius.lg,
             boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-            minWidth: "200px",
             zIndex: 1000,
-            overflow: "hidden",
+            padding: "16px",
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "4px",
           }}
         >
-          {visibleApps.map((app, i) => (
-            <div key={app.basePath}>
-              {i > 0 && (
-                <div
-                  style={{ borderTop: `1px solid ${theme.colors.border}` }}
-                />
-              )}
-              <div
-                style={{
-                  padding: "12px 16px 4px",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  color: theme.colors.textMuted,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                {app.icon}
-                {app.label}
-              </div>
-              {app.features.map((feature) => (
-                <FeatureLink
-                  key={feature.href}
-                  label={feature.label}
-                  href={feature.href}
-                />
-              ))}
-            </div>
+          {visibleApps.map((app) => (
+            <AppTile key={app.href} app={app} />
           ))}
         </div>
       )}
