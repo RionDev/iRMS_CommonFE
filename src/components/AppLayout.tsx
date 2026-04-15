@@ -75,7 +75,7 @@ interface AppNavItem {
 
 const APP_NAV: AppNavItem[] = [
   {
-    label: "관리자",
+    label: "관리자 설정",
     href: "/admin/",
     icon: (
       <svg
@@ -576,14 +576,10 @@ function ProfileMenu({
               >
                 {user.name}
               </span>
-              <span
-                style={{ fontSize: "13px", color: theme.colors.textMuted }}
-              >
+              <span style={{ fontSize: "13px", color: theme.colors.textMuted }}>
                 {user.id}
               </span>
-              <span
-                style={{ fontSize: "13px", color: theme.colors.textMuted }}
-              >
+              <span style={{ fontSize: "13px", color: theme.colors.textMuted }}>
                 {RoleLabel[user.role] ?? `역할 ${user.role}`}
               </span>
             </div>
@@ -747,11 +743,7 @@ function SidebarToggleButton({
       >
         <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
         <line x1="9" x2="9" y1="3" y2="21" />
-        {collapsed ? (
-          <path d="m14 9 3 3-3 3" />
-        ) : (
-          <path d="m16 15-3-3 3-3" />
-        )}
+        {collapsed ? <path d="m14 9 3 3-3 3" /> : <path d="m16 15-3-3 3-3" />}
       </svg>
     </button>
   );
@@ -812,8 +804,7 @@ function Sidebar({
               transition: "background-color 0.2s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                theme.colors.sidebarHover;
+              e.currentTarget.style.backgroundColor = theme.colors.sidebarHover;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";
@@ -948,9 +939,7 @@ export function AppLayout({
               userSelect: "none",
             }}
           >
-            <span style={{ fontWeight: 700, fontSize: "18px" }}>
-              {appName}
-            </span>
+            <span style={{ fontWeight: 700, fontSize: "18px" }}>{appName}</span>
             {title && (
               <>
                 <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
