@@ -121,6 +121,7 @@
 상세 사용법은 `docs/` 참조:
 
 - [docs/components.md](docs/components.md)
+- [docs/theme.md](docs/theme.md) — 라이트/다크 팔레트 및 디자인 가이드
 - [docs/auth.md](docs/auth.md)
 - [docs/api-client.md](docs/api-client.md)
 - [docs/pagination.md](docs/pagination.md)
