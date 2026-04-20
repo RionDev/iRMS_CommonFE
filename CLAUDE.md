@@ -71,7 +71,9 @@
 | `AppInfo`        | `stores/appsStore.ts`      | `{ idx, path, name }` — 앱 정보 타입                         |
 | `SignupRequest`  | `types/signup.ts`          | 회원가입 요청 타입                                           |
 | `SignupResponse` | `types/signup.ts`          | 회원가입 응답 타입                                           |
-| `SidebarItem`    | `components/AppLayout.tsx` | `{ label, to, icon? }` — AppLayout 사이드바 메뉴 항목        |
+| `SidebarItem`    | `components/AppLayout.tsx` | `SidebarLeaf` 또는 `SidebarGroup` 유니온 — 사이드바 메뉴     |
+| `SidebarLeaf`    | `components/AppLayout.tsx` | `{ label, to, icon? }` — 개별 메뉴                           |
+| `SidebarGroup`   | `components/AppLayout.tsx` | `{ label, icon?, children: SidebarLeaf[] }` — 2레벨 그룹     |
 | `RoleType`       | `types/constants.ts`       | `"ADMIN" \| "LEAD" \| "MEMBER" \| "GUEST"` 유니온 타입       |
 | `TeamType`       | `types/constants.ts`       | `"ENGINE" \| "ANALYST"` 유니온 타입                          |
 | `Theme`          | `styles/theme.ts`          | 테마 객체 타입 (`fontFamily`, `colors`, `radius` 등)         |

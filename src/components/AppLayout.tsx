@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import apiClient from "../services/apiClient";
 import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
@@ -18,10 +18,38 @@ import { Button } from "./Button";
 import { Input } from "./Input";
 import { Modal } from "./Modal";
 
-export interface SidebarItem {
+export interface SidebarLeaf {
   label: string;
   to: string;
   icon?: ReactNode;
+}
+
+export interface SidebarGroup {
+  label: string;
+  icon?: ReactNode;
+  children: SidebarLeaf[];
+}
+
+export type SidebarItem = SidebarLeaf | SidebarGroup;
+
+function isGroup(item: SidebarItem): item is SidebarGroup {
+  return "children" in item;
+}
+
+function pathMatchesLeaf(pathname: string, to: string): boolean {
+  return pathname === to || pathname.endsWith(to);
+}
+
+function findActiveGroup(
+  pathname: string,
+  items: SidebarItem[],
+): SidebarGroup | undefined {
+  for (const item of items) {
+    if (isGroup(item) && item.children.some((c) => pathMatchesLeaf(pathname, c.to))) {
+      return item;
+    }
+  }
+  return undefined;
 }
 
 const SIDEBAR_COLLAPSED_KEY = "IRMS_SIDEBAR_COLLAPSED";
@@ -697,12 +725,15 @@ function ProfileMenu({
 function SidebarNavItem({
   item,
   collapsed,
+  indented = false,
 }: {
-  item: SidebarItem;
+  item: SidebarLeaf;
   collapsed: boolean;
+  indented?: boolean;
 }) {
   const { theme } = useThemeStore();
   const [hover, setHover] = useState(false);
+  const leftPad = collapsed ? 0 : indented ? 24 : 12;
 
   return (
     <NavLink
@@ -714,7 +745,7 @@ function SidebarNavItem({
         display: "flex",
         alignItems: "center",
         gap: "12px",
-        padding: collapsed ? "10px 0" : "10px 12px",
+        padding: collapsed ? "10px 0" : `10px 12px 10px ${leftPad}px`,
         justifyContent: collapsed ? "center" : "flex-start",
         borderRadius: theme.radius.sm,
         textDecoration: "none",
@@ -738,6 +769,74 @@ function SidebarNavItem({
       )}
       {!collapsed && <span>{item.label}</span>}
     </NavLink>
+  );
+}
+
+function SidebarNavGroup({
+  group,
+  collapsed,
+}: {
+  group: SidebarGroup;
+  collapsed: boolean;
+}) {
+  const { theme } = useThemeStore();
+  const { pathname } = useLocation();
+  const [hover, setHover] = useState(false);
+
+  if (group.children.length === 0) return null;
+
+  const first = group.children[0];
+  const isActive = group.children.some((c) => pathMatchesLeaf(pathname, c.to));
+
+  if (collapsed) {
+    return (
+      <>
+        {group.children.map((child) => (
+          <SidebarNavItem key={child.to} item={child} collapsed />
+        ))}
+      </>
+    );
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+      <NavLink
+        to={first.to}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          padding: "8px 12px",
+          borderRadius: theme.radius.sm,
+          textDecoration: "none",
+          fontSize: theme.fontSize.sm,
+          fontWeight: 700,
+          letterSpacing: "0.02em",
+          color: isActive
+            ? theme.colors.sidebarActiveText
+            : theme.colors.sidebarTextMuted,
+          backgroundColor: hover ? theme.colors.sidebarHover : "transparent",
+          transition: "background-color 0.2s ease, color 0.2s ease",
+        }}
+      >
+        {group.icon && (
+          <span style={{ display: "inline-flex", alignItems: "center" }}>
+            {group.icon}
+          </span>
+        )}
+        <span>{group.label}</span>
+      </NavLink>
+      {group.children.map((child) => (
+        <SidebarNavItem
+          key={child.to}
+          item={child}
+          collapsed={false}
+          indented
+        />
+      ))}
+    </div>
   );
 }
 
@@ -944,9 +1043,17 @@ function Sidebar({
           gap: "4px",
         }}
       >
-        {items.map((item) => (
-          <SidebarNavItem key={item.to} item={item} collapsed={collapsed} />
-        ))}
+        {items.map((item) =>
+          isGroup(item) ? (
+            <SidebarNavGroup
+              key={item.label}
+              group={item}
+              collapsed={collapsed}
+            />
+          ) : (
+            <SidebarNavItem key={item.to} item={item} collapsed={collapsed} />
+          ),
+        )}
       </nav>
 
       <div
@@ -977,6 +1084,8 @@ export function AppLayout({
   const { theme } = useThemeStore();
   const { user, isAuthenticated, logout } = useAuthStore();
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed);
+  const { pathname } = useLocation();
+  const activeGroup = findActiveGroup(pathname, sidebarItems);
 
   const toggleCollapsed = () => {
     setCollapsed((v) => {
@@ -1039,6 +1148,22 @@ export function AppLayout({
             <span style={{ fontWeight: 700, fontSize: theme.fontSize.xxl }}>
               {appName}
             </span>
+            {activeGroup && (
+              <>
+                <span
+                  style={{
+                    opacity: 0.4,
+                    fontWeight: 300,
+                    fontSize: theme.fontSize.xxl,
+                  }}
+                >
+                  |
+                </span>
+                <span style={{ fontSize: theme.fontSize.xxl, fontWeight: 400 }}>
+                  {activeGroup.label}
+                </span>
+              </>
+            )}
             {title && (
               <>
                 <span

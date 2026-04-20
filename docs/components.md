@@ -11,7 +11,8 @@
 모든 앱(포털, 어드민 등)이 공유하는 표준 템플릿. 사이드바 + 헤더 + 메인 + 푸터 구조.
 
 사이드바는 항상 렌더링되며 (상단 IRMS 브랜드 + 메뉴 + 하단 로그아웃),
-헤더에는 햄버거(사이드바 접기/펼치기), `{appName} | {title}` 브레드크럼, 프로필 메뉴, 다크모드 토글, 앱 런처가 있다.
+헤더에는 햄버거(사이드바 접기/펼치기), `{appName} | {활성 그룹} | {title}` 브레드크럼, 프로필 메뉴, 다크모드 토글, 앱 런처가 있다.
+`{활성 그룹}`은 현재 경로가 그룹의 자식 중 하나와 매치될 때만 표시된다.
 콘텐츠 영역은 좌측 정렬 최대 너비(기본 960px)이며, 앱 전체 최소 너비(기본 1180px) 이하에서는 페이지에 가로 스크롤이 생긴다.
 
 ```tsx
@@ -34,23 +35,56 @@ function UserListPage() {
 
 ### 1.1. Props
 
-| prop              | 타입            | 기본값     | 설명                                                           |
-| ----------------- | --------------- | ---------- | -------------------------------------------------------------- |
-| `title`           | `string`        | —          | 헤더에 `{appName} \| {title}` 형태로 표시되는 현재 페이지 이름 |
-| `appName`         | `string`        | —          | 헤더 좌측 앱 이름 (예: `"ADMIN"`, `"PORTAL"`)                  |
-| `sidebarItems`    | `SidebarItem[]` | `[]`       | 사이드바 메뉴 항목. 빈 배열이면 브랜드 + 로그아웃만 표시       |
-| `version`         | `string`        | —          | 푸터 "Version X.X.X" 표시 (`__APP_VERSION__` 주입값)           |
-| `contentMaxWidth` | `string`        | `"960px"`  | 메인 영역 최대 너비. FHD 절반 브라우저에서 꽉 차는 크기        |
-| `appMinWidth`     | `string`        | `"1180px"` | 앱 최소 너비. 이보다 작으면 페이지 가로 스크롤 발생            |
-| `children`        | `ReactNode`     | —          | 메인 영역 콘텐츠                                               |
+| prop              | 타입            | 기본값     | 설명                                                                          |
+| ----------------- | --------------- | ---------- | ----------------------------------------------------------------------------- |
+| `title`           | `string`        | —          | 헤더에 `{appName} \| {활성 그룹} \| {title}` 형태로 표시되는 현재 페이지 이름 |
+| `appName`         | `string`        | —          | 헤더 좌측 앱 이름 (예: `"ADMIN"`, `"PORTAL"`)                                 |
+| `sidebarItems`    | `SidebarItem[]` | `[]`       | 사이드바 메뉴 항목. 빈 배열이면 브랜드 + 로그아웃만 표시                      |
+| `version`         | `string`        | —          | 푸터 "Version X.X.X" 표시 (`__APP_VERSION__` 주입값)                          |
+| `contentMaxWidth` | `string`        | `"960px"`  | 메인 영역 최대 너비. FHD 절반 브라우저에서 꽉 차는 크기                       |
+| `appMinWidth`     | `string`        | `"1180px"` | 앱 최소 너비. 이보다 작으면 페이지 가로 스크롤 발생                           |
+| `children`        | `ReactNode`     | —          | 메인 영역 콘텐츠                                                              |
 
 ### 1.2. SidebarItem
+
+`SidebarItem = SidebarLeaf | SidebarGroup` 유니온.
+1레벨(리프) 메뉴와 2레벨(그룹 + 자식들) 구조를 섞어서 배열로 전달할 수 있다.
+
+**SidebarLeaf** (개별 메뉴)
 
 | 필드    | 타입        | 설명                                      |
 | ------- | ----------- | ----------------------------------------- |
 | `label` | `string`    | 메뉴 표시 이름                            |
 | `to`    | `string`    | 앱 basename 기준 이동 경로 (react-router) |
 | `icon`  | `ReactNode` | (선택) SVG 등 아이콘 노드                 |
+
+**SidebarGroup** (2레벨 묶음)
+
+| 필드       | 타입            | 설명                                                       |
+| ---------- | --------------- | ---------------------------------------------------------- |
+| `label`    | `string`        | 그룹 표시 이름 (헤더 브레드크럼의 `{활성 그룹}`에도 사용)  |
+| `icon`     | `ReactNode`     | (선택) 그룹 아이콘                                         |
+| `children` | `SidebarLeaf[]` | 자식 메뉴 리스트                                           |
+
+동작:
+
+- 그룹 라벨을 클릭하면 `children[0].to`로 이동한다.
+- 현재 경로가 자식 중 하나와 매치되면 헤더 브레드크럼에 그룹 라벨이 표시된다.
+- 사이드바가 접힌 상태(collapsed)에서는 그룹 라벨이 숨겨지고 자식 아이템만 평면(아이콘만)으로 표시된다.
+
+```ts
+export const adminNavItems: SidebarItem[] = [
+  {
+    label: "계정 관리",
+    icon: userIcon,
+    children: [
+      { label: "계정 목록", to: "/users", icon: userIcon },
+      { label: "가입 승인", to: "/approval", icon: approvalIcon },
+      { label: "차단 계정", to: "/blocked", icon: blockedIcon },
+    ],
+  },
+];
+```
 
 사이드바 접힘 상태는 `IRMS_SIDEBAR_COLLAPSED` localStorage 키로 유지된다 (페이지 이동/새로고침 후에도 유지).
 

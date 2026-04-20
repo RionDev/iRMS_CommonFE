@@ -50,34 +50,35 @@ const base = {
     xxl: "17px",  // 페이지 타이틀
   },
   radius: { sm: "4px", md: "8px", lg: "12px" },
-  shadow: { card: "0 2px 8px rgba(0,0,0,0.1)" },
+  shadow: { card: "0 1px 2px rgba(15,23,42,0.06), 0 1px 3px rgba(15,23,42,0.08)" },
   layout: { contentMaxWidth: "1400px", sideNavWidth: "220px" },
 };
 
+// Tailwind SaaS admin 팔레트 (slate + blue)
 export const lightTheme: Theme = {
   ...base,
   colors: {
-    pageBackground: "#f5f5f5",
-    surface: "#ffffff",
-    surfaceMuted: "#e0e0e0",
-    primary: "#1976d2",
-    primaryHover: "#1565c0",
+    pageBackground: "#f8fafc",   // slate-50
+    surface: "#ffffff",           // white
+    surfaceMuted: "#f1f5f9",      // slate-100 — 테이블 헤더/보조 카드
+    primary: "#2563eb",           // blue-600
+    primaryHover: "#1d4ed8",      // blue-700
     primaryText: "#ffffff",
-    text: "#1f2937",
-    textMuted: "#666666",
-    border: "#d1d5db",
-    borderStrong: "#b6c2cf",
-    danger: "#d32f2f",
-    success: "#2e7d32",
-    warning: "#ed6c02",
-    overlay: "rgba(0,0,0,0.5)",
-    sidebarBackground: "#1e293b",
-    sidebarText: "#e2e8f0",
-    sidebarTextMuted: "#94a3b8",
-    sidebarActive: "#1976d2",
+    text: "#0f172a",              // slate-900
+    textMuted: "#94a3b8",         // slate-400
+    border: "#e2e8f0",            // slate-200
+    borderStrong: "#cbd5e1",      // slate-300
+    danger: "#dc2626",            // red-600
+    success: "#059669",           // emerald-600
+    warning: "#f59e0b",           // amber-500
+    overlay: "rgba(15,23,42,0.5)",
+    sidebarBackground: "#0f172a", // slate-900
+    sidebarText: "#e2e8f0",       // slate-200
+    sidebarTextMuted: "#94a3b8",  // slate-400
+    sidebarActive: "#2563eb",     // blue-600
     sidebarActiveText: "#ffffff",
-    sidebarHover: "rgba(255,255,255,0.08)",
-    sidebarBorder: "rgba(255,255,255,0.08)",
+    sidebarHover: "#1e293b",      // slate-800
+    sidebarBorder: "#1e293b",     // slate-800
   },
 };
 
