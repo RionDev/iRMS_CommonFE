@@ -10,7 +10,8 @@ import apiClient from "../services/apiClient";
 import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
 import { useThemeStore } from "../stores/themeStore";
-import { ROLE_LABEL, type RoleType } from "../types/constants";
+import type { AuthPayload } from "../types/auth";
+import { ROLE_LABEL } from "../types/constants";
 import { hasAppAccess } from "../utils/appPath";
 import { Avatar } from "./Avatar";
 import { Button } from "./Button";
@@ -489,7 +490,7 @@ function AppLauncher() {
 function ProfileMenu({
   user,
 }: {
-  user: { id: string; name: string; role: RoleType; team: number | null };
+  user: AuthPayload;
 }) {
   const { theme } = useThemeStore();
   const [open, setOpen] = useState(false);

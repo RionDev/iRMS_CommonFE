@@ -80,3 +80,7 @@ export async function createSome(data: SomeRequest): Promise<SomeResponse> {
 ```
 
 BE API 엔드포인트와 서비스 함수는 1:1 대응으로 작성한다.
+
+## 리스트 조회는 페이지네이션 필수
+
+리스트형 조회(여러 건 반환) API는 cursor 기반 페이지네이션을 사용한다. 서비스 함수 시그니처와 응답 처리는 [pagination.md](pagination.md) 참조.

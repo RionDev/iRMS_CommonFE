@@ -20,6 +20,7 @@
 | `Button`     | `components/Button.tsx`     | `variant?: 'primary'\|'secondary'` + 기본 button 속성           |
 | `Input`      | `components/Input.tsx`      | `label?: string`, `error?: string` + 기본 input 속성            |
 | `Modal`      | `components/Modal.tsx`      | `isOpen`, `onClose`, `title`, `children`                        |
+| `Pagination` | `components/Pagination.tsx` | 이전/다음 + 페이지 번호 네비게이션. `usePagedNav` 반환값 연결용 |
 | `LoginForm`  | `components/LoginForm.tsx`  | `onSubmit`, `loading?`, `error?` — LoginPage 내부용             |
 | `SignupForm` | `components/SignupForm.tsx` | `onSubmit`, `loading?`, `error?` — SignupPage 내부용            |
 | `lightTheme` | `styles/theme.ts`           | Light 테마 객체                                                 |
@@ -28,11 +29,13 @@
 
 ### Hooks
 
-| export         | 파일               | 반환값                                                                     |
-| -------------- | ------------------ | -------------------------------------------------------------------------- |
-| `useAuth`      | `hooks/useAuth.ts` | `{ user, isAuthenticated, logout }` — 미인증 시 `/login`으로 redirect      |
-| `useAppAccess` | `hooks/useAuth.ts` | `user` — `appsStore`에서 앱 경로 접근 권한 확인, 미허용 시 포털로 redirect |
-| `useApi`       | `hooks/useApi.ts`  | `{ data, loading, error, execute }` — fetcher 함수 래핑                    |
+| export         | 파일                    | 반환값                                                                                             |
+| -------------- | ----------------------- | -------------------------------------------------------------------------------------------------- |
+| `useAuth`      | `hooks/useAuth.ts`      | `{ user, isAuthenticated, logout }` — 미인증 시 `/login`으로 redirect                              |
+| `useAppAccess` | `hooks/useAuth.ts`      | `user` — `appsStore`에서 앱 경로 접근 권한 확인, 미허용 시 포털로 redirect                         |
+| `useApi`       | `hooks/useApi.ts`       | `{ data, loading, error, execute }` — fetcher 함수 래핑                                            |
+| `usePaginated` | `hooks/usePaginated.ts` | 누적형 페이지네이션 (무한 스크롤/더보기). `{ items, loading, error, hasMore, loadMore, reset }`    |
+| `usePagedNav`  | `hooks/usePagedNav.ts`  | 이전/다음 + 페이지 번호. `{ items, page, totalPages, total, hasPrev, hasNext, next, prev, reset }` |
 
 ### Services
 
@@ -115,4 +118,5 @@
 - [docs/components.md](docs/components.md)
 - [docs/auth.md](docs/auth.md)
 - [docs/api-client.md](docs/api-client.md)
+- [docs/pagination.md](docs/pagination.md)
 - [docs/stores.md](docs/stores.md)
