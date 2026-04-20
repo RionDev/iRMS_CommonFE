@@ -22,6 +22,7 @@ export function SearchBar({ onSearch, onReset, children }: SearchBarProps) {
         backgroundColor: theme.colors.surface,
         padding: "16px 24px",
         borderRadius: theme.radius.md,
+        border: `1px solid ${theme.colors.border}`,
         boxShadow: theme.shadow.card,
         marginBottom: "16px",
       }}

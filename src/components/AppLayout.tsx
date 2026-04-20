@@ -966,6 +966,7 @@ function Sidebar({
         flexShrink: 0,
         backgroundColor: theme.colors.sidebarBackground,
         color: theme.colors.sidebarText,
+        borderRight: `1px solid ${theme.colors.sidebarBorder}`,
         display: "flex",
         flexDirection: "column",
         transition: "width 0.2s ease",

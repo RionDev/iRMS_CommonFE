@@ -77,33 +77,48 @@ iRMS FE 전 앱이 공유하는 색상/스타일 규칙. 새 UI를 만들거나 
 ## 다크 테마
 
 톤: **modern B2B SaaS admin dark** — layered slate surfaces(완전 black 지양) + blue primary.
-앱 셸과 콘텐츠/카드/사이드바를 서로 다른 slate 단계로 분리해 시각적 레이어를 만든다.
+
+### 3 레이어 위계 (필수)
+
+사이드바가 가장 어둡고, 콘텐츠 카드로 갈수록 밝아진다. 평면 모노톤 다크 UI 금지.
+
+| 레이어 | 역할                         | Tailwind       | Hex       | 토큰                |
+| ------ | ---------------------------- | -------------- | --------- | ------------------- |
+| L1     | 사이드바 셸 (가장 어두움)    | `bg-slate-950` | `#020617` | `sidebarBackground` |
+| L2     | 메인 앱 배경                 | `bg-slate-900` | `#0f172a` | `pageBackground`    |
+| L3     | 콘텐츠 카드/테이블/필터 패널 | `bg-slate-800` | `#1e293b` | `surface`           |
+
+사이드바는 우측에 `1px solid sidebarBorder`(slate-800 `#1e293b`)로 L1↔L2 경계를 명시한다.
+콘텐츠 카드는 `1px solid border`(slate-700 `#334155`)로 L2↔L3 경계를 강조한다.
 
 ### 다크 색상 토큰 (Tailwind 매핑)
 
-| 역할                | Tailwind           | Hex       | theme 토큰 (theme.colors.*) |
-| ------------------- | ------------------ | --------- | --------------------------- |
-| App Background      | `bg-slate-950`     | `#020617` | `pageBackground`            |
-| Surface             | `bg-slate-900`     | `#0f172a` | `surface`                   |
-| Surface Elevated    | `bg-slate-800`     | `#1e293b` | `surfaceMuted`              |
-| Border Default      | `border-slate-800` | `#1e293b` | `border`                    |
-| Border Strong       | `border-slate-700` | `#334155` | `borderStrong`              |
-| Text Primary        | `text-slate-50`    | `#f8fafc` | `text`                      |
-| Text Muted          | `text-slate-400`   | `#94a3b8` | `textMuted`                 |
-| Primary             | `bg-blue-600`      | `#2563eb` | `primary`                   |
-| Primary Hover       | `bg-blue-500`      | `#3b82f6` | `primaryHover`              |
-| Primary Text        | `text-white`       | `#ffffff` | `primaryText`               |
-| Success             | `bg-emerald-600`   | `#059669` | `success`                   |
-| Warning             | `bg-amber-500`     | `#f59e0b` | `warning`                   |
-| Danger              | `bg-red-600`       | `#dc2626` | `danger`                    |
-| Sidebar Background  | `bg-slate-950`     | `#020617` | `sidebarBackground`         |
-| Sidebar Text        | `text-slate-200`   | `#e2e8f0` | `sidebarText`               |
-| Sidebar Muted       | `text-slate-500`   | `#64748b` | `sidebarTextMuted`          |
-| Sidebar Hover       | `bg-slate-800`     | `#1e293b` | `sidebarHover`              |
-| Sidebar Active      | `bg-blue-600`      | `#2563eb` | `sidebarActive`             |
-| Sidebar Active Text | `text-white`       | `#ffffff` | `sidebarActiveText`         |
+| 역할                    | Tailwind           | Hex       | theme 토큰 (theme.colors.*) |
+| ----------------------- | ------------------ | --------- | --------------------------- |
+| App Background (L2)     | `bg-slate-900`     | `#0f172a` | `pageBackground`            |
+| Surface (L3)            | `bg-slate-800`     | `#1e293b` | `surface`                   |
+| Surface Elevated        | `bg-slate-700`     | `#334155` | `surfaceMuted`              |
+| Border Default          | `border-slate-700` | `#334155` | `border`                    |
+| Border Strong           | `border-slate-600` | `#475569` | `borderStrong`              |
+| Text Primary            | `text-slate-50`    | `#f8fafc` | `text`                      |
+| Text Muted              | `text-slate-400`   | `#94a3b8` | `textMuted`                 |
+| Primary                 | `bg-blue-600`      | `#2563eb` | `primary`                   |
+| Primary Hover           | `bg-blue-500`      | `#3b82f6` | `primaryHover`              |
+| Primary Text            | `text-white`       | `#ffffff` | `primaryText`               |
+| Success                 | `bg-emerald-600`   | `#059669` | `success`                   |
+| Warning                 | `bg-amber-500`     | `#f59e0b` | `warning`                   |
+| Danger                  | `bg-red-600`       | `#dc2626` | `danger`                    |
+| Sidebar Background (L1) | `bg-slate-950`     | `#020617` | `sidebarBackground`         |
+| Sidebar Border          | `border-slate-800` | `#1e293b` | `sidebarBorder`             |
+| Sidebar Text            | `text-slate-200`   | `#e2e8f0` | `sidebarText`               |
+| Sidebar Muted           | `text-slate-500`   | `#64748b` | `sidebarTextMuted`          |
+| Sidebar Hover           | `bg-slate-800`     | `#1e293b` | `sidebarHover`              |
+| Sidebar Active          | `bg-blue-600`      | `#2563eb` | `sidebarActive`             |
+| Sidebar Active Text     | `text-white`       | `#ffffff` | `sidebarActiveText`         |
 
-메모: `surface`는 카드/콘텐츠 기본 면. `surfaceMuted`는 드롭다운/테이블 hover 같은 elevated 표면. 다크 `primaryHover`는 라이트와 반대로 **밝아지는 방향**(blue-500).
+메모: `surface`는 L3(slate-800) — 카드/테이블/필터 패널 등 콘텐츠 면.
+`surfaceMuted`는 한 단계 더 밝은 elevated(slate-700) — 드롭다운, 테이블 row hover 등.
+다크 `primaryHover`는 라이트와 반대로 **밝아지는 방향**(blue-500).
 
 ### 다크에서 자주 참조하는 값 (토큰 미존재)
 

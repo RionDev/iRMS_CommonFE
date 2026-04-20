@@ -82,31 +82,34 @@ export const lightTheme: Theme = {
   },
 };
 
-// Tailwind SaaS admin 다크 팔레트 (layered slate + blue)
+// Tailwind SaaS admin 다크 팔레트 — 3 레이어 위계
+//   L1 sidebar shell : slate-950
+//   L2 app background: slate-900
+//   L3 content cards : slate-800 + slate-700 border
 export const darkTheme: Theme = {
   ...base,
   colors: {
-    pageBackground: "#020617",   // slate-950
-    surface: "#0f172a",           // slate-900 — 카드/콘텐츠 기본 면
-    surfaceMuted: "#1e293b",      // slate-800 — elevated(드롭다운/테이블 hover)
+    pageBackground: "#0f172a",   // slate-900 (L2: 메인 앱 배경)
+    surface: "#1e293b",           // slate-800 (L3: 카드/테이블/필터 패널)
+    surfaceMuted: "#334155",      // slate-700 (elevated: 드롭다운, 테이블 row hover)
     primary: "#2563eb",           // blue-600
-    primaryHover: "#3b82f6",      // blue-500 (다크에서는 hover가 밝아짐)
+    primaryHover: "#3b82f6",      // blue-500 (다크는 hover가 밝아짐)
     primaryText: "#ffffff",
     text: "#f8fafc",              // slate-50
     textMuted: "#94a3b8",         // slate-400
-    border: "#1e293b",            // slate-800
-    borderStrong: "#334155",      // slate-700
+    border: "#334155",            // slate-700 (카드/패널 테두리)
+    borderStrong: "#475569",      // slate-600
     danger: "#dc2626",            // red-600
     success: "#059669",           // emerald-600
     warning: "#f59e0b",           // amber-500
     overlay: "rgba(2,6,23,0.7)",  // slate-950 기반 오버레이
-    sidebarBackground: "#020617", // slate-950
+    sidebarBackground: "#020617", // slate-950 (L1: 사이드바 셸 — 가장 어두움)
     sidebarText: "#e2e8f0",       // slate-200
     sidebarTextMuted: "#64748b",  // slate-500
     sidebarActive: "#2563eb",     // blue-600
     sidebarActiveText: "#ffffff",
     sidebarHover: "#1e293b",      // slate-800
-    sidebarBorder: "#1e293b",     // slate-800
+    sidebarBorder: "#1e293b",     // slate-800 (사이드바 우측 border)
   },
 };
 
