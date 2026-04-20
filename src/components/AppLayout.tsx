@@ -11,7 +11,7 @@ import { useAppsStore } from "../stores/appsStore";
 import { useAuthStore } from "../stores/authStore";
 import { useThemeStore } from "../stores/themeStore";
 import type { AuthPayload } from "../types/auth";
-import { ROLE_LABEL } from "../types/constants";
+import { ROLE_LABEL, TEAM_LABEL } from "../types/constants";
 import { hasAppAccess } from "../utils/appPath";
 import { Avatar } from "./Avatar";
 import { Button } from "./Button";
@@ -665,7 +665,7 @@ function ProfileMenu({
               <span
                 style={{ fontSize: theme.fontSize.base, color: theme.colors.textMuted }}
               >
-                {user.id}
+                {user.team ? TEAM_LABEL[user.team] : "소속 없음"}
               </span>
               <span
                 style={{ fontSize: theme.fontSize.base, color: theme.colors.textMuted }}
