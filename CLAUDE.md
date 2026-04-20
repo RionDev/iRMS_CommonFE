@@ -13,19 +13,22 @@
 
 ### Components
 
-| export       | 파일                        | Props / 설명                                                    |
-| ------------ | --------------------------- | --------------------------------------------------------------- |
-| `AppLayout`  | `components/AppLayout.tsx`  | 사이드바 + 헤더 + 메인 + 푸터 통합 레이아웃 (앱 공통 템플릿)    |
-| `Avatar`     | `components/Avatar.tsx`     | 이름 기반 이니셜 원형 아바타 (해시 색상)                        |
-| `Button`     | `components/Button.tsx`     | `variant?: 'primary'\|'secondary'` + 기본 button 속성           |
-| `Input`      | `components/Input.tsx`      | `label?: string`, `error?: string` + 기본 input 속성            |
-| `Modal`      | `components/Modal.tsx`      | `isOpen`, `onClose`, `title`, `children`                        |
-| `Pagination` | `components/Pagination.tsx` | 이전/다음 + 페이지 번호 네비게이션. `usePagedNav` 반환값 연결용 |
-| `LoginForm`  | `components/LoginForm.tsx`  | `onSubmit`, `loading?`, `error?` — LoginPage 내부용             |
-| `SignupForm` | `components/SignupForm.tsx` | `onSubmit`, `loading?`, `error?` — SignupPage 내부용            |
-| `lightTheme` | `styles/theme.ts`           | Light 테마 객체                                                 |
-| `darkTheme`  | `styles/theme.ts`           | Dark 테마 객체                                                  |
-| `theme`      | `styles/theme.ts`           | `lightTheme` alias (정적; 런타임 다크모드 반영 안 됨)           |
+| export          | 파일                          | Props / 설명                                                                          |
+| --------------- | ----------------------------- | ------------------------------------------------------------------------------------- |
+| `AppLayout`     | `components/AppLayout.tsx`    | 사이드바 + 헤더 + 메인 + 푸터 통합 레이아웃 (앱 공통 템플릿)                          |
+| `Avatar`        | `components/Avatar.tsx`       | 이름 기반 이니셜 원형 아바타 (해시 색상)                                              |
+| `Button`        | `components/Button.tsx`       | `variant?: 'primary'\|'secondary'` + 기본 button 속성                                 |
+| `Input`         | `components/Input.tsx`        | `label?: string`, `error?: string` + 기본 input 속성                                  |
+| `Modal`         | `components/Modal.tsx`        | `isOpen`, `onClose`, `title`, `children`                                              |
+| `Pagination`    | `components/Pagination.tsx`   | 이전/다음 + 페이지 번호 네비게이션. `usePagedNav` 반환값 연결용                       |
+| `SearchBar`     | `components/SearchBar.tsx`    | 검색 블록(카드+form+검색/초기화 버튼). `onSearch`, `onReset?`, children으로 필터 필드 |
+| `SearchSelect`  | `components/SearchSelect.tsx` | 검색 블록용 compact `<select>` 스타일 래퍼                                            |
+| `SearchInput`   | `components/SearchInput.tsx`  | 검색 블록용 compact `<input>` 스타일 래퍼                                             |
+| `LoginForm`     | `components/LoginForm.tsx`    | `onSubmit`, `loading?`, `error?` — LoginPage 내부용                                   |
+| `SignupForm`    | `components/SignupForm.tsx`   | `onSubmit`, `loading?`, `error?` — SignupPage 내부용                                  |
+| `lightTheme`    | `styles/theme.ts`             | Light 테마 객체                                                                       |
+| `darkTheme`     | `styles/theme.ts`             | Dark 테마 객체                                                                        |
+| `theme`         | `styles/theme.ts`             | `lightTheme` alias (정적; 런타임 다크모드 반영 안 됨)                                 |
 
 ### Hooks
 
