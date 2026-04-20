@@ -662,11 +662,13 @@ function ProfileMenu({
               >
                 {user.name}
               </span>
-              <span
-                style={{ fontSize: theme.fontSize.base, color: theme.colors.textMuted }}
-              >
-                {user.team ? TEAM_LABEL[user.team] : "소속 없음"}
-              </span>
+              {user.team && (
+                <span
+                  style={{ fontSize: theme.fontSize.base, color: theme.colors.textMuted }}
+                >
+                  {TEAM_LABEL[user.team]}
+                </span>
+              )}
               <span
                 style={{ fontSize: theme.fontSize.base, color: theme.colors.textMuted }}
               >
@@ -1039,8 +1041,16 @@ export function AppLayout({
             </span>
             {title && (
               <>
-                <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
-                <span style={{ fontSize: theme.fontSize.xl, fontWeight: 400 }}>
+                <span
+                  style={{
+                    opacity: 0.4,
+                    fontWeight: 300,
+                    fontSize: theme.fontSize.xxl,
+                  }}
+                >
+                  |
+                </span>
+                <span style={{ fontSize: theme.fontSize.xxl, fontWeight: 400 }}>
                   {title}
                 </span>
               </>
