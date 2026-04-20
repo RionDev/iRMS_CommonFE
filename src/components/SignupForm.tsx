@@ -75,7 +75,7 @@ export function SignupForm({
     padding: "8px",
     border: `1px solid ${theme.colors.border}`,
     borderRadius: theme.radius.sm,
-    fontSize: "14px",
+    fontSize: theme.fontSize.base,
     fontFamily: theme.fontFamily,
     boxSizing: "border-box" as const,
     backgroundColor: theme.colors.surface,
@@ -112,7 +112,7 @@ export function SignupForm({
           style={{
             display: "block",
             marginBottom: "4px",
-            fontSize: "14px",
+            fontSize: theme.fontSize.base,
             color: theme.colors.text,
           }}
         >
@@ -153,7 +153,7 @@ export function SignupForm({
           style={{
             display: "block",
             marginBottom: "4px",
-            fontSize: "14px",
+            fontSize: theme.fontSize.base,
             color: theme.colors.text,
           }}
         >
@@ -180,7 +180,7 @@ export function SignupForm({
         <p
           style={{
             color: theme.colors.danger,
-            fontSize: "14px",
+            fontSize: theme.fontSize.base,
             margin: "0 0 12px 0",
           }}
         >

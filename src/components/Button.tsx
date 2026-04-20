@@ -17,7 +17,7 @@ export function Button({
     border: "none",
     borderRadius: theme.radius.sm,
     cursor: props.disabled ? "not-allowed" : "pointer",
-    fontSize: "14px",
+    fontSize: theme.fontSize.base,
     fontFamily: theme.fontFamily,
     opacity: props.disabled ? 0.6 : 1,
     ...(variant === "primary"

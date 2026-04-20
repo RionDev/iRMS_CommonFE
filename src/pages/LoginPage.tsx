@@ -98,14 +98,14 @@ export function LoginPage({
           style={{
             textAlign: "center",
             marginBottom: "24px",
-            fontSize: "20px",
+            fontSize: theme.fontSize.xxl,
           }}
         >
           iRMS 로그인
         </h1>
         <LoginForm onSubmit={handleSubmit} loading={loading} error={error} />
         <div style={{ textAlign: "center", marginTop: "16px" }}>
-          <span style={{ fontSize: "14px", color: theme.colors.textMuted }}>
+          <span style={{ fontSize: theme.fontSize.base, color: theme.colors.textMuted }}>
             계정이 없으신가요?{" "}
             <a
               href={signupUrl}

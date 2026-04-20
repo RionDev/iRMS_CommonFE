@@ -72,14 +72,14 @@ export function SignupPage({ loginUrl = "/login" }: SignupPageProps) {
           style={{
             textAlign: "center",
             marginBottom: "24px",
-            fontSize: "20px",
+            fontSize: theme.fontSize.xxl,
           }}
         >
           iRMS 회원가입
         </h1>
         <SignupForm onSubmit={handleSubmit} loading={loading} error={error} />
         <div style={{ textAlign: "center", marginTop: "16px" }}>
-          <span style={{ fontSize: "14px", color: theme.colors.textMuted }}>
+          <span style={{ fontSize: theme.fontSize.base, color: theme.colors.textMuted }}>
             이미 계정이 있으신가요?{" "}
             <a
               href={loginUrl}

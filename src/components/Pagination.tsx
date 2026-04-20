@@ -53,7 +53,7 @@ export function Pagination({
     gap: "12px",
     padding: "12px 0",
     fontFamily: theme.fontFamily,
-    fontSize: "14px",
+    fontSize: theme.fontSize.base,
     color: theme.colors.text,
   };
 
@@ -65,7 +65,7 @@ export function Pagination({
     color: theme.colors.text,
     cursor: disabled ? "not-allowed" : "pointer",
     opacity: disabled ? 0.5 : 1,
-    fontSize: "14px",
+    fontSize: theme.fontSize.base,
     fontFamily: theme.fontFamily,
   });
 
@@ -75,7 +75,7 @@ export function Pagination({
     borderRadius: theme.radius.sm,
     backgroundColor: theme.colors.surface,
     color: theme.colors.text,
-    fontSize: "14px",
+    fontSize: theme.fontSize.base,
     fontFamily: theme.fontFamily,
     cursor: "pointer",
   };

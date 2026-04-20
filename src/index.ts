@@ -7,6 +7,8 @@ export { AppLayout } from "./components/AppLayout";
 export type { SidebarItem } from "./components/AppLayout";
 export { Avatar } from "./components/Avatar";
 export { Button } from "./components/Button";
+export { Drawer } from "./components/Drawer";
+export type { DrawerProps } from "./components/Drawer";
 export { Input } from "./components/Input";
 export { LoginForm } from "./components/LoginForm";
 export { Modal } from "./components/Modal";

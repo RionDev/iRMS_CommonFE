@@ -24,6 +24,14 @@ export interface ThemeColors {
 
 export interface Theme {
   fontFamily: string;
+  fontSize: {
+    xs: string;
+    sm: string;
+    base: string;
+    lg: string;
+    xl: string;
+    xxl: string;
+  };
   radius: { sm: string; md: string; lg: string };
   shadow: { card: string };
   layout: { contentMaxWidth: string; sideNavWidth: string };
@@ -33,9 +41,17 @@ export interface Theme {
 const base = {
   fontFamily:
     "'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif",
+  fontSize: {
+    xs: "10px",   // footer, 미세 라벨
+    sm: "12px",   // 에러 메시지, 테이블 보조
+    base: "13px", // 본문/버튼/입력/테이블 셀
+    lg: "14px",   // 서브 타이틀
+    xl: "15px",   // 섹션 헤더
+    xxl: "17px",  // 페이지 타이틀
+  },
   radius: { sm: "4px", md: "8px", lg: "12px" },
   shadow: { card: "0 2px 8px rgba(0,0,0,0.1)" },
-  layout: { contentMaxWidth: "1120px", sideNavWidth: "220px" },
+  layout: { contentMaxWidth: "1400px", sideNavWidth: "220px" },
 };
 
 export const lightTheme: Theme = {

@@ -39,7 +39,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
         <h2
           style={{
             margin: "0 0 16px 0",
-            fontSize: "18px",
+            fontSize: theme.fontSize.xl,
             color: theme.colors.text,
           }}
         >

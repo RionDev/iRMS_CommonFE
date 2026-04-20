@@ -149,7 +149,7 @@ function ChangePasswordModal({
           <p
             style={{
               color: theme.colors.success,
-              fontSize: "14px",
+              fontSize: theme.fontSize.base,
               margin: "8px 0 16px",
             }}
           >
@@ -192,7 +192,7 @@ function ChangePasswordModal({
               style={{
                 color: theme.colors.danger,
                 marginTop: "12px",
-                fontSize: "14px",
+                fontSize: theme.fontSize.base,
               }}
             >
               {error}
@@ -224,7 +224,7 @@ function PwChangeButton({ onClick }: { onClick: () => void }) {
         background: hover ? theme.colors.surfaceMuted : "transparent",
         color: theme.colors.textMuted,
         cursor: "pointer",
-        fontSize: "14px",
+        fontSize: theme.fontSize.base,
         fontWeight: 500,
         fontFamily: theme.fontFamily,
         borderRadius: theme.radius.sm,
@@ -292,7 +292,7 @@ function HeaderIconButton({
             transform: "translateX(-50%)",
             background: "rgba(0,0,0,0.75)",
             color: "#fff",
-            fontSize: "12px",
+            fontSize: theme.fontSize.sm,
             padding: "4px 10px",
             borderRadius: theme.radius.sm,
             whiteSpace: "nowrap",
@@ -375,7 +375,7 @@ function ThemeToggle() {
             transform: "translateX(-50%)",
             background: "rgba(0,0,0,0.75)",
             color: "#fff",
-            fontSize: "12px",
+            fontSize: theme.fontSize.sm,
             padding: "4px 10px",
             borderRadius: theme.radius.sm,
             whiteSpace: "nowrap",
@@ -416,7 +416,7 @@ function AppTile({ app }: { app: AppNavItem }) {
       {app.icon}
       <span
         style={{
-          fontSize: "10px",
+          fontSize: theme.fontSize.xs,
           fontWeight: isActive ? 600 : 400,
           textAlign: "center",
           lineHeight: 1,
@@ -568,19 +568,19 @@ function ProfileMenu({
               <span
                 style={{
                   fontWeight: 700,
-                  fontSize: "15px",
+                  fontSize: theme.fontSize.lg,
                   color: theme.colors.text,
                 }}
               >
                 {user.name}
               </span>
               <span
-                style={{ fontSize: "13px", color: theme.colors.textMuted }}
+                style={{ fontSize: theme.fontSize.base, color: theme.colors.textMuted }}
               >
                 {user.id}
               </span>
               <span
-                style={{ fontSize: "13px", color: theme.colors.textMuted }}
+                style={{ fontSize: theme.fontSize.base, color: theme.colors.textMuted }}
               >
                 {ROLE_LABEL[user.role] ?? user.role}
               </span>
@@ -628,7 +628,7 @@ function SidebarNavItem({
         justifyContent: collapsed ? "center" : "flex-start",
         borderRadius: theme.radius.sm,
         textDecoration: "none",
-        fontSize: "14px",
+        fontSize: theme.fontSize.base,
         fontWeight: 500,
         color: isActive
           ? theme.colors.sidebarActiveText
@@ -680,7 +680,7 @@ function SidebarLogoutButton({
         background: hover ? theme.colors.sidebarHover : "transparent",
         color: theme.colors.sidebarTextMuted,
         cursor: "pointer",
-        fontSize: "14px",
+        fontSize: theme.fontSize.base,
         fontFamily: theme.fontFamily,
         transition: "background-color 0.2s ease, color 0.2s ease",
       }}
@@ -835,7 +835,7 @@ function Sidebar({
             <span
               style={{
                 fontWeight: 700,
-                fontSize: "18px",
+                fontSize: theme.fontSize.xxl,
               }}
             >
               IRMS
@@ -880,7 +880,7 @@ export function AppLayout({
   appName,
   sidebarItems = [],
   version,
-  contentMaxWidth = "960px",
+  contentMaxWidth = "1400px",
   appMinWidth = "1180px",
   children,
 }: AppLayoutProps) {
@@ -946,13 +946,13 @@ export function AppLayout({
               userSelect: "none",
             }}
           >
-            <span style={{ fontWeight: 700, fontSize: "18px" }}>
+            <span style={{ fontWeight: 700, fontSize: theme.fontSize.xxl }}>
               {appName}
             </span>
             {title && (
               <>
                 <span style={{ opacity: 0.4, fontWeight: 300 }}>|</span>
-                <span style={{ fontSize: "16px", fontWeight: 400 }}>
+                <span style={{ fontSize: theme.fontSize.xl, fontWeight: 400 }}>
                   {title}
                 </span>
               </>
@@ -966,7 +966,7 @@ export function AppLayout({
                 style={{
                   opacity: 0.3,
                   fontWeight: 300,
-                  fontSize: "18px",
+                  fontSize: theme.fontSize.xxl,
                   margin: "0 4px",
                 }}
               >
@@ -998,7 +998,7 @@ export function AppLayout({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            fontSize: "12px",
+            fontSize: theme.fontSize.sm,
             height: "48px",
             flexShrink: 0,
             userSelect: "none",

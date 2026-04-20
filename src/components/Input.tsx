@@ -15,7 +15,7 @@ export function Input({ label, error, style, ...props }: InputProps) {
           style={{
             display: "block",
             marginBottom: "4px",
-            fontSize: "14px",
+            fontSize: theme.fontSize.base,
             color: theme.colors.text,
           }}
         >
@@ -28,7 +28,7 @@ export function Input({ label, error, style, ...props }: InputProps) {
           padding: "8px",
           border: `1px solid ${error ? theme.colors.danger : theme.colors.border}`,
           borderRadius: theme.radius.sm,
-          fontSize: "14px",
+          fontSize: theme.fontSize.base,
           fontFamily: theme.fontFamily,
           boxSizing: "border-box",
           ...style,
@@ -36,7 +36,7 @@ export function Input({ label, error, style, ...props }: InputProps) {
         {...props}
       />
       {error && (
-        <span style={{ color: theme.colors.danger, fontSize: "12px" }}>
+        <span style={{ color: theme.colors.danger, fontSize: theme.fontSize.sm }}>
           {error}
         </span>
       )}

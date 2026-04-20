@@ -51,7 +51,7 @@ export function LoginForm({
         <p
           style={{
             color: theme.colors.danger,
-            fontSize: "14px",
+            fontSize: theme.fontSize.base,
             margin: "0 0 12px 0",
           }}
         >
