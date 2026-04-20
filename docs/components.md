@@ -20,12 +20,12 @@ import { AppLayout } from "@common";
 function UserListPage() {
   return (
     <AppLayout
-      title="회원 목록"
+      title="계정 목록"
       appName="ADMIN"
       sidebarItems={adminNavItems}
       version={__APP_VERSION__}
     >
-      <h2>회원 목록</h2>
+      <h2>계정 목록</h2>
       <UserTable ... />
     </AppLayout>
   );
