@@ -31,12 +31,30 @@ export function SearchBar({ onSearch, onReset, children }: SearchBarProps) {
         onSubmit={handleSubmit}
         style={{
           display: "flex",
-          flexWrap: "wrap",
           gap: "8px",
           alignItems: "center",
         }}
       >
-        {children}
+        <div
+          style={{
+            display: "flex",
+            flex: 1,
+            minWidth: 0,
+            gap: "8px",
+            alignItems: "center",
+          }}
+        >
+          {children}
+        </div>
+        <span
+          aria-hidden
+          style={{
+            width: "1px",
+            height: "24px",
+            backgroundColor: theme.colors.border,
+            margin: "0 4px",
+          }}
+        />
         <Button type="submit">검색</Button>
         {onReset && (
           <Button type="button" variant="secondary" onClick={onReset}>
