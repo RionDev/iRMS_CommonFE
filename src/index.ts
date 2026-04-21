@@ -18,12 +18,15 @@ export { SearchBar } from "./components/SearchBar";
 export { SearchInput } from "./components/SearchInput";
 export { SearchSelect } from "./components/SearchSelect";
 export { SignupForm } from "./components/SignupForm";
+export { TableBlock } from "./components/TableBlock";
+export type { TableBlockProps } from "./components/TableBlock";
 export { theme, lightTheme, darkTheme } from "./styles/theme";
 export type { Theme, ThemeColors } from "./styles/theme";
 
 // Hooks
 export { useApi } from "./hooks/useApi";
 export { useAuth, useAppAccess } from "./hooks/useAuth";
+export { useDynamicPageSize } from "./hooks/useDynamicPageSize";
 export { usePaginated } from "./hooks/usePaginated";
 export type { UsePaginatedOptions, UsePaginatedResult } from "./hooks/usePaginated";
 export { usePagedNav } from "./hooks/usePagedNav";
