@@ -20,6 +20,8 @@ export { SearchSelect } from "./components/SearchSelect";
 export { SignupForm } from "./components/SignupForm";
 export { TableBlock } from "./components/TableBlock";
 export type { TableBlockProps } from "./components/TableBlock";
+export { TableEmptyState } from "./components/TableEmptyState";
+export type { TableEmptyStateProps } from "./components/TableEmptyState";
 export { theme, lightTheme, darkTheme } from "./styles/theme";
 export type { Theme, ThemeColors } from "./styles/theme";
 
