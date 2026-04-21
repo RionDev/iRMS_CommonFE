@@ -1103,9 +1103,10 @@ export function AppLayout({
   return (
     <div
       style={{
-        minHeight: "100vh",
+        height: "100vh",
         minWidth: appMinWidth,
         display: "flex",
+        overflow: "hidden",
         backgroundColor: theme.colors.pageBackground,
         color: theme.colors.text,
         fontFamily: theme.fontFamily,
@@ -1204,6 +1205,9 @@ export function AppLayout({
         <main
           style={{
             flex: 1,
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
             padding: "24px",
             maxWidth: contentMaxWidth,
             width: "100%",
