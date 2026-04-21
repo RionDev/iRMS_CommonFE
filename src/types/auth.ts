@@ -31,6 +31,12 @@ export interface VUser {
   last_at: string | null;
   created_at: string | null;
   updated_at: string | null;
+  /**
+   * 차단 사유. BE는 INACTIVE 상태로 전환 시 저장하며,
+   * 다른 상태로 전환되면 자동으로 NULL 로 초기화한다.
+   * 포맷: `"{adminName}:{ISO time}:{reason}"`.
+   */
+  blocked_reason?: string | null;
 }
 
 export interface TokenPair {
