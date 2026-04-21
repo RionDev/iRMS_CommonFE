@@ -69,9 +69,12 @@ export function useDynamicPageSize(
         measuredReserved > 0 ? measuredReserved : reservedHeight;
 
       const available = el.clientHeight - effectiveReserved;
-      // padding/line-height/border 측정 오차로 한 행이 넘쳐 컨테이너 밖으로
-      // 튀어 나가는 것을 막기 위해 한 행 분의 안전 여유를 둔다.
-      const capacity = Math.floor(available / effectiveRowH) - 1;
+      // 측정 오차 누적 방지용 안전 여유 2행.
+      //  - Pagination 이 total=0 일 때 null 을 렌더하므로 초기 measure 시점에
+      //    trailingH 가 과소 측정되는 케이스 대비
+      //  - row/thead/padding/line-height 의 소수점 오차로 마지막 행이 넘쳐
+      //    pagination 이 overflow:hidden 에 클리핑되는 문제 방지
+      const capacity = Math.floor(available / effectiveRowH) - 2;
       const next = Math.max(minSize, capacity);
       setSize((prev) => (prev === next ? prev : next));
     };
