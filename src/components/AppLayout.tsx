@@ -964,6 +964,10 @@ function Sidebar({
       style={{
         width,
         flexShrink: 0,
+        position: "sticky",
+        top: 0,
+        alignSelf: "flex-start",
+        height: "100vh",
         backgroundColor: theme.colors.sidebarBackground,
         color: theme.colors.sidebarText,
         borderRight: `1px solid ${theme.colors.sidebarBorder}`,
@@ -1103,10 +1107,9 @@ export function AppLayout({
   return (
     <div
       style={{
-        height: "100vh",
+        minHeight: "100vh",
         minWidth: appMinWidth,
         display: "flex",
-        overflow: "hidden",
         backgroundColor: theme.colors.pageBackground,
         color: theme.colors.text,
         fontFamily: theme.fontFamily,
@@ -1129,6 +1132,9 @@ export function AppLayout({
       >
         <header
           style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 10,
             backgroundColor: theme.colors.primary,
             color: theme.colors.primaryText,
             padding: "0 24px",
@@ -1205,14 +1211,12 @@ export function AppLayout({
         <main
           style={{
             flex: 1,
-            minHeight: 0,
             display: "flex",
             flexDirection: "column",
             padding: "24px",
             maxWidth: contentMaxWidth,
             width: "100%",
             boxSizing: "border-box",
-            overflow: "auto",
           }}
         >
           {children}
