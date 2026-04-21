@@ -3,6 +3,8 @@ export { LoginPage } from "./pages/LoginPage";
 export { SignupPage } from "./pages/SignupPage";
 
 // Components
+export { AppCenterMessage } from "./components/AppCenterMessage";
+export type { AppCenterMessageProps } from "./components/AppCenterMessage";
 export { AppLayout, ChangePasswordModal } from "./components/AppLayout";
 export type { SidebarItem } from "./components/AppLayout";
 export { Avatar } from "./components/Avatar";

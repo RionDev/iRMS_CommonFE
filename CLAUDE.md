@@ -13,32 +13,37 @@
 
 ### Components
 
-| export          | 파일                          | Props / 설명                                                                          |
-| --------------- | ----------------------------- | ------------------------------------------------------------------------------------- |
-| `AppLayout`     | `components/AppLayout.tsx`    | 사이드바 + 헤더 + 메인 + 푸터 통합 레이아웃 (앱 공통 템플릿)                          |
-| `Avatar`        | `components/Avatar.tsx`       | 이름 기반 이니셜 원형 아바타 (해시 색상)                                              |
-| `Button`        | `components/Button.tsx`       | `variant?: 'primary'\|'secondary'` + 기본 button 속성                                 |
-| `Input`         | `components/Input.tsx`        | `label?: string`, `error?: string` + 기본 input 속성                                  |
-| `Modal`         | `components/Modal.tsx`        | `isOpen`, `onClose`, `title`, `children`                                              |
-| `Pagination`    | `components/Pagination.tsx`   | 이전/다음 + 페이지 번호 네비게이션. `usePagedNav` 반환값 연결용                       |
-| `SearchBar`     | `components/SearchBar.tsx`    | 검색 블록(카드+form+검색/초기화 버튼). `onSearch`, `onReset?`, children으로 필터 필드 |
-| `SearchSelect`  | `components/SearchSelect.tsx` | 검색 블록용 compact `<select>` 스타일 래퍼                                            |
-| `SearchInput`   | `components/SearchInput.tsx`  | 검색 블록용 compact `<input>` 스타일 래퍼                                             |
-| `LoginForm`     | `components/LoginForm.tsx`    | `onSubmit`, `loading?`, `error?` — LoginPage 내부용                                   |
-| `SignupForm`    | `components/SignupForm.tsx`   | `onSubmit`, `loading?`, `error?` — SignupPage 내부용                                  |
-| `lightTheme`    | `styles/theme.ts`             | Light 테마 객체                                                                       |
-| `darkTheme`     | `styles/theme.ts`             | Dark 테마 객체                                                                        |
-| `theme`         | `styles/theme.ts`             | `lightTheme` alias (정적; 런타임 다크모드 반영 안 됨)                                 |
+| export                | 파일                               | Props / 설명                                                                                    |
+| --------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `AppCenterMessage`    | `components/AppCenterMessage.tsx`  | 앱 영역(`<main>`) 전체 중앙에 텍스트. 페이지 전체 placeholder 용. `docs/layout.md` 참조.        |
+| `AppLayout`           | `components/AppLayout.tsx`         | 사이드바 + 헤더 + 메인 + 푸터 통합 레이아웃 (앱 공통 템플릿)                                    |
+| `Avatar`              | `components/Avatar.tsx`            | 이름 기반 이니셜 원형 아바타 (해시 색상)                                                        |
+| `Button`              | `components/Button.tsx`            | `variant?: 'primary'\|'secondary'` + 기본 button 속성                                           |
+| `ChangePasswordModal` | `components/AppLayout.tsx`         | 본인 비밀번호 변경 모달. AppLayout 내부에서 쓰이나 외부에서도 재사용 가능.                      |
+| `Input`               | `components/Input.tsx`             | `label?: string`, `error?: string` + 기본 input 속성                                            |
+| `Modal`               | `components/Modal.tsx`             | `isOpen`, `onClose`, `title`, `children`                                                        |
+| `Pagination`          | `components/Pagination.tsx`        | 이전/다음 + 페이지 번호 네비게이션. 고정 높이 48px. `total=0` 일 때도 placeholder 로 공간 유지. |
+| `SearchBar`           | `components/SearchBar.tsx`         | 검색 블록(카드+form+검색/초기화 버튼). 고정 높이 72px. `onSearch`, `onReset?`                   |
+| `SearchSelect`        | `components/SearchSelect.tsx`      | 검색 블록용 compact `<select>` 스타일 래퍼                                                      |
+| `SearchInput`         | `components/SearchInput.tsx`       | 검색 블록용 compact `<input>` 스타일 래퍼                                                       |
+| `LoginForm`           | `components/LoginForm.tsx`         | `onSubmit`, `loading?`, `error?` — LoginPage 내부용                                             |
+| `SignupForm`          | `components/SignupForm.tsx`        | `onSubmit`, `loading?`, `error?` — SignupPage 내부용                                            |
+| `TableBlock`          | `components/TableBlock.tsx`        | 테이블을 감싸는 카드형 블럭(flex column, overflow hidden). `ref` 전달 지원.                     |
+| `TableEmptyState`     | `components/TableEmptyState.tsx`   | TableBlock 바디 중앙 메시지(로딩/빈 상태). `docs/layout.md` 참조.                               |
+| `lightTheme`          | `styles/theme.ts`                  | Light 테마 객체                                                                                 |
+| `darkTheme`           | `styles/theme.ts`                  | Dark 테마 객체                                                                                  |
+| `theme`               | `styles/theme.ts`                  | `lightTheme` alias (정적; 런타임 다크모드 반영 안 됨)                                           |
 
 ### Hooks
 
-| export         | 파일                    | 반환값                                                                                             |
-| -------------- | ----------------------- | -------------------------------------------------------------------------------------------------- |
-| `useAuth`      | `hooks/useAuth.ts`      | `{ user, isAuthenticated, logout }` — 미인증 시 `/login`으로 redirect                              |
-| `useAppAccess` | `hooks/useAuth.ts`      | `user` — `appsStore`에서 앱 경로 접근 권한 확인, 미허용 시 포털로 redirect                         |
-| `useApi`       | `hooks/useApi.ts`       | `{ data, loading, error, execute }` — fetcher 함수 래핑                                            |
-| `usePaginated` | `hooks/usePaginated.ts` | 누적형 페이지네이션 (무한 스크롤/더보기). `{ items, loading, error, hasMore, loadMore, reset }`    |
-| `usePagedNav`  | `hooks/usePagedNav.ts`  | 이전/다음 + 페이지 번호. `{ items, page, totalPages, total, hasPrev, hasNext, next, prev, reset }` |
+| export              | 파일                         | 반환값                                                                                             |
+| ------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------- |
+| `useAuth`           | `hooks/useAuth.ts`           | `{ user, isAuthenticated, logout }` — 미인증 시 `/login`으로 redirect                              |
+| `useAppAccess`      | `hooks/useAuth.ts`           | `user` — `appsStore`에서 앱 경로 접근 권한 확인, 미허용 시 포털로 redirect                         |
+| `useApi`            | `hooks/useApi.ts`            | `{ data, loading, error, execute }` — fetcher 함수 래핑                                            |
+| `useFixedPageSize`  | `hooks/useFixedPageSize.ts`  | 고정 레이아웃 기반 pageSize 계산(마운트 시 1회). `LAYOUT` 상수와 함께 사용.                        |
+| `usePaginated`      | `hooks/usePaginated.ts`      | 누적형 페이지네이션 (무한 스크롤/더보기). `{ items, loading, error, hasMore, loadMore, reset }`    |
+| `usePagedNav`       | `hooks/usePagedNav.ts`       | 이전/다음 + 페이지 번호. `{ items, page, totalPages, total, hasPrev, hasNext, next, prev, reset }` |
 
 ### Services
 
@@ -81,15 +86,20 @@
 
 ### Constants
 
-| export                | 파일                 | 설명                                                      |
-| --------------------- | -------------------- | --------------------------------------------------------- |
-| `Role`                | `types/constants.ts` | `{ ADMIN, LEAD, MEMBER, GUEST }` — 값은 대문자 string     |
-| `ROLE_LABEL`          | `types/constants.ts` | `RoleType` → 한국어 표시 라벨 (예: `ADMIN` → `관리자`)    |
-| `ROLE_OPTIONS`        | `types/constants.ts` | 관리자 편집 폼용 전체 option 배열                         |
-| `SIGNUP_ROLE_OPTIONS` | `types/constants.ts` | 자가 가입 폼용 option (MEMBER/GUEST 만)                   |
-| `Team`                | `types/constants.ts` | `{ ENGINE, ANALYST }` — 값은 대문자 string                |
-| `TEAM_LABEL`          | `types/constants.ts` | `TeamType` → 한국어 표시 라벨                             |
-| `TEAM_OPTIONS`        | `types/constants.ts` | `<option>` 생성용 전체 option 배열                        |
+| export                | 파일                          | 설명                                                                                                  |
+| --------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `Role`                | `types/constants.ts`          | `{ ADMIN, LEAD, MEMBER, GUEST }` — 값은 대문자 string                                                 |
+| `ROLE_LABEL`          | `types/constants.ts`          | `RoleType` → 한국어 표시 라벨 (예: `ADMIN` → `관리자`)                                                |
+| `ROLE_OPTIONS`        | `types/constants.ts`          | 관리자 편집 폼용 전체 option 배열                                                                     |
+| `SIGNUP_ROLE_OPTIONS` | `types/constants.ts`          | 자가 가입 폼용 option (MEMBER/GUEST 만)                                                               |
+| `Team`                | `types/constants.ts`          | `{ ENGINE, ANALYST }` — 값은 대문자 string                                                            |
+| `TEAM_LABEL`          | `types/constants.ts`          | `TeamType` → 한국어 표시 라벨                                                                         |
+| `TEAM_OPTIONS`        | `types/constants.ts`          | `<option>` 생성용 전체 option 배열                                                                    |
+| `Status`              | `types/constants.ts`          | `{ PENDING, ACTIVE, INACTIVE }` — 값은 대문자 string                                                  |
+| `STATUS_LABEL`        | `types/constants.ts`          | `StatusType` → 한국어 표시 라벨                                                                       |
+| `STATUS_CODE`         | `types/constants.ts`          | `StatusType` → DB idx (int). update 요청 전송용.                                                      |
+| `STATUS_OPTIONS`      | `types/constants.ts`          | `<option>` 생성용 전체 option 배열                                                                    |
+| `LAYOUT`              | `hooks/useFixedPageSize.ts`   | `{ HEADER_H, FOOTER_H, MAIN_PAD_Y, SEARCHBAR_H, SEARCHBAR_MARGIN, PAGINATION_H }` — 고정 높이 상수    |
 
 ### Utils
 
@@ -121,6 +131,7 @@
 상세 사용법은 `docs/` 참조:
 
 - [docs/components.md](docs/components.md)
+- [docs/layout.md](docs/layout.md) — 레이아웃 영역 정의 및 중앙 메시지 배치 정책
 - [docs/theme.md](docs/theme.md) — 라이트/다크 팔레트 및 디자인 가이드
 - [docs/auth.md](docs/auth.md)
 - [docs/api-client.md](docs/api-client.md)
