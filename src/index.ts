@@ -7,6 +7,13 @@ export { AppCenterMessage } from "./components/AppCenterMessage";
 export type { AppCenterMessageProps } from "./components/AppCenterMessage";
 export { AppLayout, ChangePasswordModal } from "./components/AppLayout";
 export type { SidebarItem } from "./components/AppLayout";
+export {
+  BaseTable,
+  TABLE_ROW_H_COMPACT,
+  TABLE_ROW_H_NORMAL,
+  TABLE_THEAD_H,
+} from "./components/BaseTable";
+export type { BaseTableProps, TableColumn } from "./components/BaseTable";
 export { Avatar } from "./components/Avatar";
 export { Button } from "./components/Button";
 export { Drawer } from "./components/Drawer";
