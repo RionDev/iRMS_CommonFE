@@ -12,6 +12,17 @@ export interface UseFixedPageSizeOptions {
   rowHeight: number;
   /** 최소 페이지 크기. 기본 5. */
   minSize?: number;
+  /**
+   * 테이블 바디에 보장되는 최소 가용 높이(px).
+   *
+   * 사이드에 대시보드처럼 min-content 가 큰 컬럼이 있어서 `alignItems:stretch` 로
+   * 테이블 컬럼도 같이 stretch 되는 경우에 사용. 뷰포트 기반 계산이 이 값보다
+   * 작으면 이 값을 사용해 더 많은 row 를 렌더한다.
+   *
+   * 계산법: `사이드 컬럼 min-content 높이 - 테이블 컬럼 내부 overhead`
+   * (= searchbar + margin + tableblock padding + thead + pagination)
+   */
+  minAvailable?: number;
 }
 
 /**
@@ -45,10 +56,12 @@ export function useFixedPageSize({
   overhead,
   rowHeight,
   minSize = 5,
+  minAvailable = 0,
 }: UseFixedPageSizeOptions): number {
   const [size] = useState(() => {
     if (typeof window === "undefined") return minSize;
-    const available = window.innerHeight - overhead;
+    const fromViewport = window.innerHeight - overhead;
+    const available = Math.max(fromViewport, minAvailable);
     return Math.max(minSize, Math.floor(available / rowHeight));
   });
   return size;
