@@ -8,6 +8,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export function Input({ label, error, style, ...props }: InputProps) {
   const { theme } = useThemeStore();
+  const disabled = props.disabled;
   return (
     <div style={{ marginBottom: "12px" }}>
       {label && (
@@ -16,7 +17,7 @@ export function Input({ label, error, style, ...props }: InputProps) {
             display: "block",
             marginBottom: "4px",
             fontSize: theme.fontSize.base,
-            color: theme.colors.text,
+            color: disabled ? theme.colors.textMuted : theme.colors.text,
           }}
         >
           {label}
@@ -31,6 +32,11 @@ export function Input({ label, error, style, ...props }: InputProps) {
           fontSize: theme.fontSize.base,
           fontFamily: theme.fontFamily,
           boxSizing: "border-box",
+          backgroundColor: disabled
+            ? theme.colors.surfaceMuted
+            : theme.colors.surface,
+          color: disabled ? theme.colors.textMuted : theme.colors.text,
+          cursor: disabled ? "not-allowed" : undefined,
           ...style,
         }}
         {...props}
