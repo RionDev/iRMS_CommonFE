@@ -209,7 +209,7 @@ const APP_NAV: AppNavItem[] = [
   },
 ];
 
-function ChangePasswordModal({
+export function ChangePasswordModal({
   isOpen,
   onClose,
 }: {

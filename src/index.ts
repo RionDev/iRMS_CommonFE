@@ -3,7 +3,7 @@ export { LoginPage } from "./pages/LoginPage";
 export { SignupPage } from "./pages/SignupPage";
 
 // Components
-export { AppLayout } from "./components/AppLayout";
+export { AppLayout, ChangePasswordModal } from "./components/AppLayout";
 export type { SidebarItem } from "./components/AppLayout";
 export { Avatar } from "./components/Avatar";
 export { Button } from "./components/Button";
@@ -55,11 +55,15 @@ export {
   ROLE_LABEL,
   ROLE_OPTIONS,
   SIGNUP_ROLE_OPTIONS,
+  Status,
+  STATUS_CODE,
+  STATUS_LABEL,
+  STATUS_OPTIONS,
   Team,
   TEAM_LABEL,
   TEAM_OPTIONS,
 } from "./types/constants";
-export type { RoleType, TeamType } from "./types/constants";
+export type { RoleType, StatusType, TeamType } from "./types/constants";
 export type { SignupRequest, SignupResponse } from "./types/signup";
 export type { Page } from "./types/pagination";
 

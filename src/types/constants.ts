@@ -66,3 +66,35 @@ export const TEAM_OPTIONS: ReadonlyArray<{ value: TeamType; label: string }> = [
   { value: Team.ENGINE, label: TEAM_LABEL.ENGINE },
   { value: Team.ANALYST, label: TEAM_LABEL.ANALYST },
 ];
+
+/**
+ * 계정 상태(Status) 상수 / 타입 / 라벨
+ *
+ * VUser.status 는 name(대문자 영어 문자열)으로 주고받는다.
+ * UpdateUserRequest.status 는 BE에서 int idx 로 받으므로 STATUS_CODE 로 변환해 전송한다.
+ */
+export const Status = {
+  PENDING: "PENDING",
+  ACTIVE: "ACTIVE",
+  INACTIVE: "INACTIVE",
+} as const;
+
+export type StatusType = (typeof Status)[keyof typeof Status];
+
+export const STATUS_LABEL: Record<StatusType, string> = {
+  PENDING: "승인대기",
+  ACTIVE: "활성",
+  INACTIVE: "차단",
+};
+
+export const STATUS_CODE: Record<StatusType, number> = {
+  PENDING: 1,
+  ACTIVE: 2,
+  INACTIVE: 3,
+};
+
+export const STATUS_OPTIONS: ReadonlyArray<{ value: StatusType; label: string }> = [
+  { value: Status.PENDING, label: STATUS_LABEL.PENDING },
+  { value: Status.ACTIVE, label: STATUS_LABEL.ACTIVE },
+  { value: Status.INACTIVE, label: STATUS_LABEL.INACTIVE },
+];

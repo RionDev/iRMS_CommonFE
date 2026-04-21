@@ -29,6 +29,8 @@ export interface VUser {
   team: string | null;
   status: string;
   last_at: string | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 export interface TokenPair {
