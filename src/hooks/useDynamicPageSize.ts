@@ -17,10 +17,10 @@ interface UseDynamicPageSizeOptions {
 /**
  * 컨테이너 높이에 맞춰 한 페이지에 표시할 행 수를 계산한다.
  *
- * 마운트 시 1회만 측정한다. 윈도우 리사이즈를 감지해 재계산하면
- * `usePagedNav` 의 `size` dep 가 바뀌어 리스트/검색/페이지가 리셋되기 때문에
- * 의도적으로 관찰을 생략했다. 리사이즈 시 약간의 빈 공간 / 클리핑이 생길 수 있지만
- * 사용자 입장에서 상태가 유지되는 편이 낫다.
+ * 초기 마운트 / tbody 첫 데이터 도착 / 웹 폰트 로드 / 컨테이너 리사이즈 직후
+ * 여러 시점에 재측정을 시도한다. 단, 사용자가 페이지 이동 / 검색을 시작한
+ * 뒤(= 일정 안정화 시간 이후)에는 관찰을 중단해 리사이즈로 인한
+ * `usePagedNav` 리셋이 일어나지 않도록 한다.
  */
 export function useDynamicPageSize(
   containerRef: RefObject<HTMLElement | null>,
@@ -36,6 +36,8 @@ export function useDynamicPageSize(
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+
+    const cleanups: Array<() => void> = [];
 
     const compute = () => {
       const style = window.getComputedStyle(el);
@@ -79,23 +81,55 @@ export function useDynamicPageSize(
       setSize((prev) => (prev === next ? prev : next));
     };
 
+    // 1. 즉시 1회 측정 (초기 fallback 값으로 빠른 size 확정 → 첫 fetch 시작)
     compute();
 
-    // tbody가 비어있으면 fallback rowHeight 가 쓰여 부정확할 수 있다.
-    // 데이터가 도착해 첫 행이 생기면 한 번 더 재측정한다 (리사이즈 감지 아니므로 이후 리셋 없음).
-    if (!el.querySelector("tbody tr")) {
-      const tbody = el.querySelector("tbody");
-      if (tbody) {
-        const mo = new MutationObserver(() => {
-          if (el.querySelector("tbody tr")) {
-            compute();
-            mo.disconnect();
-          }
-        });
-        mo.observe(tbody, { childList: true });
-        return () => mo.disconnect();
-      }
+    // 2. 다음 애니메이션 프레임에 재측정 (브라우저가 초기 레이아웃을 확정한 후)
+    const rafId = requestAnimationFrame(() => compute());
+    cleanups.push(() => cancelAnimationFrame(rafId));
+
+    // 3. 웹 폰트가 로드되면 row 높이가 변하므로 재측정
+    //    (Noto Sans KR 같은 CJK 폰트는 로드 전/후 metrics 차이가 커서 이걸 빼먹으면
+    //    fallback 폰트 기준으로 계산된 pageSize 가 1~2 행 과다로 남는다)
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      let cancelled = false;
+      document.fonts.ready.then(() => {
+        if (!cancelled) compute();
+      });
+      cleanups.push(() => {
+        cancelled = true;
+      });
     }
+
+    // 4. tbody 가 비어있을 때 첫 행이 들어오면 실제 row 높이로 재측정
+    const tbody = el.querySelector("tbody");
+    if (tbody && !el.querySelector("tbody tr")) {
+      const mo = new MutationObserver(() => {
+        if (el.querySelector("tbody tr")) {
+          compute();
+          mo.disconnect();
+        }
+      });
+      mo.observe(tbody, { childList: true });
+      cleanups.push(() => mo.disconnect());
+    }
+
+    // 5. 초기 안정화 구간(2초) 동안만 컨테이너 리사이즈 재측정.
+    //    이후에는 해제해서 사용자 상호작용 중 리사이즈 이벤트로 인한
+    //    pagination 리셋이 일어나지 않게 한다.
+    if (typeof ResizeObserver !== "undefined") {
+      const ro = new ResizeObserver(() => compute());
+      ro.observe(el);
+      const roTimer = setTimeout(() => ro.disconnect(), 2000);
+      cleanups.push(() => {
+        clearTimeout(roTimer);
+        ro.disconnect();
+      });
+    }
+
+    return () => {
+      for (const fn of cleanups) fn();
+    };
   }, [containerRef, rowHeight, reservedHeight, minSize]);
 
   return size;
