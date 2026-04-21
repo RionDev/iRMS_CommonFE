@@ -73,7 +73,7 @@ export function BaseTable<T>({
         borderCollapse: "collapse",
         color: theme.colors.text,
         fontSize: theme.fontSize.base,
-        textAlign: compact ? "center" : "left",
+        textAlign: "center",
       }}
     >
       <thead>
