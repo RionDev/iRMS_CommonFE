@@ -9,8 +9,7 @@ export { AppLayout, ChangePasswordModal } from "./components/AppLayout";
 export type { SidebarItem } from "./components/AppLayout";
 export {
   BaseTable,
-  TABLE_ROW_H_COMPACT,
-  TABLE_ROW_H_NORMAL,
+  TABLE_ROW_H,
   TABLE_THEAD_H,
 } from "./components/BaseTable";
 export type { BaseTableProps, TableColumn } from "./components/BaseTable";

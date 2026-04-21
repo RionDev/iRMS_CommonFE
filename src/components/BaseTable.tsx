@@ -1,10 +1,8 @@
 import type { CSSProperties, ReactNode } from "react";
 import { useThemeStore } from "../stores/themeStore";
 
-/** compact 모드 tbody row 고정 높이. useFixedPageSize 의 rowHeight 와 일치해야 함. */
-export const TABLE_ROW_H_COMPACT = 40;
-/** 일반 모드 tbody row 고정 높이. */
-export const TABLE_ROW_H_NORMAL = 44;
+/** tbody row 고정 높이. useFixedPageSize 의 rowHeight 와 일치해야 함. */
+export const TABLE_ROW_H = 40;
 /** thead 고정 높이. useFixedPageSize 의 overhead 계산에 쓰인다. */
 export const TABLE_THEAD_H = 40;
 
@@ -26,8 +24,6 @@ export interface BaseTableProps<T> {
   onRowClick?: (item: T) => void;
   /** React key 추출. 기본값은 `(item as any).idx`. */
   rowKey?: (item: T) => string | number;
-  /** compact 모드: 셀 padding 좁히고 텍스트 중앙 정렬, row 높이 40px. */
-  compact?: boolean;
 }
 
 /**
@@ -37,32 +33,30 @@ export interface BaseTableProps<T> {
  * 카드형 블럭(`TableBlock`) 과 페이지네이션(`Pagination`) 은 각 페이지가
  * 개별적으로 조립하며, 이 컴포넌트는 순수 테이블 표시만 담당한다.
  *
- * 고정 높이(`TABLE_ROW_H_*`, `TABLE_THEAD_H`)는 `useFixedPageSize` 의
- * overhead / rowHeight 계산과 동일한 값을 써야 한다.
+ * 스타일은 단일 밀도(40px row / 20px horizontal padding / 중앙 정렬 / nowrap)
+ * 로 모든 앱에 동일하게 적용된다. 고정 높이(`TABLE_ROW_H`, `TABLE_THEAD_H`)
+ * 는 `useFixedPageSize` 의 overhead / rowHeight 계산과 동일한 값을 써야 한다.
  */
 export function BaseTable<T>({
   items,
   columns,
   onRowClick,
   rowKey,
-  compact = false,
 }: BaseTableProps<T>) {
   const { theme } = useThemeStore();
-  const cellPadX = compact ? "20px" : "8px";
-  const rowH = compact ? TABLE_ROW_H_COMPACT : TABLE_ROW_H_NORMAL;
-  const nowrap = compact ? ("nowrap" as const) : undefined;
-  const getKey = rowKey ?? ((item: T) => (item as { idx?: string | number }).idx ?? "");
+  const getKey =
+    rowKey ?? ((item: T) => (item as { idx?: string | number }).idx ?? "");
 
   const thStyle: CSSProperties = {
-    padding: `0 ${cellPadX}`,
-    whiteSpace: nowrap,
+    padding: "0 20px",
+    whiteSpace: "nowrap",
     height: `${TABLE_THEAD_H}px`,
     boxSizing: "border-box",
   };
   const tdBaseStyle: CSSProperties = {
-    padding: `0 ${cellPadX}`,
-    whiteSpace: nowrap,
-    height: `${rowH}px`,
+    padding: "0 20px",
+    whiteSpace: "nowrap",
+    height: `${TABLE_ROW_H}px`,
     boxSizing: "border-box",
   };
 
@@ -98,7 +92,7 @@ export function BaseTable<T>({
             style={{
               borderBottom: `1px solid ${theme.colors.surfaceMuted}`,
               cursor: onRowClick ? "pointer" : "default",
-              height: `${rowH}px`,
+              height: `${TABLE_ROW_H}px`,
             }}
             onMouseEnter={(e) => {
               if (onRowClick) {
