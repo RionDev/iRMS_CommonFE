@@ -42,8 +42,6 @@ export function Pagination({
 }: PaginationProps) {
   const { theme } = useThemeStore();
 
-  if (total === 0) return null;
-
   const showSizeSelector = size !== undefined && sizeOptions && onSizeChange;
 
   const containerStyle: React.CSSProperties = {
@@ -51,7 +49,9 @@ export function Pagination({
     alignItems: "center",
     justifyContent: "center",
     gap: "12px",
-    padding: "12px 0",
+    height: "48px",
+    boxSizing: "border-box",
+    flexShrink: 0,
     fontFamily: theme.fontFamily,
     fontSize: theme.fontSize.base,
     color: theme.colors.text,
@@ -92,6 +92,9 @@ export function Pagination({
 
   const prevDisabled = !hasPrev || !!loading;
   const nextDisabled = !hasNext || !!loading;
+
+  // total === 0 일 때도 컨테이너 높이는 유지한다 (useFixedPageSize 의 overhead 계산이 흔들리지 않도록).
+  if (total === 0) return <div style={containerStyle} />;
 
   return (
     <div style={containerStyle}>

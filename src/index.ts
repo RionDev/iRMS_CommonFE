@@ -26,7 +26,8 @@ export type { Theme, ThemeColors } from "./styles/theme";
 // Hooks
 export { useApi } from "./hooks/useApi";
 export { useAuth, useAppAccess } from "./hooks/useAuth";
-export { useDynamicPageSize } from "./hooks/useDynamicPageSize";
+export { useFixedPageSize, LAYOUT } from "./hooks/useFixedPageSize";
+export type { UseFixedPageSizeOptions } from "./hooks/useFixedPageSize";
 export { usePaginated } from "./hooks/usePaginated";
 export type { UsePaginatedOptions, UsePaginatedResult } from "./hooks/usePaginated";
 export { usePagedNav } from "./hooks/usePagedNav";

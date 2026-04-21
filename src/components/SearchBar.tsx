@@ -20,11 +20,14 @@ export function SearchBar({ onSearch, onReset, children }: SearchBarProps) {
     <div
       style={{
         backgroundColor: theme.colors.surface,
+        height: "72px",
         padding: "16px 24px",
         borderRadius: theme.radius.md,
         border: `1px solid ${theme.colors.border}`,
         boxShadow: theme.shadow.card,
         marginBottom: "16px",
+        boxSizing: "border-box",
+        flexShrink: 0,
       }}
     >
       <form
