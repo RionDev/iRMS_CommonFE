@@ -40,6 +40,7 @@ function UserListPage() {
 | `title`           | `string`        | —          | 헤더에 `{appName} \| {활성 그룹} \| {title}` 형태로 표시되는 현재 페이지 이름 |
 | `appName`         | `string`        | —          | 헤더 좌측 앱 이름 (예: `"ADMIN"`, `"PORTAL"`)                                 |
 | `sidebarItems`    | `SidebarItem[]` | `[]`       | 사이드바 메뉴 항목. 빈 배열이면 브랜드 + 로그아웃만 표시                      |
+| `hideSidebar`     | `boolean`       | `false`    | true면 사이드바 미표시 (예: 포털). 로그아웃은 프로필 메뉴에서 가능            |
 | `version`         | `string`        | —          | 푸터 "Version X.X.X" 표시 (`__APP_VERSION__` 주입값)                          |
 | `contentMaxWidth` | `string`        | `"960px"`  | 메인 영역 최대 너비. FHD 절반 브라우저에서 꽉 차는 크기                       |
 | `appMinWidth`     | `string`        | `"1180px"` | 앱 최소 너비. 이보다 작으면 페이지 가로 스크롤 발생                           |

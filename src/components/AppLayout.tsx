@@ -73,6 +73,11 @@ interface AppLayoutProps {
   appName: string;
   /** 사이드바 메뉴 항목. 빈 배열이면 메뉴 없이 브랜드 + 로그아웃만 표시. */
   sidebarItems?: SidebarItem[];
+  /**
+   * true면 사이드바를 렌더링하지 않는다 (예: 포털처럼 메뉴가 필요 없는
+   * 허브 페이지). 로그아웃은 프로필 메뉴에서 가능하다.
+   */
+  hideSidebar?: boolean;
   /** 하단 푸터 버전 표시 */
   version?: string;
   /**
@@ -320,7 +325,15 @@ export function ChangePasswordModal({
   );
 }
 
-function PwChangeButton({ onClick }: { onClick: () => void }) {
+function ProfileMenuButton({
+  icon,
+  label,
+  onClick,
+}: {
+  icon: ReactNode;
+  label: string;
+  onClick: () => void;
+}) {
   const { theme } = useThemeStore();
   const [hover, setHover] = useState(false);
 
@@ -347,23 +360,37 @@ function PwChangeButton({ onClick }: { onClick: () => void }) {
         transition: "background-color 0.2s ease, color 0.2s ease",
       }}
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-        <circle cx="12" cy="12" r="3" />
-      </svg>
-      비밀번호 변경
+      {icon}
+      {label}
     </button>
   );
 }
+
+const PROFILE_MENU_ICON_PROPS = {
+  width: 16,
+  height: 16,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+};
+
+const pwChangeIcon = (
+  <svg {...PROFILE_MENU_ICON_PROPS}>
+    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+const logoutIcon = (
+  <svg {...PROFILE_MENU_ICON_PROPS}>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+);
 
 function HeaderIconButton({
   onClick,
@@ -609,6 +636,7 @@ function ProfileMenu({
   user: AuthPayload;
 }) {
   const { theme } = useThemeStore();
+  const { logout } = useAuthStore();
   const [open, setOpen] = useState(false);
   const [pwModalOpen, setPwModalOpen] = useState(false);
   const [hover, setHover] = useState(false);
@@ -705,11 +733,18 @@ function ProfileMenu({
             </div>
           </div>
           <div style={{ padding: "8px" }}>
-            <PwChangeButton
+            <ProfileMenuButton
+              icon={pwChangeIcon}
+              label="비밀번호 변경"
               onClick={() => {
                 setOpen(false);
                 setPwModalOpen(true);
               }}
+            />
+            <ProfileMenuButton
+              icon={logoutIcon}
+              label="로그아웃"
+              onClick={logout}
             />
           </div>
         </div>
@@ -1081,6 +1116,7 @@ export function AppLayout({
   title,
   appName,
   sidebarItems = [],
+  hideSidebar = false,
   version,
   contentMaxWidth = "1400px",
   appMinWidth = "1180px",
@@ -1115,12 +1151,14 @@ export function AppLayout({
         fontFamily: theme.fontFamily,
       }}
     >
-      <Sidebar
-        items={sidebarItems}
-        collapsed={collapsed}
-        onToggle={toggleCollapsed}
-        onLogout={logout}
-      />
+      {!hideSidebar && (
+        <Sidebar
+          items={sidebarItems}
+          collapsed={collapsed}
+          onToggle={toggleCollapsed}
+          onLogout={logout}
+        />
+      )}
 
       <div
         style={{
