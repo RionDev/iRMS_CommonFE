@@ -114,6 +114,15 @@ export function ApiKeyModal({
     }
   };
 
+  // 전문을 보여주는 동안은 배경 클릭으로 닫히지 않는다 — 다시 볼 수 없는 키가 실수로 사라지지 않게.
+  // "확인했습니다" 로 패널을 지운 뒤에만 닫힌다. 닫을 때 전문은 state 에서도 지운다.
+  const handleClose = () => {
+    if (created) return;
+    setCreated(null);
+    setCopied(false);
+    onClose();
+  };
+
   const atMax = limits !== null && keys.length >= limits.max_active;
   const muted: CSSProperties = { color: theme.colors.textMuted, fontSize: theme.fontSize.sm };
   const cell: CSSProperties = {
@@ -125,7 +134,7 @@ export function ApiKeyModal({
   const mono: CSSProperties = { fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="API 키 관리" maxWidth={760}>
+    <Modal isOpen={isOpen} onClose={handleClose} title="API 키 관리" maxWidth={760}>
       {limits && (
         <p style={{ ...muted, margin: "0 0 12px", lineHeight: 1.5 }}>
           키 1개당 분당 {limits.per_minute.toLocaleString("ko-KR")}회 · 일{" "}
