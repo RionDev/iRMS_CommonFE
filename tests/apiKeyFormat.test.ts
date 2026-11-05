@@ -44,3 +44,21 @@ describe("curlExample", () => {
     expect(curlExample("http://localhost", "irms_abc")).toContain("X-API-Key: irms_abc");
   });
 });
+
+import { scopeLabels } from "../src/utils/apiKeyFormat";
+
+describe("scopeLabels", () => {
+  const options = [
+    { path: "/sample", name: "샘플" },
+    { path: "/stats", name: "통계" },
+  ];
+  it("path 를 앱 이름으로 바꿔 이어 붙인다", () => {
+    expect(scopeLabels(["/sample", "/stats"], options)).toBe("샘플, 통계");
+  });
+  it("선택지에 없는 path 는 path 그대로 보여준다 (허용이 꺼진 앱)", () => {
+    expect(scopeLabels(["/sample", "/gone"], options)).toBe("샘플, /gone");
+  });
+  it("빈 목록은 대시", () => {
+    expect(scopeLabels([], options)).toBe("-");
+  });
+});

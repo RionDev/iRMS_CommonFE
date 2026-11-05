@@ -27,3 +27,13 @@ export function apiBaseUrl(): string {
 export function curlExample(baseUrl: string, key = "<키>"): string {
   return `curl -H "X-API-Key: ${key}" ${baseUrl}/api/sample/samples`;
 }
+
+/** 키 scopes(path 목록)를 앱 이름으로 바꿔 ", " 로 잇는다. 선택지에 없는 path(허용이 꺼진 앱)는 path 그대로. */
+export function scopeLabels(
+  scopes: string[],
+  options: { path: string; name: string }[],
+): string {
+  if (scopes.length === 0) return "-";
+  const byPath = new Map(options.map((o) => [o.path, o.name]));
+  return scopes.map((p) => byPath.get(p) ?? p).join(", ");
+}

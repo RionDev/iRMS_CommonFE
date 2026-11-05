@@ -72,6 +72,7 @@ export type {
   ApiKeyListResponse,
   CreateApiKeyRequest,
   CreateApiKeyResponse,
+  ScopeOption,
 } from "./types/apiKey";
 export {
   Role,
@@ -105,4 +106,5 @@ export {
   curlExample,
   formatDate,
   formatUsage,
+  scopeLabels,
 } from "./utils/apiKeyFormat";

@@ -79,8 +79,9 @@
 | `LoginResponse`  | `types/auth.ts`            | `access_token`, `refresh_token` (현재 `TokenPair` 와 동일)   |
 | `ApiKeyItem`     | `types/apiKey.ts`          | 키 목록 항목 (`key_prefix`, `usage_today` 등, 전문 없음)      |
 | `ApiKeyLimits`   | `types/apiKey.ts`          | `per_minute`, `per_day`, `max_active` — BE 환경변수 값        |
-| `ApiKeyListResponse` | `types/apiKey.ts`      | `limits`, `api_keys[]`                                       |
-| `CreateApiKeyRequest` | `types/apiKey.ts`     | `name`, `expires_in_days?`                                   |
+| `ApiKeyListResponse` | `types/apiKey.ts`      | `limits`(역할별), `available_scopes[]`, `api_keys[]`         |
+| `ScopeOption`    | `types/apiKey.ts`          | `{ path, name }` — 키로 고를 수 있는 앱                       |
+| `CreateApiKeyRequest` | `types/apiKey.ts`     | `name`, `expires_in_days?`, `scopes[]`(1개 이상)             |
 | `CreateApiKeyResponse` | `types/apiKey.ts`    | 생성 응답. `key` 전문은 여기서만                             |
 | `AppInfo`        | `stores/appsStore.ts`      | `{ idx, path, name }` — 앱 정보 타입                         |
 | `SignupRequest`  | `types/signup.ts`          | 회원가입 요청 타입                                           |
@@ -125,6 +126,7 @@
 | `formatDate`      | `utils/apiKeyFormat.ts` | ISO → `YYYY-MM-DD`, null 이면 대체 문구                  |
 | `curlExample`     | `utils/apiKeyFormat.ts` | 키 사용 예시 curl 한 줄                                  |
 | `apiBaseUrl`      | `utils/apiKeyFormat.ts` | `VITE_API_BASE_URL` 또는 현재 origin                     |
+| `scopeLabels`     | `utils/apiKeyFormat.ts` | scopes path → 앱 이름 목록 문자열                         |
 
 ## 규칙
 
