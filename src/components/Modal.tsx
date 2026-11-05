@@ -6,9 +6,17 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: ReactNode;
+  /** 본문 최대 너비. 기본 480px */
+  maxWidth?: number | string;
 }
 
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  maxWidth = 480,
+}: ModalProps) {
   const { theme } = useThemeStore();
   if (!isOpen) return null;
 
@@ -31,7 +39,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
           borderRadius: theme.radius.md,
           padding: "24px",
           minWidth: "320px",
-          maxWidth: "480px",
+          maxWidth: typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth,
           fontFamily: theme.fontFamily,
         }}
         onClick={(e) => e.stopPropagation()}
