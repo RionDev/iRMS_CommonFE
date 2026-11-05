@@ -4,7 +4,7 @@ import {
   curlExample,
   formatDate,
   formatUsage,
-} from "./apiKeyFormat";
+} from "../src/utils/apiKeyFormat";
 
 describe("formatUsage", () => {
   it("천 단위 구분과 한도를 보여준다", () => {
