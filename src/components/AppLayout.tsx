@@ -17,6 +17,7 @@ import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 import { Input } from "./Input";
 import { Modal } from "./Modal";
+import { ApiKeyModal } from "./ApiKeyModal";
 
 export interface SidebarLeaf {
   label: string;
@@ -392,6 +393,12 @@ const logoutIcon = (
   </svg>
 );
 
+const apiKeyIcon = (
+  <svg {...PROFILE_MENU_ICON_PROPS}>
+    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+  </svg>
+);
+
 function HeaderIconButton({
   onClick,
   tooltip,
@@ -639,6 +646,7 @@ function ProfileMenu({
   const { logout } = useAuthStore();
   const [open, setOpen] = useState(false);
   const [pwModalOpen, setPwModalOpen] = useState(false);
+  const [keyModalOpen, setKeyModalOpen] = useState(false);
   const [hover, setHover] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -742,6 +750,14 @@ function ProfileMenu({
               }}
             />
             <ProfileMenuButton
+              icon={apiKeyIcon}
+              label="API 키 관리"
+              onClick={() => {
+                setOpen(false);
+                setKeyModalOpen(true);
+              }}
+            />
+            <ProfileMenuButton
               icon={logoutIcon}
               label="로그아웃"
               onClick={logout}
@@ -752,6 +768,10 @@ function ProfileMenu({
       <ChangePasswordModal
         isOpen={pwModalOpen}
         onClose={() => setPwModalOpen(false)}
+      />
+      <ApiKeyModal
+        isOpen={keyModalOpen}
+        onClose={() => setKeyModalOpen(false)}
       />
     </div>
   );

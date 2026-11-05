@@ -6,6 +6,7 @@ export { SignupPage } from "./pages/SignupPage";
 export { AppCenterMessage } from "./components/AppCenterMessage";
 export type { AppCenterMessageProps } from "./components/AppCenterMessage";
 export { AppLayout, ChangePasswordModal } from "./components/AppLayout";
+export { ApiKeyModal } from "./components/ApiKeyModal";
 export type { SidebarItem } from "./components/AppLayout";
 export {
   BaseTable,
@@ -46,6 +47,7 @@ export type { UsePagedNavOptions, UsePagedNavResult } from "./hooks/usePagedNav"
 // Services
 export { default as apiClient } from "./services/apiClient";
 export { login, logout, refresh } from "./services/authService";
+export { listApiKeys, createApiKey, revokeApiKey } from "./services/apiKeyService";
 export { signup } from "./services/signupService";
 
 // Stores
@@ -64,6 +66,13 @@ export type {
   User,
   VUser,
 } from "./types/auth";
+export type {
+  ApiKeyItem,
+  ApiKeyLimits,
+  ApiKeyListResponse,
+  CreateApiKeyRequest,
+  CreateApiKeyResponse,
+} from "./types/apiKey";
 export {
   Role,
   ROLE_LABEL,
@@ -90,3 +99,10 @@ export {
   saveTokens,
 } from "./utils/token";
 export { hasAppAccess } from "./utils/appPath";
+export {
+  EXPIRY_OPTIONS,
+  apiBaseUrl,
+  curlExample,
+  formatDate,
+  formatUsage,
+} from "./utils/apiKeyFormat";

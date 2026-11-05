@@ -209,8 +209,18 @@ const [isOpen, setIsOpen] = useState(false);
 | `onClose`  | `() => void` | 배경 클릭 시 호출           |
 | `title`    | `string`     | 모달 상단 제목              |
 | `children` | `ReactNode`  | 모달 본문                   |
+| `maxWidth` | `number \| string` | 본문 최대 너비. 기본 `480` (px) |
 
 배경 클릭 시 `onClose` 호출. 모달 내부 클릭은 이벤트 전파가 막힌다.
+
+### 5.2. ApiKeyModal
+
+프로필 메뉴 "API 키 관리" 가 여는 모달. `GET/POST/DELETE /api/auth/api-keys` 를 호출한다.
+
+- 상단에 BE 가 내려준 한도(`limits`)를 표시한다. 숫자를 하드코딩하지 않는다.
+- 키 전문은 생성 직후 한 번만 보여준다. "확인했습니다" 를 누르거나 모달을 닫으면 사라진다.
+- 무효화는 버튼 2단계(무효화 → 정말 무효화). 브라우저 `confirm()` 을 쓰지 않는다.
+- 활성 키가 `limits.max_active` 개면 생성 폼을 비활성화한다.
 
 ---
 

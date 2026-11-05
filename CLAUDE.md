@@ -21,7 +21,8 @@
 | `Button`              | `components/Button.tsx`            | `variant?: 'primary'\|'secondary'` + 기본 button 속성                                           |
 | `ChangePasswordModal` | `components/AppLayout.tsx`         | 본인 비밀번호 변경 모달. AppLayout 내부에서 쓰이나 외부에서도 재사용 가능.                      |
 | `Input`               | `components/Input.tsx`             | `label?: string`, `error?: string` + 기본 input 속성                                            |
-| `Modal`               | `components/Modal.tsx`             | `isOpen`, `onClose`, `title`, `children`                                                        |
+| `Modal`               | `components/Modal.tsx`             | `isOpen`, `onClose`, `title`, `children`, `maxWidth?`(기본 480)                                 |
+| `ApiKeyModal`         | `components/ApiKeyModal.tsx`       | 내 API 키 목록·생성(전문 1회 표시)·무효화 모달. 프로필 메뉴 "API 키 관리" 가 연다.            |
 | `Pagination`          | `components/Pagination.tsx`        | 이전/다음 + 페이지 번호 네비게이션. 고정 높이 48px. `total=0` 일 때도 placeholder 로 공간 유지. |
 | `SearchBar`           | `components/SearchBar.tsx`         | 검색 블록(카드+form+검색/초기화 버튼). 고정 높이 72px. `onSearch`, `onReset?`                   |
 | `SearchSelect`        | `components/SearchSelect.tsx`      | 검색 블록용 compact `<select>` 스타일 래퍼                                                      |
@@ -53,6 +54,9 @@
 | `login`               | `services/authService.ts`   | `POST /api/auth/login`                          |
 | `refresh`             | `services/authService.ts`   | `POST /api/auth/refresh`                        |
 | `logout`              | `services/authService.ts`   | `POST /api/auth/logout`                         |
+| `listApiKeys`         | `services/apiKeyService.ts` | `GET /api/auth/api-keys`                        |
+| `createApiKey`        | `services/apiKeyService.ts` | `POST /api/auth/api-keys`                       |
+| `revokeApiKey`        | `services/apiKeyService.ts` | `DELETE /api/auth/api-keys/{idx}`               |
 | `signup`              | `services/signupService.ts` | `POST /api/user/register`                       |
 
 ### Stores
@@ -73,6 +77,11 @@
 | `AuthPayload`    | `types/auth.ts`            | JWT 디코딩 결과 (`sub`, `id`, `name`, `role`, `team`, `exp`) |
 | `LoginRequest`   | `types/auth.ts`            | `id`, `password`                                             |
 | `LoginResponse`  | `types/auth.ts`            | `access_token`, `refresh_token` (현재 `TokenPair` 와 동일)   |
+| `ApiKeyItem`     | `types/apiKey.ts`          | 키 목록 항목 (`key_prefix`, `usage_today` 등, 전문 없음)      |
+| `ApiKeyLimits`   | `types/apiKey.ts`          | `per_minute`, `per_day`, `max_active` — BE 환경변수 값        |
+| `ApiKeyListResponse` | `types/apiKey.ts`      | `limits`, `api_keys[]`                                       |
+| `CreateApiKeyRequest` | `types/apiKey.ts`     | `name`, `expires_in_days?`                                   |
+| `CreateApiKeyResponse` | `types/apiKey.ts`    | 생성 응답. `key` 전문은 여기서만                             |
 | `AppInfo`        | `stores/appsStore.ts`      | `{ idx, path, name }` — 앱 정보 타입                         |
 | `SignupRequest`  | `types/signup.ts`          | 회원가입 요청 타입                                           |
 | `SignupResponse` | `types/signup.ts`          | 회원가입 응답 타입                                           |
@@ -111,6 +120,11 @@
 | `clearTokens`     | `utils/token.ts`   | access/refresh token localStorage 삭제                        |
 | `decodeToken`     | `utils/token.ts`   | JWT payload 디코딩 → `AuthPayload`                            |
 | `hasAppAccess`    | `utils/appPath.ts` | 접근 가능 앱 목록에 특정 경로가 포함되는지 판정 (경로 정규화) |
+| `EXPIRY_OPTIONS`  | `utils/apiKeyFormat.ts` | 키 만료 선택지 (30/90/180일/무기한)                      |
+| `formatUsage`     | `utils/apiKeyFormat.ts` | `"1,234 / 5,000"` (한도로 캡)                            |
+| `formatDate`      | `utils/apiKeyFormat.ts` | ISO → `YYYY-MM-DD`, null 이면 대체 문구                  |
+| `curlExample`     | `utils/apiKeyFormat.ts` | 키 사용 예시 curl 한 줄                                  |
+| `apiBaseUrl`      | `utils/apiKeyFormat.ts` | `VITE_API_BASE_URL` 또는 현재 origin                     |
 
 ## 규칙
 

@@ -157,3 +157,9 @@ interface AuthPayload {
   exp: number; // 만료 시각 (Unix timestamp, 초 단위)
 }
 ```
+
+## API 키
+
+- 사용자가 프로필 메뉴 "API 키 관리"(`ApiKeyModal`)에서 발급한다. BE 샘플 조회·다운로드 API 전용이다.
+- FE 는 키를 저장하거나 요청에 붙이지 않는다. 키는 외부 스크립트가 `X-API-Key` 헤더로 쓴다.
+- 한도·최대 개수는 `GET /api/auth/api-keys` 의 `limits` 로 받아 표시한다.
