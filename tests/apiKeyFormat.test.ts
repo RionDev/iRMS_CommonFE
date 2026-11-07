@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   EXPIRY_OPTIONS,
+  expiryOptionsFor,
   curlExample,
   formatDate,
   formatUsage,
@@ -60,5 +61,16 @@ describe("scopeLabels", () => {
   });
   it("빈 목록은 대시", () => {
     expect(scopeLabels([], options)).toBe("-");
+  });
+});
+
+describe("expiryOptionsFor", () => {
+  it("무기한 허용이면 전체 옵션", () => {
+    expect(expiryOptionsFor(true)).toEqual(EXPIRY_OPTIONS);
+  });
+  it("무기한 불허(GUEST)면 무기한 옵션을 뺀다", () => {
+    const opts = expiryOptionsFor(false);
+    expect(opts.every((o) => o.days !== null)).toBe(true);
+    expect(opts.length).toBe(EXPIRY_OPTIONS.length - 1);
   });
 });

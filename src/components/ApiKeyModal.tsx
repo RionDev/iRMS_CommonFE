@@ -3,7 +3,7 @@ import { createApiKey, listApiKeys, revokeApiKey } from "../services/apiKeyServi
 import { useThemeStore } from "../stores/themeStore";
 import type { ApiKeyItem, ApiKeyLimits, CreateApiKeyResponse, ScopeOption } from "../types/apiKey";
 import {
-  EXPIRY_OPTIONS,
+  expiryOptionsFor,
   apiBaseUrl,
   curlExample,
   formatDate,
@@ -80,7 +80,7 @@ export function ApiKeyModal({
     try {
       const res = await createApiKey({
         name: name.trim(),
-        expires_in_days: EXPIRY_OPTIONS[expiryIdx].days,
+        expires_in_days: expiryOptions[expiryIdx].days,
         scopes: selected,
       });
       setCreated(res);
@@ -137,6 +137,7 @@ export function ApiKeyModal({
   };
 
   const atMax = limits !== null && keys.length >= limits.max_active;
+  const expiryOptions = expiryOptionsFor(limits?.unlimited_allowed ?? false);
   const muted: CSSProperties = { color: theme.colors.textMuted, fontSize: theme.fontSize.sm };
   const cell: CSSProperties = {
     padding: "6px 8px",
@@ -309,7 +310,7 @@ export function ApiKeyModal({
               fontFamily: theme.fontFamily,
             }}
           >
-            {EXPIRY_OPTIONS.map((o, i) => (
+            {expiryOptions.map((o, i) => (
               <option key={o.label} value={i}>{o.label}</option>
             ))}
           </select>

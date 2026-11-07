@@ -102,6 +102,7 @@ export {
 export { hasAppAccess } from "./utils/appPath";
 export {
   EXPIRY_OPTIONS,
+  expiryOptionsFor,
   apiBaseUrl,
   curlExample,
   formatDate,

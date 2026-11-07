@@ -6,6 +6,11 @@ export const EXPIRY_OPTIONS: { label: string; days: number | null }[] = [
   { label: "무기한", days: null },
 ];
 
+/** 역할에 따라 고를 수 있는 만료 옵션. 무기한이 허용되지 않으면(GUEST) 무기한을 뺀다. */
+export function expiryOptionsFor(unlimitedAllowed: boolean): typeof EXPIRY_OPTIONS {
+  return unlimitedAllowed ? EXPIRY_OPTIONS : EXPIRY_OPTIONS.filter((o) => o.days !== null);
+}
+
 const fmt = new Intl.NumberFormat("ko-KR");
 
 /** "1,234 / 5,000". 한도를 넘은 값은 한도로 캡한다 (거절된 호출도 카운트에 남으므로). */

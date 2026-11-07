@@ -17,6 +17,8 @@ export interface ApiKeyLimits {
   per_minute: number;
   per_day: number;
   max_active: number;
+  /** 무기한 키 발급 가능 여부 (GUEST 는 false) */
+  unlimited_allowed: boolean;
 }
 
 /** 키 생성 시 고를 수 있는 앱 (관리자가 API 키 허용을 켠 앱 중 접근 가능한 것) */

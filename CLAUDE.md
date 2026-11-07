@@ -122,6 +122,7 @@
 | `decodeToken`     | `utils/token.ts`   | JWT payload 디코딩 → `AuthPayload`                            |
 | `hasAppAccess`    | `utils/appPath.ts` | 접근 가능 앱 목록에 특정 경로가 포함되는지 판정 (경로 정규화) |
 | `EXPIRY_OPTIONS`  | `utils/apiKeyFormat.ts` | 키 만료 선택지 (30/90/180일/무기한)                      |
+| `expiryOptionsFor` | `utils/apiKeyFormat.ts` | 역할별 만료 선택지 (`limits.unlimited_allowed` false=GUEST 면 무기한 제외) |
 | `formatUsage`     | `utils/apiKeyFormat.ts` | `"1,234 / 5,000"` (한도로 캡)                            |
 | `formatDate`      | `utils/apiKeyFormat.ts` | ISO → `YYYY-MM-DD`, null 이면 대체 문구                  |
 | `curlExample`     | `utils/apiKeyFormat.ts` | 키 사용 예시 curl 한 줄                                  |
