@@ -37,6 +37,7 @@ export type { Theme, ThemeColors } from "./styles/theme";
 // Hooks
 export { useApi } from "./hooks/useApi";
 export { useAuth, useAppAccess } from "./hooks/useAuth";
+export { useFeatures } from "./hooks/useFeatures";
 export { useFixedPageSize, LAYOUT } from "./hooks/useFixedPageSize";
 export type { UseFixedPageSizeOptions } from "./hooks/useFixedPageSize";
 export { usePaginated } from "./hooks/usePaginated";
@@ -53,6 +54,8 @@ export { signup } from "./services/signupService";
 // Stores
 export { useAppsStore } from "./stores/appsStore";
 export type { AppInfo } from "./stores/appsStore";
+export { useFeaturesStore } from "./stores/featuresStore";
+export type { FeatureEntry } from "./stores/featuresStore";
 export { useAuthStore } from "./stores/authStore";
 export { useThemeStore } from "./stores/themeStore";
 

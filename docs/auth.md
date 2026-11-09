@@ -122,6 +122,25 @@ function AdminPage() {
 
 페이지 단위로 권한을 세분화하려면 `apps` 테이블에 해당 경로를 레코드로 등록하고, 페이지에서 `useAppAccess("/admin/apps")` 처럼 경로별로 호출한다.
 
+## useFeatures — 앱 안의 기능 단위 노출 제어
+
+앱 권한 아래에 기능(관련 API 묶음) 단위 권한이 있다. 기능 키는 BE 서비스 코드가 정하고(예: sample `search`/`export_csv`/`download`), 관리자가 admin 앱 → 앱 상세 → 기능 권한에서 기능별 최소 등급·허용 팀을 바꾼다.
+
+`useFeatures(appPath)` 는 `GET /api/app/me/features?path=` 결과(내가 쓸 수 있는 기능 키)를 path 별로 한 번 불러와 캐시한다 (`featuresStore`, 로그아웃 시 초기화). 쓸 수 없는 기능의 버튼·메뉴는 숨긴다.
+
+```tsx
+import { useFeatures } from "@common/hooks/useFeatures";
+
+function Toolbar() {
+  const { can, loaded } = useFeatures("/sample");
+  return <>{can("download") && <Button>다운로드</Button>}</>;
+}
+```
+
+- 불러오기 전(`loaded=false`)·실패 시 `can()` 은 `false` — 기본 차단.
+- FE 는 숨기기만 한다. 실제 차단은 BE `feature_dependency` 가 JWT·API 키 모두에 같은 규칙으로 한다 (403).
+- 판정은 BE 가 users 의 현재 role/team 으로 한다. 권한이 바뀌면 새로고침해야 화면에 반영된다.
+
 ### Role 상수
 
 BE 와 합의된 규약: 전 구간 **대문자 영어 string** (`"ADMIN" | "LEAD" | "MEMBER" | "GUEST"`) 으로 주고받는다. FE 는 숫자↔문자열 변환을 하지 않는다.

@@ -11,6 +11,7 @@ import {
   saveTokens,
 } from "../utils/token";
 import { useAppsStore } from "./appsStore";
+import { useFeaturesStore } from "./featuresStore";
 
 const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
 
@@ -52,6 +53,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
     clearTokens();
     useAppsStore.getState().clear();
+    useFeaturesStore.getState().clear();
     set({ user: null, isAuthenticated: false });
   },
 

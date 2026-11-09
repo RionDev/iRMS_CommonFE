@@ -41,6 +41,7 @@
 | ------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------- |
 | `useAuth`           | `hooks/useAuth.ts`           | `{ user, isAuthenticated, logout }` — 미인증 시 `/login`으로 redirect                              |
 | `useAppAccess`      | `hooks/useAuth.ts`           | `user` — `appsStore`에서 앱 경로 접근 권한 확인, 미허용 시 포털로 redirect                         |
+| `useFeatures`       | `hooks/useFeatures.ts`       | `{ can(key), loaded, features }` — 앱 안의 기능 권한. 쓸 수 없는 기능의 버튼·메뉴를 숨긴다 (`docs/auth.md`) |
 | `useApi`            | `hooks/useApi.ts`            | `{ data, loading, error, execute }` — fetcher 함수 래핑                                            |
 | `useFixedPageSize`  | `hooks/useFixedPageSize.ts`  | 고정 레이아웃 기반 pageSize 계산(마운트 시 1회). `LAYOUT` 상수와 함께 사용.                        |
 | `usePaginated`      | `hooks/usePaginated.ts`      | 누적형 페이지네이션 (무한 스크롤/더보기). `{ items, loading, error, hasMore, loadMore, reset }`    |
@@ -64,6 +65,7 @@
 | export          | 파일                   | 상태/액션                                                              |
 | --------------- | ---------------------- | ---------------------------------------------------------------------- |
 | `useAppsStore`  | `stores/appsStore.ts`  | `apps`, `loaded`, `fetchApps()`, `clear()` — 접근 가능 앱 목록         |
+| `useFeaturesStore` | `stores/featuresStore.ts` | `byPath[path]`, `fetchFeatures(path)`, `clear()` — 앱별 쓸 수 있는 기능 키 캐시 (`GET /api/app/me/features`) |
 | `useAuthStore`  | `stores/authStore.ts`  | `user`, `isAuthenticated`, `login(tokens)`, `logout()`, `initialize()` |
 | `useThemeStore` | `stores/themeStore.ts` | `isDarkMode`, `theme`, `toggleDarkMode()`, `setDarkMode()` — 다크모드  |
 
@@ -136,6 +138,7 @@
 - 앱에서 로그인 페이지를 별도 구현하지 않는다 — `LoginPage` 사용
 - 앱에서 `useAuth`, `useAppAccess`를 재구현하지 않는다
 - 앱 접근 권한은 `useAppAccess(path)`로 검사한다 — DB `apps` 테이블 기반
+- 앱 안의 기능 노출은 `useFeatures(path).can(key)`로 정한다 — DB `app_features` 기반. 숨기기만 하고 차단은 BE가 한다
 - `AppLayout`은 `useAuthStore`, `useAppsStore`, `useThemeStore`를 직접 참조하므로 앱에서 store를 props로 전달하지 않아도 된다
 - 앱 내부 페이지/컴포넌트는 `theme`를 정적 import 하지 않고 `useThemeStore().theme`로 구독해 다크모드 전환에 반응한다
 - 페이지 이름은 `AppLayout`의 `title` prop으로만 표시한다 — body 최상단에 같은 제목(`<h2>`)을 다시 출력하지 않는다 (헤더에 `{appName} | {title}`로 이미 노출됨)
