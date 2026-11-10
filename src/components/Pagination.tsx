@@ -8,6 +8,8 @@ export interface PaginationProps {
   totalPages: number;
   /** 전체 항목 수 */
   total: number;
+  /** total 이 집계 상한으로 잘린 경우 — "총 100,000+건", "1 / 2,000+" 로 표시 */
+  totalCapped?: boolean;
   /** 이전 페이지 이동 가능 여부 */
   hasPrev: boolean;
   /** 다음 페이지 이동 가능 여부 */
@@ -31,6 +33,7 @@ export function Pagination({
   page,
   totalPages,
   total,
+  totalCapped = false,
   hasPrev,
   hasNext,
   onPrev,
@@ -107,7 +110,9 @@ export function Pagination({
         {"< 이전"}
       </button>
       <span style={infoStyle}>
-        {page} / {totalPages} (총 {total.toLocaleString()}건)
+        {page} / {totalPages.toLocaleString()}
+        {totalCapped ? "+" : ""} (총 {total.toLocaleString()}
+        {totalCapped ? "+" : ""}건)
       </span>
       <button
         type="button"

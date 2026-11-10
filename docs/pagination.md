@@ -32,6 +32,7 @@ GET /api/{service}/{resource}?cursor=<opaque>&snapshot_idx=<int>&size=50&<필터
   "next_cursor": "eyJpZHgiOjEyM30",
   "has_more": true,
   "total": 1234,
+  "total_capped": false,
   "snapshot_idx": 9876543
 }
 ```
@@ -41,12 +42,13 @@ GET /api/{service}/{resource}?cursor=<opaque>&snapshot_idx=<int>&size=50&<필터
 | `items`        | array             | 이번 페이지 항목들                                              |
 | `next_cursor`  | string \| null    | 다음 페이지 요청 시 전달할 cursor. 끝이면 `null`                |
 | `has_more`     | boolean           | 다음 페이지 존재 여부                                           |
-| `total`        | integer           | 스냅샷 기준 전체 매칭 건수. 항상 숫자 (null 없음)               |
+| `total`        | integer           | 스냅샷 기준 전체 매칭 건수. 항상 숫자 (null 없음). `total_capped` 면 상한값 |
+| `total_capped` | boolean           | 대용량 테이블에서 매칭이 집계 상한(sample 10만)을 넘어 `total` 이 잘렸는지. 생략/`false` 면 정확한 값 |
 | `snapshot_idx` | integer           | 이번 요청의 스냅샷 상한 idx. 이후 요청에 echo                   |
 
 - `next_cursor === null` 또는 `has_more === false`이면 끝이다.
 - 빈 결과는 `{ items: [], next_cursor: null, has_more: false, total: 0, snapshot_idx: N }` 로 반환된다.
-- `total`은 BE가 COUNT 쿼리를 끝까지 실행한 결과라 항상 숫자다. FE는 `total / size`로 전체 페이지 수를 계산할 수 있다.
+- `total`은 항상 숫자다. FE는 `total / size`로 전체 페이지 수를 계산할 수 있다. `total_capped`가 `true`면 "100,000+ 건", "2,000+ 페이지"처럼 `+`를 붙여 표시한다 (`Pagination`의 `totalCapped`, `usePagedNav`의 `totalCapped`). cursor 순회는 상한과 무관하게 끝까지 동작한다.
 
 ## snapshot_idx — 페이지 간 일관성
 
@@ -114,7 +116,8 @@ const {
 | `error`      | 에러                                                                        |
 | `page`       | 현재 페이지 번호 (1-base)                                                   |
 | `totalPages` | 전체 페이지 수 = `ceil(total / size)`                                       |
-| `total`      | 전체 항목 수                                                                |
+| `total`      | 전체 항목 수 (`totalCapped`면 집계 상한값)                                  |
+| `totalCapped`| 응답의 `total_capped` — `Pagination`에 그대로 전달해 `+` 표시               |
 | `hasPrev`    | 이전 페이지 존재 여부 (페이지 ≥ 2일 때 true)                                |
 | `hasNext`    | 다음 페이지 존재 여부 (응답의 `has_more`)                                   |
 | `next`       | 다음 페이지 요청                                                            |

@@ -31,8 +31,10 @@ export interface UsePagedNavResult<T> {
   page: number;
   /** 전체 페이지 수 — ceil(total / size) */
   totalPages: number;
-  /** 전체 항목 수 */
+  /** 전체 항목 수 (totalCapped 면 집계 상한값) */
   total: number;
+  /** total 이 집계 상한으로 잘렸는지 — 표시에 "+" 를 붙인다 */
+  totalCapped: boolean;
   hasPrev: boolean;
   hasNext: boolean;
   next: () => Promise<void>;
@@ -61,6 +63,7 @@ export function usePagedNav<T>({
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [totalCapped, setTotalCapped] = useState(false);
   const [hasNext, setHasNext] = useState(false);
 
   const historyRef = useRef<(string | undefined)[]>([undefined]);
@@ -80,6 +83,7 @@ export function usePagedNav<T>({
         const res = await fetcherRef.current(cursor, snapshotIdxRef.current, size);
         setItems(res.items);
         setTotal(res.total);
+        setTotalCapped(res.total_capped === true);
         setHasNext(res.has_more);
         nextCursorRef.current = res.next_cursor;
         snapshotIdxRef.current = res.snapshot_idx;
@@ -139,6 +143,7 @@ export function usePagedNav<T>({
     page,
     totalPages,
     total,
+    totalCapped,
     hasPrev,
     hasNext,
     next,
