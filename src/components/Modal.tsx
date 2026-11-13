@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import { useThemeStore } from "../stores/themeStore";
 
 interface ModalProps {
@@ -18,6 +18,17 @@ export function Modal({
   maxWidth = 480,
 }: ModalProps) {
   const { theme } = useThemeStore();
+
+  // ESC 로 닫기 (열려 있을 때만)
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -44,15 +55,26 @@ export function Modal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2
-          style={{
-            margin: "0 0 16px 0",
-            fontSize: theme.fontSize.xl,
-            color: theme.colors.text,
-          }}
-        >
-          {title}
-        </h2>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", margin: "0 0 16px 0" }}>
+          <h2 style={{ margin: 0, flex: 1, fontSize: theme.fontSize.xl, color: theme.colors.text }}>{title}</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="닫기"
+            title="닫기 (Esc)"
+            style={{
+              border: "none",
+              background: "none",
+              cursor: "pointer",
+              color: theme.colors.textMuted,
+              fontSize: theme.fontSize.xl,
+              lineHeight: 1,
+              padding: "2px 4px",
+            }}
+          >
+            ✕
+          </button>
+        </div>
         {children}
       </div>
     </div>

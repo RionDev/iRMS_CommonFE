@@ -10,6 +10,8 @@ export interface ApiKeyItem {
   /** KST 오늘 호출 수 */
   usage_today: number;
   created_at: string;
+  /** 원문이 보관돼 있어 다시 복사할 수 있는지 (이 기능 이전에 만든 키는 false) */
+  copyable: boolean;
 }
 
 /** 현재 한도 (요청자 역할 기준, BE 환경변수 값). 하드코딩하지 말고 이 값을 표시한다. */

@@ -1,5 +1,5 @@
-import { type CSSProperties, type FormEvent, useCallback, useEffect, useState } from "react";
-import { createApiKey, listApiKeys, revokeApiKey } from "../services/apiKeyService";
+import { type CSSProperties, type FormEvent, Fragment, useCallback, useEffect, useState } from "react";
+import { createApiKey, listApiKeys, revealApiKey, revokeApiKey } from "../services/apiKeyService";
 import { useThemeStore } from "../stores/themeStore";
 import type { ApiKeyItem, ApiKeyLimits, CreateApiKeyResponse, ScopeOption } from "../types/apiKey";
 import {
@@ -16,7 +16,8 @@ import { Modal } from "./Modal";
 
 /**
  * 내 API 키 관리 모달 — 목록·생성·무효화.
- * 키 전문은 생성 직후 한 번만 보여주고, 모달을 닫거나 "확인했습니다" 를 누르면 다시 볼 수 없다.
+ * 키 원문은 BE 가 암호화해 보관하므로 목록의 "복사" 로 언제든 다시 복사할 수 있다 (이 기능 이전에 만든 키 제외).
+ * 모달은 언제든 ESC·바깥 클릭·✕ 로 닫힌다.
  * 한도·최대 개수는 BE 응답(limits)으로 표시하고 하드코딩하지 않는다.
  */
 export function ApiKeyModal({
@@ -33,7 +34,8 @@ export function ApiKeyModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [created, setCreated] = useState<CreateApiKeyResponse | null>(null);
-  const [copied, setCopied] = useState(false);
+  // 방금 복사한 대상 ("new" = 새로 만든 키 패널, 숫자 = 목록의 키 idx) — 잠깐 "복사됨" 표시
+  const [copied, setCopied] = useState<number | "new" | null>(null);
 
   // 생성 폼
   const [name, setName] = useState("");
@@ -41,7 +43,7 @@ export function ApiKeyModal({
   const [selected, setSelected] = useState<string[]>([]);
   const [creating, setCreating] = useState(false);
 
-  // 무효화 2단계 확인 (브라우저 confirm 을 쓰지 않는다)
+  // 무효화 확인 — 그 줄 아래에 설명과 [무효화] [취소] 를 펼친다 (브라우저 confirm 을 쓰지 않는다)
   const [confirmIdx, setConfirmIdx] = useState<number | null>(null);
 
   const load = useCallback(async () => {
@@ -67,7 +69,7 @@ export function ApiKeyModal({
   useEffect(() => {
     if (isOpen) {
       setCreated(null);
-      setCopied(false);
+      setCopied(null);
       setConfirmIdx(null);
       void load();
     }
@@ -84,7 +86,7 @@ export function ApiKeyModal({
         scopes: selected,
       });
       setCreated(res);
-      setCopied(false);
+      setCopied(null);
       setName("");
       await load();
     } catch (err: unknown) {
@@ -103,10 +105,6 @@ export function ApiKeyModal({
   };
 
   const handleRevoke = async (idx: number) => {
-    if (confirmIdx !== idx) {
-      setConfirmIdx(idx);
-      return;
-    }
     setError(null);
     try {
       await revokeApiKey(idx);
@@ -117,22 +115,35 @@ export function ApiKeyModal({
     }
   };
 
-  const handleCopy = async () => {
+  const writeClipboard = async (text: string, target: number | "new") => {
+    await navigator.clipboard.writeText(text);
+    setCopied(target);
+    window.setTimeout(() => setCopied((c) => (c === target ? null : c)), 1500);
+  };
+
+  const handleCopyNew = async () => {
     if (!created) return;
     try {
-      await navigator.clipboard.writeText(created.key);
-      setCopied(true);
+      await writeClipboard(created.key, "new");
     } catch {
-      setCopied(false);
+      setError("클립보드에 복사하지 못했습니다. 키를 직접 선택해 복사하세요.");
     }
   };
 
-  // 전문을 보여주는 동안은 배경 클릭으로 닫히지 않는다 — 다시 볼 수 없는 키가 실수로 사라지지 않게.
-  // "확인했습니다" 로 패널을 지운 뒤에만 닫힌다. 닫을 때 전문은 state 에서도 지운다.
+  const handleCopyKey = async (idx: number) => {
+    setError(null);
+    try {
+      await writeClipboard(await revealApiKey(idx), idx);
+    } catch {
+      setError("키를 복사하지 못했습니다.");
+    }
+  };
+
+  // 언제든 닫힌다. 원문은 목록에서 다시 복사할 수 있으므로 화면 state 에서만 지운다.
   const handleClose = () => {
-    if (created) return;
     setCreated(null);
-    setCopied(false);
+    setCopied(null);
+    setConfirmIdx(null);
     onClose();
   };
 
@@ -169,8 +180,8 @@ export function ApiKeyModal({
           <div style={{ fontWeight: 700, marginBottom: "6px", color: theme.colors.text }}>
             새 키 "{created.name}" 가 만들어졌습니다
           </div>
-          <div style={{ color: theme.colors.danger, fontSize: theme.fontSize.sm, marginBottom: "8px" }}>
-            이 창을 닫으면 키 전문을 다시 볼 수 없습니다. 지금 복사해 두세요.
+          <div style={{ ...muted, marginBottom: "8px" }}>
+            아래 목록의 "복사" 로 언제든 다시 복사할 수 있습니다.
           </div>
           <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
             <code
@@ -187,8 +198,8 @@ export function ApiKeyModal({
             >
               {created.key}
             </code>
-            <Button type="button" onClick={() => void handleCopy()}>
-              {copied ? "복사됨" : "복사"}
+            <Button type="button" onClick={() => void handleCopyNew()}>
+              {copied === "new" ? "복사됨" : "복사"}
             </Button>
           </div>
           <pre style={{ ...mono, ...muted, margin: "8px 0 0", whiteSpace: "pre-wrap" }}>
@@ -200,7 +211,7 @@ export function ApiKeyModal({
             style={{ marginTop: "8px" }}
             onClick={() => setCreated(null)}
           >
-            확인했습니다
+            안내 닫기
           </Button>
         </div>
       )}
@@ -229,7 +240,8 @@ export function ApiKeyModal({
             )}
             {!loading &&
               keys.map((k) => (
-                <tr key={k.idx}>
+                <Fragment key={k.idx}>
+                <tr>
                   <td style={cell}>{k.name}</td>
                   <td style={{ ...cell, ...mono }}>{k.key_prefix}…</td>
                   <td style={cell}>{scopeLabels(k.scopes, options)}</td>
@@ -237,17 +249,61 @@ export function ApiKeyModal({
                   <td style={cell}>{limits ? formatUsage(k.usage_today, limits.per_day) : k.usage_today}</td>
                   <td style={cell}>{formatDate(k.last_used_at)}</td>
                   <td style={{ ...cell, textAlign: "right" }}>
-                    <Button
-                      type="button"
-                      variant={confirmIdx === k.idx ? "primary" : "secondary"}
-                      style={{ padding: "4px 10px", fontSize: theme.fontSize.sm }}
-                      onClick={() => void handleRevoke(k.idx)}
-                      onBlur={() => confirmIdx === k.idx && setConfirmIdx(null)}
-                    >
-                      {confirmIdx === k.idx ? "정말 무효화" : "무효화"}
-                    </Button>
+                    <div style={{ display: "inline-flex", gap: "6px" }}>
+                      {k.copyable && (
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          style={{ padding: "4px 10px", fontSize: theme.fontSize.sm }}
+                          onClick={() => void handleCopyKey(k.idx)}
+                          title="키 전문을 클립보드에 복사"
+                        >
+                          {copied === k.idx ? "복사됨" : "복사"}
+                        </Button>
+                      )}
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        style={{ padding: "4px 10px", fontSize: theme.fontSize.sm }}
+                        onClick={() => setConfirmIdx(confirmIdx === k.idx ? null : k.idx)}
+                      >
+                        무효화
+                      </Button>
+                    </div>
                   </td>
                 </tr>
+                {confirmIdx === k.idx && (
+                  <tr>
+                    <td colSpan={7} style={{ ...cell, whiteSpace: "normal", background: theme.colors.surfaceMuted }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                        <span style={{ flex: 1, color: theme.colors.text }}>
+                          "{k.name}" 키를 무효화하면 이 키로 호출하는 프로그램이 바로 막히고, 되돌릴 수 없습니다.
+                        </span>
+                        <Button
+                          type="button"
+                          style={{
+                            padding: "4px 10px",
+                            fontSize: theme.fontSize.sm,
+                            background: theme.colors.danger,
+                            borderColor: theme.colors.danger,
+                          }}
+                          onClick={() => void handleRevoke(k.idx)}
+                        >
+                          무효화
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          style={{ padding: "4px 10px", fontSize: theme.fontSize.sm }}
+                          onClick={() => setConfirmIdx(null)}
+                        >
+                          취소
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                </Fragment>
               ))}
           </tbody>
         </table>
