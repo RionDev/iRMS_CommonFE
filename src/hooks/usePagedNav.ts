@@ -40,6 +40,8 @@ export interface UsePagedNavResult<T> {
   next: () => Promise<void>;
   prev: () => Promise<void>;
   reset: () => void;
+  /** 보고 있는 페이지를 다시 읽는다. 응답이 올 때까지 기존 items 를 유지해 화면이 깜빡이지 않는다 (자동 새로고침용). */
+  refresh: () => Promise<void>;
 }
 
 /**
@@ -118,6 +120,11 @@ export function usePagedNav<T>({
     await fetchPage(cursor, historyRef.current.length);
   }, [hasNext, fetchPage]);
 
+  const refresh = useCallback(async () => {
+    const cursor = historyRef.current[historyRef.current.length - 1];
+    await fetchPage(cursor, historyRef.current.length);
+  }, [fetchPage]);
+
   const prev = useCallback(async () => {
     if (historyRef.current.length <= 1) return;
     historyRef.current.pop();
@@ -149,5 +156,6 @@ export function usePagedNav<T>({
     next,
     prev,
     reset,
+    refresh,
   };
 }

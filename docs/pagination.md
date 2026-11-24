@@ -101,7 +101,7 @@ const {
   items, loading, error,
   page, totalPages, total,
   hasPrev, hasNext,
-  next, prev, reset,
+  next, prev, reset, refresh,
 } = usePagedNav({
   fetcher: (cursor, snapshotIdx, size) => getSamples(query, cursor, snapshotIdx, size),
   size: 50,
@@ -122,7 +122,8 @@ const {
 | `hasNext`    | 다음 페이지 존재 여부 (응답의 `has_more`)                                   |
 | `next`       | 다음 페이지 요청                                                            |
 | `prev`       | 이전 페이지로 이동 (FE가 기억한 cursor 히스토리 사용)                       |
-| `reset`      | 상태 초기화 후 첫 페이지 재요청                                             |
+| `reset`      | 상태 초기화 후 첫 페이지 재요청 (items 가 비었다가 채워진다 — 필터 변경용)   |
+| `refresh`    | 보고 있는 페이지 재요청. 응답까지 기존 items 유지 → **자동 새로고침은 이걸로** (deps 에 reloadKey 를 넣어 reset 시키면 매번 깜빡인다) |
 
 내부 동작:
 
