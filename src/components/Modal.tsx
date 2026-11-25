@@ -51,6 +51,9 @@ export function Modal({
           padding: "24px",
           minWidth: "320px",
           maxWidth: typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth,
+          maxHeight: "90vh",          // 내용이 화면보다 길면 모달 안에서 스크롤 (위아래 잘림 방지)
+          overflowY: "auto",
+          boxSizing: "border-box",
           fontFamily: theme.fontFamily,
         }}
         onClick={(e) => e.stopPropagation()}
