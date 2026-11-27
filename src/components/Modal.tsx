@@ -8,6 +8,8 @@ interface ModalProps {
   children: ReactNode;
   /** 본문 최대 너비. 기본 480px */
   maxWidth?: number | string;
+  /** true 면 바깥 클릭·ESC 로 안 닫힘 — 입력 폼처럼 실수로 닫히면 안 되는 모달. 닫기(✕)·취소·저장 버튼으로만 */
+  staticBackdrop?: boolean;
 }
 
 export function Modal({
@@ -16,6 +18,7 @@ export function Modal({
   title,
   children,
   maxWidth = 480,
+  staticBackdrop = false,
 }: ModalProps) {
   const { theme } = useThemeStore();
 
@@ -23,11 +26,11 @@ export function Modal({
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape" && !staticBackdrop) onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, staticBackdrop]);
 
   if (!isOpen) return null;
 
@@ -42,7 +45,7 @@ export function Modal({
         alignItems: "center",
         zIndex: 1000,
       }}
-      onClick={onClose}
+      onClick={staticBackdrop ? undefined : onClose}
     >
       <div
         style={{
